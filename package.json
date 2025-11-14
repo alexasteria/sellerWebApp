@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview --strictPort",
-    "api:generate": "npx swagger-typescript-api generate -o ./src -n backendApi.ts --path ../sellerGoApi/docs/swagger.yaml --axios"
+    "api:generate": "npx swagger-typescript-api generate -o ./src -n backendApi.ts --path ../sellerGoApi/docs/swagger.yaml --axios",
+    "deploy": "bash ./deploy.sh"
   },
   "dependencies": {
     "@types/telegram-web-app": "^9.0.0",

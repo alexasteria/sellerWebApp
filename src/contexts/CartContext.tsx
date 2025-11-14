@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { CartState, Product, DeliveryInfo } from "@/types";
 import { useProducts } from "@/contexts/ProductsContext";
 
@@ -21,7 +28,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartMap, setCartMap] = useState<Map<string, Product>>(new Map());
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null);
   const { products } = useProducts();
-
   const total = useMemo(
     () =>
       Object.entries(cart).reduce((sum, [id, variantState]) => {
@@ -34,7 +40,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             0;
           const discountPrice = item.discount
             ? currentVariantPrice * (1 - item.discount / 100)
-            : currentVariantPrice * count;
+            : currentVariantPrice;
           currentItemPrice += discountPrice * count;
         });
         return sum + currentItemPrice;
@@ -44,49 +50,69 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const hasItems = total > 0.009;
 
-  const increment = (product: Product, variantID: string) => {
-    setCart((prev) => {
-      const variantCount = prev[product.id] || {};
-      return {
-        ...prev,
-        [product.id]: {
-          ...prev[product.id],
-          [variantID]: (variantCount[variantID] ?? 0) + 1,
-        },
-      };
-    });
-    if (!cartMap.get(product.id)) {
-      setCartMap((prev) => {
-        return prev.set(product.id, product);
+  const increment = useCallback(
+    (product: Product, variantID: string) => {
+      setCart((prev) => {
+        const variantCount = prev[product.id] || {};
+        return {
+          ...prev,
+          [product.id]: {
+            ...prev[product.id],
+            [variantID]: (variantCount[variantID] ?? 0) + 1,
+          },
+        };
       });
-    }
-  };
+      if (!cartMap.get(product.id)) {
+        setCartMap((prev) => {
+          const newMap = new Map(prev);
+          newMap.set(product.id, product);
+          return newMap;
+        });
+      }
+    },
+    [cartMap],
+  );
 
-  const decrement = (product: Product, variantID: string) =>
+  const decrement = useCallback((product: Product, variantID: string) => {
     setCart((prev) => {
       const variantCount = prev[product.id] || {};
+      const newCount = (variantCount[variantID] ?? 0) - 1;
+      const newVariantState = { ...prev[product.id], [variantID]: newCount };
+      if (newCount <= 0) {
+        delete newVariantState[variantID];
+      }
       return {
         ...prev,
-        [product.id]: {
-          ...prev[product.id],
-          [variantID]: (variantCount[variantID] ?? 0) - 1,
-        },
+        [product.id]: newVariantState,
       };
     });
+  }, []);
 
-  const clearCart = () => setCart({});
+  const clearCart = useCallback(() => setCart({}), []);
 
-  const value = {
-    cart,
-    total,
-    hasItems,
-    increment,
-    decrement,
-    clearCart,
-    cartMap,
-    deliveryInfo,
-    setDeliveryInfo,
-  };
+  const value = useMemo(
+    () => ({
+      cart,
+      total,
+      hasItems,
+      increment,
+      decrement,
+      clearCart,
+      cartMap,
+      deliveryInfo,
+      setDeliveryInfo,
+    }),
+    [
+      cart,
+      total,
+      hasItems,
+      increment,
+      decrement,
+      clearCart,
+      cartMap,
+      deliveryInfo,
+    ],
+  );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

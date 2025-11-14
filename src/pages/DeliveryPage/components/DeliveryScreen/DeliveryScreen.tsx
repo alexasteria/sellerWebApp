@@ -5,6 +5,10 @@ import CourierSelection from "@/pages/DeliveryPage/components/CourierSelection/C
 import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
 import { useCart } from "@/contexts/CartContext";
 import styles from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen.module.css";
+import { Api, ModelsCreateOrderRequest } from "@/backendApi.ts";
+import { useUser } from "@/contexts/UserContext.tsx";
+import { useProducts } from "@/contexts/ProductsContext.tsx";
+import { WebApp } from "telegram-web-app";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -12,6 +16,17 @@ interface DeliveryScreenProps {
   onConfirm: (deliveryInfo: DeliveryInfo) => void;
   onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void;
 }
+const tg: WebApp = (window as any).Telegram?.WebApp;
+// Helper to safely execute Telegram API calls
+const safeTgCall = (callback: () => void) => {
+  try {
+    if (tg) {
+      callback();
+    }
+  } catch (error) {
+    console.error("Telegram WebApp error:", error);
+  }
+};
 
 const DeliveryScreen: FC<DeliveryScreenProps> = ({
   subtotal,
@@ -20,15 +35,65 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
   onDeliveryInfoChange,
 }) => {
   const { cartMap, cart } = useCart();
-  const [address, setAddress] = useState<DeliveryAddress>({
-    city: "",
-    street: "",
-    house: "",
-    apartment: "",
-    entrance: "",
-    floor: "",
-    comment: "",
-  });
+  const { products } = useProducts();
+  const { user } = useUser();
+  const createOrderPayload = (): ModelsCreateOrderRequest => {
+    if (!user) throw new Error("User not found");
+
+    const cartTemp: ModelsCreateOrderRequest["cart"] = [];
+    Object.entries(cart).forEach(([productID, variantState]) => {
+      const product = products.find((m) => m.id === productID);
+      if (!product) return;
+
+      Object.entries(variantState).forEach(([variantID, count]) => {
+        if (count <= 0) return;
+        const variant = product.variants?.find((v) => v.id === variantID);
+        if (!variant) return;
+
+        const discountedPrice = product.discount
+          ? variant.cost * (1 - product.discount / 100)
+          : variant.cost;
+
+        cartTemp.push({
+          productID: product.id,
+          variantID: variant.id,
+          quantity: count,
+          price: discountedPrice,
+        });
+      });
+    });
+
+    return {
+      userID: user.id,
+      cart: cartTemp,
+    };
+  };
+  const submitOrder = async (payload: ModelsCreateOrderRequest) => {
+    try {
+      const api = new Api({ baseURL: "/api" });
+      await api.orders.ordersCreate({ tenant: "SELL_DEPARTMENT" }, payload);
+      tg.close();
+    } catch (error) {
+      console.error("[DEBUG] API call failed:", error);
+      safeTgCall(() =>
+        tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз."),
+      );
+    } finally {
+      console.log(
+        `[DEBUG] Reached finally block at ${new Date().toISOString()}. Setting isSubmitting to false.`,
+      );
+      safeTgCall(() => tg.MainButton.hideProgress());
+    }
+  };
+  // const [address, setAddress] = useState<DeliveryAddress>({
+  //   city: "",
+  //   street: "",
+  //   house: "",
+  //   apartment: "",
+  //   entrance: "",
+  //   floor: "",
+  //   comment: "",
+  // });
 
   // const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(
   //   null,
@@ -120,7 +185,15 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
             </strong>
           </div>
         </div>
-
+        <button
+          className={styles.confirmBtn}
+          onClick={async () => {
+            const payload = createOrderPayload();
+            await submitOrder(payload);
+          }}
+        >
+          Оформить заказ
+        </button>
         {/* <button
           className={`${styles.confirmBtn} ${isFormValid ? styles.active : styles.disabled}`}
           onClick={handleConfirm}

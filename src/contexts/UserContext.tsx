@@ -12,9 +12,9 @@ const tg = (window as any).Telegram?.WebApp;
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const user = useMemo(() => tg?.initDataUnsafe?.user, []);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
-  };
+  }), [user]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

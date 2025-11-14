@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import DeliveryScreen from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen";
 import { useCart } from "@/contexts/CartContext";
-import { useTelegramUi, useTheme } from "@/hooks/useTelegram";
+import { useTheme } from "@/hooks/useTelegram";
 import { useThemeSync } from "@/hooks/useThemeSync";
 import { DeliveryInfo } from "@/types";
 
@@ -11,7 +11,6 @@ const DeliveryPage: FC = () => {
   const { total, setDeliveryInfo } = useCart();
   const theme = useTheme();
 
-  useTelegramUi();
   useThemeSync(theme);
 
   const handleBack = () => {

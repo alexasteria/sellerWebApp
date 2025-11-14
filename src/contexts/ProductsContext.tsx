@@ -393,10 +393,10 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     fetchProducts();
   }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     products,
     isLoading,
-  };
+  }), [products, isLoading]);
 
   return (
     <ProductsContext.Provider value={value}>

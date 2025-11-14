@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { useTelegramUi } from "@/hooks/useTelegram.ts";
 
 interface ExpandedCardContextType {
   expandedCardId: string | null;
@@ -28,7 +27,6 @@ export const ExpandedCardProvider: React.FC<ExpandedCardProviderProps> = ({
   children,
 }) => {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
-  useTelegramUi();
   const handleSetExpandedCardId = (id: string | null) => {
     setExpandedCardId(id);
   };
