@@ -4,14 +4,17 @@ import React, {
   useMemo,
   useState,
   useEffect,
-  useCallback,
 } from "react";
-import { Product } from "@/types";
-import { Api, ModelsProduct } from "@/backendApi";
+import { ModelsProduct } from "@/backendApi";
+import { productService } from "@/services/ProductService";
+import { userService } from "@/services/UserService";
+import { useUser } from "./UserContext";
 
-const prod = [
+// Hardcoded initial data (can be used for development or as a fallback)
+const prod: ModelsProduct[] = [
   {
     id: "classic-maki",
+    tenantID: "default_tenant_id",
     title: "Классический маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Рис, нори, классическая начинка",
@@ -31,8 +34,9 @@ const prod = [
   },
   {
     id: "margherita",
+    tenantID: "default_tenant_id",
     title: "Маргарита",
-    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description:
       "Классическая итальянская пицца с ароматным томатным соусом и свежей моцареллой, украшенная листьями базилика.",
     discount: 15,
@@ -69,8 +73,9 @@ const prod = [
   },
   {
     id: "pepperoni",
+    tenantID: "default_tenant_id",
     title: "Пепперони",
-    img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop&crop=center",
     description:
       "Популярная пицца с пикантной колбасой пепперони и тянущейся моцареллой на тонком тесте.",
     discount: 10,
@@ -107,8 +112,9 @@ const prod = [
   },
   {
     id: "quattro-formaggi",
+    tenantID: "default_tenant_id",
     title: "Четыре сыра",
-    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description:
       "Ароматная пицца с сочетанием четырёх видов сыра для настоящих гурманов.",
     discount: 20,
@@ -146,8 +152,9 @@ const prod = [
   },
   {
     id: "hawaiian",
+    tenantID: "default_tenant_id",
     title: "Гавайская",
-    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description:
       "Сочетание нежной ветчины и сладких ананасов — яркий вкус Гавайев на вашем столе.",
     discount: 0,
@@ -185,8 +192,9 @@ const prod = [
   },
   {
     id: "vegetarian",
+    tenantID: "default_tenant_id",
     title: "Вегетарианская",
-    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description: "Лёгкая пицца с большим количеством свежих овощей и трав.",
     discount: 0,
     variants: [
@@ -225,6 +233,7 @@ const prod = [
   },
   {
     id: "vege-sushi",
+    tenantID: "default_tenant_id",
     title: "Вегетарианский маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Огурец, авокадо, морковь",
@@ -244,8 +253,9 @@ const prod = [
   },
   {
     id: "bbq-chicken",
+    tenantID: "default_tenant_id",
     title: "Барбекю курица",
-    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400\u0026h=300\u0026fit=crop\u0026crop=center",
+    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop&crop=center",
     description:
       "Пицца с нежной курицей и соусом барбекю для любителей насыщенного вкуса.",
     discount: 0,
@@ -284,6 +294,7 @@ const prod = [
   },
   {
     id: "spicy-tuna",
+    tenantID: "default_tenant_id",
     title: "Spicy Tuna Roll",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Тунец, острый соус, огурец",
@@ -309,6 +320,7 @@ const prod = [
   },
   {
     id: "avocado-maki",
+    tenantID: "default_tenant_id",
     title: "Авокадо маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Авокадо и рис",
@@ -328,6 +340,7 @@ const prod = [
   },
   {
     id: "mixed-nigiri",
+    tenantID: "default_tenant_id",
     title: "Нигири ассорти",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Нигири с разной рыбой",
@@ -347,6 +360,7 @@ const prod = [
   },
   {
     id: "futomaki",
+    tenantID: "default_tenant_id",
     title: "Футомаки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg",
     description: "Толстый ролл с несколькими начинками",
@@ -365,6 +379,7 @@ const prod = [
     },
   },
 ];
+
 interface ProductsContextType {
   products: ModelsProduct[];
   isLoading: boolean;
@@ -375,28 +390,34 @@ const ProductsContext = createContext<ProductsContextType | undefined>(
 );
 
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<ModelsProduct[]>(prod);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const fetchProducts = useCallback(async () => {
-    const api = new Api({ baseURL: "/api" });
-    const items = await api.products.productsList({
-      tenant: "SELL_DEPARTMENT",
-    }); //todo add from tg bot
-    if (items.data) {
-      setProducts(items.data); //todo id type
-    }
-    //setIsLoading(false);
-  }, []);
+  const [products, setProducts] = useState<ModelsProduct[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { user } = useUser();
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    const loadProducts = async () => {
+      //todo del mock products
+      if (!user) return setProducts(prod); // Don't fetch until user is available
 
-  const value = useMemo(() => ({
-    products,
-    isLoading,
-  }), [products, isLoading]);
+      setIsLoading(true);
+      const tenantId = userService.getTenantId(user);
+      const fetchedProducts = await productService.getProducts(tenantId);
+      if (fetchedProducts.length > 0) {
+        setProducts(fetchedProducts);
+      }
+      setIsLoading(false);
+    };
+
+    loadProducts();
+  }, [user]); // Dependency on user ensures this runs after user is loaded
+
+  const value = useMemo(
+    () => ({
+      products,
+      isLoading,
+    }),
+    [products, isLoading],
+  );
 
   return (
     <ProductsContext.Provider value={value}>

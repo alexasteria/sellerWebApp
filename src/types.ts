@@ -1,5 +1,6 @@
 export interface Product {
   id: string;
+  tenantID: string;
   title: string;
   img?: string;
   description?: string;

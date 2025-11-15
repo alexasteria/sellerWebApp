@@ -38,6 +38,7 @@ export interface ModelsProduct {
   id: string;
   img?: string;
   tags?: ModelsProductTagGroup;
+  tenantID: string;
   title: string;
   variants: ModelsProductVariant[];
 }
@@ -55,19 +56,29 @@ export interface ModelsProductVariant {
 }
 
 export interface ModelsTgBotUser {
-  chat_id?: number;
-  first_name?: string;
-  id?: number;
+  first_name: string;
+  id: number;
   is_bot?: boolean;
   language_code?: string;
   last_name?: string;
-  photo_url?: string;
-  tenant?: string;
+  photoURL?: string;
+  tenant: string;
   username?: string;
 }
 
 export interface ModelsUpdateOrderStatusRequest {
   status: string;
+}
+
+export interface ModelsUpdateOrderStatusResponse {
+  message?: string;
+}
+
+export interface ModelsUser {
+  chat_id?: number;
+  id?: number;
+  tenant_id?: string;
+  tg_user_id?: number;
 }
 
 import type {
@@ -266,7 +277,7 @@ export class Api<
      * @request POST:/auth/tg-web-app
      */
     tgWebAppCreate: (user: ModelsTgBotUser, params: RequestParams = {}) =>
-      this.request<string, string>({
+      this.request<Record<string, string>, string>({
         path: `/auth/tg-web-app`,
         method: "POST",
         body: user,
@@ -276,6 +287,29 @@ export class Api<
       }),
   };
   orders = {
+    /**
+     * @description Get a list of orders for a given tenant.
+     *
+     * @tags orders
+     * @name OrdersList
+     * @summary Get a list of orders
+     * @request GET:/orders
+     */
+    ordersList: (
+      query: {
+        /** Tenant ID */
+        tenant: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsOrder[], string>({
+        path: `/orders`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
     /**
      * @description Create a new order with the provided cart items.
      *
@@ -315,7 +349,7 @@ export class Api<
       status: ModelsUpdateOrderStatusRequest,
       params: RequestParams = {},
     ) =>
-      this.request<string, string>({
+      this.request<ModelsUpdateOrderStatusResponse, string>({
         path: `/orders/${id}/status`,
         method: "PUT",
         body: status,
@@ -344,6 +378,47 @@ export class Api<
         path: `/products`,
         method: "GET",
         query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get a single product by its ID for a given tenant.
+     *
+     * @tags products
+     * @name ProductsDetail
+     * @summary Get a single product
+     * @request GET:/products/{id}
+     */
+    productsDetail: (
+      id: string,
+      query: {
+        /** Tenant ID */
+        tenant: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsProduct, string>({
+        path: `/products/${id}`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+  };
+  users = {
+    /**
+     * @description Get a list of all registered users
+     *
+     * @tags users
+     * @name UsersList
+     * @summary Get all users
+     * @request GET:/users
+     */
+    usersList: (params: RequestParams = {}) =>
+      this.request<ModelsUser[], string>({
+        path: `/users`,
+        method: "GET",
         format: "json",
         ...params,
       }),

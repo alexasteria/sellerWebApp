@@ -3,6 +3,7 @@ import { Product } from "../types";
 const maxPizzaMenu: Product[] = [
   {
     id: "margherita",
+    tenantID: "default_tenant_id",
     title: "Маргарита",
     img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description:
@@ -40,6 +41,7 @@ const maxPizzaMenu: Product[] = [
   },
   {
     id: "pepperoni",
+    tenantID: "default_tenant_id",
     title: "Пепперони",
     img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop&crop=center",
     description:
@@ -77,6 +79,7 @@ const maxPizzaMenu: Product[] = [
   },
   {
     id: "quattro-formaggi",
+    tenantID: "default_tenant_id",
     title: "Четыре сыра",
     img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description:
@@ -110,6 +113,7 @@ const maxPizzaMenu: Product[] = [
   },
   {
     id: "hawaiian",
+    tenantID: "default_tenant_id",
     title: "Гавайская",
     img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description:
@@ -147,6 +151,7 @@ const maxPizzaMenu: Product[] = [
   },
   {
     id: "vegetarian",
+    tenantID: "default_tenant_id",
     title: "Вегетарианская",
     img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description: "Лёгкая пицца с большим количеством свежих овощей и трав.",
@@ -185,6 +190,7 @@ const maxPizzaMenu: Product[] = [
   },
   {
     id: "bbq-chicken",
+    tenantID: "default_tenant_id",
     title: "Барбекю курица",
     img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop&crop=center",
     description:
@@ -226,6 +232,7 @@ const maxPizzaMenu: Product[] = [
 const pizzaMenu: Product[] = [
   {
     id: "margherita",
+    tenantID: "default_tenant_id",
     title: "Маргарита",
     img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description: "Томатный соус, моцарелла, базилик",
@@ -256,6 +263,7 @@ const pizzaMenu: Product[] = [
   },
   {
     id: "pepperoni",
+    tenantID: "default_tenant_id",
     title: "Пепперони",
     img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop&crop=center",
     description: "Томатный соус, моцарелла, пепперони",
@@ -282,6 +290,7 @@ const pizzaMenu: Product[] = [
   },
   {
     id: "quattro-formaggi",
+    tenantID: "default_tenant_id",
     title: "Четыре сыра",
     img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description: "Моцарелла, горгонзола, пармезан, рикотта",
@@ -307,6 +316,7 @@ const pizzaMenu: Product[] = [
   },
   {
     id: "hawaiian",
+    tenantID: "default_tenant_id",
     title: "Гавайская",
     img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&h=300&fit=crop&crop=center",
     description: "Томатный соус, моцарелла, ветчина, ананас",
@@ -336,6 +346,7 @@ const pizzaMenu: Product[] = [
   },
   {
     id: "vegetarian",
+    tenantID: "default_tenant_id",
     title: "Вегетарианская",
     img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&crop=center",
     description: "Томатный соус, моцарелла, перец, грибы, лук",
@@ -365,6 +376,7 @@ const pizzaMenu: Product[] = [
   },
   {
     id: "bbq-chicken",
+    tenantID: "default_tenant_id",
     title: "Барбекю курица",
     img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop&crop=center",
     description: "Барбекю соус, моцарелла, курица, лук, кинза",
@@ -396,6 +408,7 @@ const pizzaMenu: Product[] = [
 const sushiMenu: Product[] = [
   {
     id: "spicy-tuna",
+    tenantID: "default_tenant_id",
     title: "Spicy Tuna Roll",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", //
     description: "Тунец, острый соус, огурец",
@@ -416,6 +429,7 @@ const sushiMenu: Product[] = [
   },
   {
     id: "vege-sushi",
+    tenantID: "default_tenant_id",
     title: "Вегетарианский маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", //
     description: "Огурец, авокадо, морковь",
@@ -433,6 +447,7 @@ const sushiMenu: Product[] = [
   },
   {
     id: "classic-maki",
+    tenantID: "default_tenant_id",
     title: "Классический маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", //
     description: "Рис, нори, классическая начинка",
@@ -446,6 +461,7 @@ const sushiMenu: Product[] = [
   // Ещё 4 — можно использовать те же изображения с разными id
   {
     id: "avocado-maki",
+    tenantID: "default_tenant_id",
     title: "Авокадо маки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", // повтор
     description: "Авокадо и рис",
@@ -463,6 +479,7 @@ const sushiMenu: Product[] = [
   },
   {
     id: "mixed-nigiri",
+    tenantID: "default_tenant_id",
     title: "Нигири ассорти",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", // пример
     description: "Нигири с разной рыбой",
@@ -480,6 +497,7 @@ const sushiMenu: Product[] = [
   },
   {
     id: "futomaki",
+    tenantID: "default_tenant_id",
     title: "Футомаки",
     img: "https://sushihasi-nn.ru/assets/images/rolls/nabory/filoman25-2.jpg", // повтор
     description: "Толстый ролл с несколькими начинками",
@@ -499,6 +517,7 @@ const sushiMenu: Product[] = [
 const ikeaMenu: Product[] = [
   {
     id: "billy-bookcase",
+    tenantID: "default_tenant_id",
     title: "Стеллаж BILLY",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5tvuByN5oJZPdLXAcB3MUw5c39LUERvRVWg5Q5-lc0VX2eMZb8l7qQcyhh9PM2IzznXk&usqp=CAU", // интерьер с BILLY  [oai_citation:0‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Белый книжный стеллаж",
@@ -519,6 +538,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "sofa-stockholm",
+    tenantID: "default_tenant_id",
     title: "Диван STOCKHOLM",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5tvuByN5oJZPdLXAcB3MUw5c39LUERvRVWg5Q5-lc0VX2eMZb8l7qQcyhh9PM2IzznXk&usqp=CAU", // интерьер с диваном  [oai_citation:1‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Сканди-диван светлого оттенка",
@@ -539,6 +559,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "friheten-sofabed",
+    tenantID: "default_tenant_id",
     title: "Диван-кровать FRIHETEN",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5tvuByN5oJZPdLXAcB3MUw5c39LUERvRVWg5Q5-lc0VX2eMZb8l7qQcyhh9PM2IzznXk&usqp=CAU", // интерьер с FRIHETEN  [oai_citation:2‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Удобный диван-кровать с хранилищем",
@@ -556,6 +577,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "sofa-soderhamn",
+    tenantID: "default_tenant_id",
     title: "Модульный диван SÖDERHAMN",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:3‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Модульный диван в красном цвете",
@@ -573,6 +595,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "poang-chair",
+    tenantID: "default_tenant_id",
     title: "Кресло POÄNG",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:4‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Удобное кресло с деревянным каркасом",
@@ -593,6 +616,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "kallax-shelf",
+    tenantID: "default_tenant_id",
     title: "Стеллаж KALLAX",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:5‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Функциональный куб-стеллаж",
@@ -613,6 +637,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "tonstad-cabinet",
+    tenantID: "default_tenant_id",
     title: "Шкаф TONSTAD",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:6‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Шкаф с раздвижными стеклянными дверцами",
@@ -630,6 +655,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "tidtabell-rug",
+    tenantID: "default_tenant_id",
     title: "Ковер TIDTABELL",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:7‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Современный ковер с геометрическим узором",
@@ -647,6 +673,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "kivik-armchair",
+    tenantID: "default_tenant_id",
     title: "Кресло KIVIK",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:8‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Удобное кресло-модуль",
@@ -664,6 +691,7 @@ const ikeaMenu: Product[] = [
   },
   {
     id: "stocksund-table",
+    tenantID: "default_tenant_id",
     title: "Журнальный стол STOCKSUND",
     img: "https://www.ikea.com/us/en/rooms/living-room/gallery/", // интерьер  [oai_citation:9‡IKEA](https://www.ikea.com/us/en/rooms/living-room/gallery/?utm_source=chatgpt.com)
     description: "Элегантный журнальный столик",

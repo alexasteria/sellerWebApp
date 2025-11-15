@@ -1,14 +1,12 @@
-import React, { FC, useState, useEffect } from "react";
-import { DeliveryAddress, CourierService, DeliveryInfo } from "@/types";
-import DeliveryAddressForm from "@/pages/DeliveryPage/components/DeliveryAddressForm/DeliveryAddressForm";
-import CourierSelection from "@/pages/DeliveryPage/components/CourierSelection/CourierSelection";
+import React, { FC, useState } from "react";
+import { DeliveryInfo } from "@/types";
 import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
 import { useCart } from "@/contexts/CartContext";
-import styles from "@/pages/DeliveryPage/components/DeliveryScreen/DeliveryScreen.module.css";
-import { Api, ModelsCreateOrderRequest } from "@/backendApi.ts";
+import styles from "./DeliveryScreen.module.css";
 import { useUser } from "@/contexts/UserContext.tsx";
 import { useProducts } from "@/contexts/ProductsContext.tsx";
 import { WebApp } from "telegram-web-app";
+import { orderService } from "@/services/OrderService";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -16,7 +14,9 @@ interface DeliveryScreenProps {
   onConfirm: (deliveryInfo: DeliveryInfo) => void;
   onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void;
 }
+
 const tg: WebApp = (window as any).Telegram?.WebApp;
+
 // Helper to safely execute Telegram API calls
 const safeTgCall = (callback: () => void) => {
   try {
@@ -31,105 +31,35 @@ const safeTgCall = (callback: () => void) => {
 const DeliveryScreen: FC<DeliveryScreenProps> = ({
   subtotal,
   onBack,
-  onConfirm,
-  onDeliveryInfoChange,
 }) => {
-  const { cartMap, cart } = useCart();
+  const { cart } = useCart();
   const { products } = useProducts();
   const { user } = useUser();
-  const createOrderPayload = (): ModelsCreateOrderRequest => {
-    if (!user) throw new Error("User not found");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const cartTemp: ModelsCreateOrderRequest["cart"] = [];
-    Object.entries(cart).forEach(([productID, variantState]) => {
-      const product = products.find((m) => m.id === productID);
-      if (!product) return;
+  const handleOrderSubmit = async () => {
+    if (!user || isSubmitting) {
+      return;
+    }
 
-      Object.entries(variantState).forEach(([variantID, count]) => {
-        if (count <= 0) return;
-        const variant = product.variants?.find((v) => v.id === variantID);
-        if (!variant) return;
+    setIsSubmitting(true);
+    safeTgCall(() => tg.MainButton.showProgress());
 
-        const discountedPrice = product.discount
-          ? variant.cost * (1 - product.discount / 100)
-          : variant.cost;
+    const orderResult = await orderService.submitOrder(cart, products, user);
 
-        cartTemp.push({
-          productID: product.id,
-          variantID: variant.id,
-          quantity: count,
-          price: discountedPrice,
-        });
-      });
-    });
+    safeTgCall(() => tg.MainButton.hideProgress());
+    setIsSubmitting(false);
 
-    return {
-      userID: user.id,
-      cart: cartTemp,
-    };
-  };
-  const submitOrder = async (payload: ModelsCreateOrderRequest) => {
-    try {
-      const api = new Api({ baseURL: "/api" });
-      await api.orders.ordersCreate({ tenant: "SELL_DEPARTMENT" }, payload);
-      tg.close();
-    } catch (error) {
-      console.error("[DEBUG] API call failed:", error);
+    if (orderResult) {
+      // Order was successful
+      safeTgCall(() => tg.close());
+    } else {
+      // Order failed
       safeTgCall(() =>
-        tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз."),
+        tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.")
       );
-    } finally {
-      console.log(
-        `[DEBUG] Reached finally block at ${new Date().toISOString()}. Setting isSubmitting to false.`,
-      );
-      safeTgCall(() => tg.MainButton.hideProgress());
     }
   };
-  // const [address, setAddress] = useState<DeliveryAddress>({
-  //   city: "",
-  //   street: "",
-  //   house: "",
-  //   apartment: "",
-  //   entrance: "",
-  //   floor: "",
-  //   comment: "",
-  // });
-
-  // const [selectedCourier, setSelectedCourier] = useState<CourierService | null>(
-  //   null,
-  // );
-  //
-  // const isFormValid =
-  //   address.city.trim() &&
-  //   address.street.trim() &&
-  //   address.house.trim() &&
-  //   selectedCourier;
-
-  // Обновляем информацию о доставке для Telegram
-  // useEffect(() => {
-  //   if (isFormValid && selectedCourier && onDeliveryInfoChange) {
-  //     const deliveryInfo: DeliveryInfo = {
-  //       address,
-  //       courier: selectedCourier,
-  //       totalWithDelivery: subtotal + selectedCourier.price,
-  //     };
-  //     onDeliveryInfoChange(deliveryInfo);
-  //   } else if (onDeliveryInfoChange) {
-  //     onDeliveryInfoChange(null);
-  //   }
-  // }, [address, selectedCourier, subtotal, isFormValid, onDeliveryInfoChange]);
-
-  // const handleConfirm = () => {
-  //   if (!isFormValid || !selectedCourier) return;
-  //
-  //   const deliveryInfo: DeliveryInfo = {
-  //     address,
-  //     courier: selectedCourier,
-  //     totalWithDelivery: subtotal + selectedCourier.price,
-  //   };
-  //
-  //   onConfirm(deliveryInfo);
-  // };
 
   return (
     <div className={styles.deliveryScreen}>
@@ -140,7 +70,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
         <h2>Доставка</h2>
       </header>
 
-      <CartDisplay cart={cart} cartMap={cartMap} />
+      <CartDisplay cart={cart} />
 
       <div className={styles.orderConfirmationInfo}>
         <p>Пожалуйста, внимательно проверьте ваш заказ.</p>
@@ -149,17 +79,6 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
           телефону.
         </p>
       </div>
-
-      {/*<div className={styles.deliveryContent}>*/}
-      {/*  <DeliveryAddressForm address={address} onChange={setAddress} />*/}
-
-      {/*  /!*<CourierSelection*!/*/}
-      {/*  /!*  selectedCourier={selectedCourier}*!/*/}
-      {/*  /!*  onSelect={setSelectedCourier}*!/*/}
-      {/*  /!*  subtotal={subtotal}*!/*/}
-      {/*  /!*/
-      /*/}
-      {/*</div>*/}
 
       <footer className={styles.deliveryFooter}>
         <div className={styles.deliverySummary}>
@@ -171,36 +90,20 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
             <span>Доставка курьером:</span>
             <span>0.00₽</span>
           </div>
-          {/*{selectedCourier && (*/}
-          {/*  <div className="summary-row">*/}
-          {/*    <span>Доставка ({selectedCourier.name}):</span>*/}
-          {/*    <span>+${selectedCourier.price.toFixed(2)}</span>*/}
-          {/*  </div>*/}
-          {/*)}*/}
           <div className={`${styles.summaryRow} ${styles.total}`}>
             <span>Итого к оплате:</span>
             <strong>
-              {/*${(subtotal + (selectedCourier?.price || 0)).toFixed(2)}*/}
               {subtotal.toFixed(2)}₽
             </strong>
           </div>
         </div>
         <button
           className={styles.confirmBtn}
-          onClick={async () => {
-            const payload = createOrderPayload();
-            await submitOrder(payload);
-          }}
+          onClick={handleOrderSubmit}
+          disabled={isSubmitting}
         >
-          Оформить заказ
+          {isSubmitting ? "Отправка..." : "Оформить заказ"}
         </button>
-        {/* <button
-          className={`${styles.confirmBtn} ${isFormValid ? styles.active : styles.disabled}`}
-          onClick={handleConfirm}
-          disabled={!isFormValid}
-        >
-          Перейти к оплате
-        </button> */}
       </footer>
     </div>
   );
