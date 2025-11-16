@@ -34,7 +34,8 @@ class OrderService {
   private createOrderPayload(
     cart: CartState,
     products: ModelsProduct[],
-    user: WebAppUser
+    user: WebAppUser,
+    tenantId: string, // Add tenantId here
   ): ModelsCreateOrderRequest {
     const cartItems: ModelsCreateOrderRequest["cart"] = [];
 
@@ -56,6 +57,7 @@ class OrderService {
           variantID: variant.id,
           quantity: count,
           price: discountedPrice, // Assuming the backend wants the final price per item
+          tenantID: tenantId, // Add tenantID to cart item
         });
       });
     });
@@ -64,8 +66,19 @@ class OrderService {
         throw new Error("User ID is missing, cannot create order.");
     }
 
+    const tgUser: ModelsCreateOrderRequest["tgUser"] = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        username: user.username,
+        language_code: user.language_code,
+        photo_url: user.photo_url,
+        tenant: tenantId, // This will be overwritten by the backend, but good to send
+    };
+
     return {
-      userID: user.id,
+      tenantID: tenantId, // Add tenantID to the main payload
+      tgUser: tgUser,
       cart: cartItems,
     };
   }
@@ -80,11 +93,11 @@ class OrderService {
   public async submitOrder(
     cart: CartState,
     products: ModelsProduct[],
-    user: WebAppUser
+    user: WebAppUser,
+    tenantId: string,
   ): Promise<ModelsOrder | null> {
     try {
-      const payload = this.createOrderPayload(cart, products, user);
-      const tenantId = userService.getTenantId(user);
+      const payload = this.createOrderPayload(cart, products, user, tenantId);
       
       if (payload.cart.length === 0) {
         console.warn("Cannot submit an empty order.");
@@ -92,7 +105,6 @@ class OrderService {
       }
 
       const response = await apiClient.orders.ordersCreate(
-        { tenant: tenantId },
         payload
       );
       
