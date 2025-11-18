@@ -2,6 +2,7 @@ import { ModelsTgBotUser } from "@/backendApi";
 import { WebAppUser } from "telegram-web-app";
 import { apiClient } from "@/apiClient";
 
+
 /**
  * Service class for handling user-related operations, such as authentication.
  * This class follows the Singleton pattern.
@@ -35,18 +36,29 @@ class UserService {
       last_name: user.last_name,
       username: user.username,
       language_code: user.language_code,
-      photoURL: user.photo_url,
+      photo_url: user.photo_url, // Changed from photoURL to photo_url
       is_bot: user.is_bot,
-      tenant: this.getTenantId(user),
+      // New fields from the refactored tg_user table, can be undefined initially
+      contact_info: undefined,
+      delivery_address: undefined,
+      email: undefined,
+      role: undefined,
     };
 
     try {
-      const response = await apiClient.auth.tgWebAppCreate(userData);
+      const response = await apiClient.auth.tgWebAppCreate(
+        userData,
+        {
+          headers: {
+            "Tenant-Code": import.meta.env.VITE_TENANT_CODE,
+          },
+        }
+      );
       this.authToken = response.data.token;
-      
+
       // Configure the shared API client to use the token for all subsequent requests.
       apiClient.instance.defaults.headers.common['Authorization'] = `Bearer ${this.authToken}`;
-      
+
       console.log("User authenticated successfully.");
       return this.authToken;
     } catch (error) {
@@ -62,14 +74,7 @@ class UserService {
    * @returns The tenant ID string.
    */
   public getTenantId(user?: WebAppUser): string {
-    // In a real application, the tenant might be part of the user object from the backend
-    // or could be derived from the hostname or another piece of initData.
-    // For now, we'll use the value that was previously hardcoded.
-    // The `user` parameter is there for future extension.
-    if (user) {
-      // Future logic could go here, e.g. return user.tenant;
-    }
-    return "SELL_DEPARTMENT";
+    return import.meta.env.VITE_TENANT_CODE;
   }
 
   /**

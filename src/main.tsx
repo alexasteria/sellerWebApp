@@ -17,7 +17,7 @@ if (!container) {
 
 const router = createBrowserRouter([
   {
-    path: "/:tenantId",
+    path: "/",
     element: <App />,
     children: [
       {
@@ -34,10 +34,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "*",
-    element: <Navigate to="/default-tenant" replace />, // Redirect to a default tenant for now
-  }
 ]);
 
 createRoot(container).render(

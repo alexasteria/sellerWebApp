@@ -36,11 +36,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const hasItems = total > 0;
 
   const increment = useCallback((product: ModelsProduct, variantID: string) => {
-    setCart(prevCart => cartService.addItem(prevCart, product.id, variantID));
+    if (!product.id) return;
+    const productId = product.id;
+    setCart(prevCart => cartService.addItem(prevCart, productId, variantID));
   }, []);
 
   const decrement = useCallback((product: ModelsProduct, variantID: string) => {
-    setCart(prevCart => cartService.removeItem(prevCart, product.id, variantID));
+    if (!product.id) return;
+    const productId = product.id;
+    setCart(prevCart => cartService.removeItem(prevCart, productId, variantID));
   }, []);
 
   const clearCart = useCallback(() => setCart({}), []);

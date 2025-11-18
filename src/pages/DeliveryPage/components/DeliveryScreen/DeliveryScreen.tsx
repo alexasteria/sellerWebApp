@@ -5,7 +5,6 @@ import { useCart } from "@/contexts/CartContext";
 import styles from "./DeliveryScreen.module.css";
 import { useUser } from "@/contexts/UserContext.tsx";
 import { useProducts } from "@/contexts/ProductsContext.tsx";
-import { useParams } from "react-router-dom";
 import { WebApp } from "telegram-web-app";
 import { orderService } from "@/services/OrderService";
 
@@ -37,17 +36,17 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
   const { products } = useProducts();
   const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { tenantId } = useParams<{ tenantId: string }>();
+  const tenantCode = import.meta.env.VITE_TENANT_CODE;
 
   const handleOrderSubmit = async () => {
-    if (!user || isSubmitting || !tenantId) {
+    if (!user || isSubmitting) {
       return;
     }
 
     setIsSubmitting(true);
     safeTgCall(() => tg.MainButton.showProgress());
 
-    const orderResult = await orderService.submitOrder(cart, products, user, tenantId);
+    const orderResult = await orderService.submitOrder(cart, products, user);
 
     safeTgCall(() => tg.MainButton.hideProgress());
     setIsSubmitting(false);

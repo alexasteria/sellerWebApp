@@ -62,7 +62,8 @@ class CartService {
    * @param variantId - The ID of the product variant to add.
    * @returns The new cart state.
    */
-  public addItem(prevCart: CartState, productId: string, variantId: string): CartState {
+  public addItem(prevCart: CartState, productId: string, variantId: string | undefined): CartState {
+    if (variantId === undefined) return prevCart;
     const newCart = { ...prevCart };
     const variantState = newCart[productId] || {};
     
@@ -81,7 +82,8 @@ class CartService {
    * @param variantId - The ID of the product variant to remove.
    * @returns The new cart state.
    */
-  public removeItem(prevCart: CartState, productId: string, variantId: string): CartState {
+  public removeItem(prevCart: CartState, productId: string, variantId: string | undefined): CartState {
+    if (variantId === undefined) return prevCart;
     const newCart = { ...prevCart };
     const variantState = newCart[productId];
 

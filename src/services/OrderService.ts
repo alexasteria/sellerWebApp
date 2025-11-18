@@ -35,7 +35,6 @@ class OrderService {
     cart: CartState,
     products: ModelsProduct[],
     user: WebAppUser,
-    tenantId: string, // Add tenantId here
   ): ModelsCreateOrderRequest {
     const cartItems: ModelsCreateOrderRequest["cart"] = [];
 
@@ -53,11 +52,11 @@ class OrderService {
           : variant.cost;
 
         cartItems.push({
-          productID: product.id,
-          variantID: variant.id,
+          productID: product.id as string,
+          variantID: variant.id as string,
           quantity: count,
           price: discountedPrice, // Assuming the backend wants the final price per item
-          tenantID: tenantId, // Add tenantID to cart item
+          // tenantID: tenantId, // Removed: tenantID is not part of ModelsCartItem
         });
       });
     });
@@ -66,20 +65,22 @@ class OrderService {
         throw new Error("User ID is missing, cannot create order.");
     }
 
-    const tgUser: ModelsCreateOrderRequest["tgUser"] = {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-        language_code: user.language_code,
-        photo_url: user.photo_url,
-        tenant: tenantId, // This will be overwritten by the backend, but good to send
-    };
+    // Removed tgUser as it's not part of ModelsCreateOrderRequest
+    // const tgUser: ModelsCreateOrderRequest["tgUser"] = {
+    //     id: user.id,
+    //     first_name: user.first_name,
+    //     last_name: user.last_name,
+    //     username: user.username,
+    //     language_code: user.language_code,
+    //     photo_url: user.photo_url,
+    //     tenant: import.meta.env.VITE_TENANT_CODE,
+    // };
 
     return {
-      tenantID: tenantId, // Add tenantID to the main payload
-      tgUser: tgUser,
+      // tenantID: tenantId, // Removed: tenantID is not part of ModelsCreateOrderRequest
+      // tgUser: tgUser, // Removed: tgUser is not part of ModelsCreateOrderRequest
       cart: cartItems,
+      userID: user.id, // Added userID as per ModelsCreateOrderRequest
     };
   }
 
@@ -94,10 +95,9 @@ class OrderService {
     cart: CartState,
     products: ModelsProduct[],
     user: WebAppUser,
-    tenantId: string,
   ): Promise<ModelsOrder | null> {
     try {
-      const payload = this.createOrderPayload(cart, products, user, tenantId);
+      const payload = this.createOrderPayload(cart, products, user);
       
       if (payload.cart.length === 0) {
         console.warn("Cannot submit an empty order.");
@@ -105,7 +105,12 @@ class OrderService {
       }
 
       const response = await apiClient.orders.ordersCreate(
-        payload
+        payload,
+        {
+          headers: {
+            "Tenant-Code": import.meta.env.VITE_TENANT_CODE,
+          },
+        }
       );
       
       console.log("Order submitted successfully:", response.data);

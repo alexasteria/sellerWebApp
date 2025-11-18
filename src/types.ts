@@ -1,20 +1,16 @@
+import { ModelsProductVariant } from "@/backendApi";
+
 export interface Product {
   id: string;
-  tenantID: string;
   title: string;
   img?: string;
   description?: string;
   discount?: number;
-  variants: ProductVariant[]; //вариации одного продукта, напр - обьем сока, минимум 1
+  variants: ModelsProductVariant[]; //вариации одного продукта, напр - обьем сока, минимум 1
   options?: ProductOption[]; //допы, например соус или сырный бортик к пицце
   tags?: ProductTags;
 }
-export type ProductVariant = {
-  id: string;
-  value: string;
-  cost: number;
-  stock: number;
-};
+
 type ProductOption = {
   id: string;
   value: string;

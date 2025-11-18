@@ -7,8 +7,8 @@ import { ModelsProduct } from "@/backendApi.ts";
 interface MenuProps {
   cart: CartState;
   products: ModelsProduct[];
-  onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (product: Product, variantID: string) => void;
+  onIncrement: (product: ModelsProduct, variantID: string) => void;
+  onDecrement: (product: ModelsProduct, variantID: string) => void;
 }
 
 const Menu: FC<MenuProps> = ({ cart, products, onIncrement, onDecrement }) => {
@@ -18,7 +18,7 @@ const Menu: FC<MenuProps> = ({ cart, products, onIncrement, onDecrement }) => {
         <ExpandableCard
           key={item.id}
           item={item}
-          variantState={cart[item.id]}
+          variantState={item.id ? cart[item.id] : undefined}
           onIncrement={onIncrement}
           onDecrement={onDecrement}
         />

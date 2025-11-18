@@ -10,20 +10,10 @@
  * ---------------------------------------------------------------
  */
 
-export interface HandlersAdminAuthRequest {
-  code: string;
-  tg_login: string;
-}
-
-export interface HandlersSendAuthCodeRequest {
-  tg_login: string;
-}
-
 export interface ModelsCartItem {
   price: number;
   productID: string;
   quantity: number;
-  tenantID: string;
   variantID: string;
 }
 
@@ -31,15 +21,27 @@ export interface ModelsCategory {
   created_at?: string;
   id?: string;
   name?: string;
-  tenant_id?: string;
   updated_at?: string;
 }
 
 export interface ModelsCreateOrderRequest {
   cart: ModelsCartItem[];
-  contactInfo?: string;
-  tenantID: string;
-  tgUser: ModelsTgBotUser;
+  userID: number;
+}
+
+export interface ModelsCreateProductRequest {
+  categoryID: string;
+  description?: string;
+  discount?: number;
+  img?: string;
+  tags?: ModelsProductTagGroup;
+  title: string;
+  variants: ModelsProductVariant[];
+}
+
+export interface ModelsLoginRequest {
+  login: string;
+  password: string;
 }
 
 export interface ModelsOrder {
@@ -47,87 +49,94 @@ export interface ModelsOrder {
   id: number;
   order_items?: ModelsOrderItem[];
   status: string;
-  tenant_id: string;
+  tg_user_id: number;
   total_amount: number;
   updated_at: string;
-  user?: ModelsUser;
-  /** This is the internal user ID (UUID) */
-  user_id: string;
 }
 
 export interface ModelsOrderItem {
+  created_at?: string;
+  order_id?: number;
   price?: number;
-  productID?: string;
-  productTitle?: string;
+  product_id?: string;
   quantity?: number;
-  variantID?: string;
-  variantValue?: string;
+  total_price?: number;
+  variant_id?: string;
 }
 
 export interface ModelsProduct {
-  /** New field */
-  category_id: string;
-  created_at?: string;
+  categoryID: string;
+  createdAt?: string;
   description?: string;
   discount?: number;
-  id: string;
+  id?: string;
   img?: string;
   tags?: ModelsProductTagGroup;
-  tenantID: string;
   title: string;
-  updated_at?: string;
+  updatedAt?: string;
   variants: ModelsProductVariant[];
 }
 
 export interface ModelsProductTagGroup {
+  id?: string;
   name: string;
+  product_id?: string;
   tags: string[];
 }
 
 export interface ModelsProductVariant {
   cost: number;
-  id: string;
+  createdAt?: string;
+  id?: string;
+  product_id?: string;
   stock: number;
+  updatedAt?: string;
   value: string;
 }
 
+export interface ModelsShopOwner {
+  created_at?: string;
+  email?: string;
+  first_name?: string;
+  id?: string;
+  /** Nullable */
+  last_name?: string;
+  login?: string;
+  /** Plain text password for requests */
+  password?: string;
+  /** Nullable */
+  phone_number?: string;
+  updated_at?: string;
+}
+
 export interface ModelsTenant {
+  code?: string;
   created_at?: string;
   id?: string;
   is_active?: boolean;
-  name: string;
+  name?: string;
   updated_at?: string;
 }
 
 export interface ModelsTgBotUser {
+  auth_date?: string;
+  contact_info?: string;
   created_at?: string;
-  first_name: string;
-  id: number;
+  delivery_address?: string;
+  email?: string;
+  first_name?: string;
+  id?: number;
   is_bot?: boolean;
   language_code?: string;
   last_name?: string;
   photo_url?: string;
-  tenant: string;
+  role?: string;
   updated_at?: string;
   username?: string;
 }
 
 export interface ModelsUpdateOrderStatusRequest {
   status: string;
-}
-
-export interface ModelsUpdateOrderStatusResponse {
-  message?: string;
-}
-
-export interface ModelsUser {
-  contact_info?: string;
-  created_at?: string;
-  delivery_address?: string;
-  id?: string;
-  tenant_id?: string;
-  tg_user_id?: number;
-  updated_at?: string;
 }
 
 import type {
@@ -194,7 +203,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "//localhost:8085",
+      baseURL: axiosConfig.baseURL || import.meta.env.VITE_API_BASE_URL || "/api",
     });
     this.secure = secure;
     this.format = format;
@@ -316,42 +325,107 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  auth = {
+  admin = {
     /**
-     * @description Authenticates an administrator using a Telegram login and a one-time code.
+     * @description Get a list of all registered shop owners
      *
-     * @tags users
-     * @name AdminCreate
-     * @summary Authenticate administrator
-     * @request POST:/auth/admin
+     * @tags shop-owners
+     * @name UsersList
+     * @summary Get a list of shop owners
+     * @request GET:/admin/users
      */
-    adminCreate: (
-      request: HandlersAdminAuthRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, string>({
-        path: `/auth/admin`,
+    usersList: (params: RequestParams = {}) =>
+      this.request<ModelsShopOwner[], string>({
+        path: `/admin/users`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create a new shop owner with the provided details
+     *
+     * @tags shop-owners
+     * @name UsersCreate
+     * @summary Create a new shop owner
+     * @request POST:/admin/users
+     */
+    usersCreate: (shopOwner: ModelsShopOwner, params: RequestParams = {}) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/admin/users`,
         method: "POST",
-        body: request,
+        body: shopOwner,
         type: ContentType.Json,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Sends a one-time authentication code to the user's Telegram chat for admin panel login.
+     * @description Delete a shop owner by its ID
      *
-     * @tags users
-     * @name SendCodeCreate
-     * @summary Send authentication code
-     * @request POST:/auth/send-code
+     * @tags shop-owners
+     * @name UsersDelete
+     * @summary Delete a shop owner
+     * @request DELETE:/admin/users/{id}
      */
-    sendCodeCreate: (
-      request: HandlersSendAuthCodeRequest,
+    usersDelete: (id: string, params: RequestParams = {}) =>
+      this.request<string, string>({
+        path: `/admin/users/${id}`,
+        method: "DELETE",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get a single shop owner by its ID
+     *
+     * @tags shop-owners
+     * @name UsersDetail
+     * @summary Get a single shop owner
+     * @request GET:/admin/users/{id}
+     */
+    usersDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/admin/users/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update an existing shop owner with the provided details
+     *
+     * @tags shop-owners
+     * @name UsersUpdate
+     * @summary Update an existing shop owner
+     * @request PUT:/admin/users/{id}
+     */
+    usersUpdate: (
+      id: string,
+      shopOwner: ModelsShopOwner,
       params: RequestParams = {},
     ) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/admin/users/${id}`,
+        method: "PUT",
+        body: shopOwner,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  auth = {
+    /**
+     * @description Authenticates a shop owner with login and password, returning a JWT token.
+     *
+     * @tags auth
+     * @name LoginCreate
+     * @summary Shop owner login
+     * @request POST:/auth/login
+     */
+    loginCreate: (request: ModelsLoginRequest, params: RequestParams = {}) =>
       this.request<Record<string, string>, string>({
-        path: `/auth/send-code`,
+        path: `/auth/login`,
         method: "POST",
         body: request,
         type: ContentType.Json,
@@ -367,18 +441,10 @@ export class Api<
      * @summary Authenticate a Telegram Web App user
      * @request POST:/auth/tg-web-app
      */
-    tgWebAppCreate: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      user: ModelsTgBotUser,
-      params: RequestParams = {},
-    ) =>
+    tgWebAppCreate: (user: ModelsTgBotUser, params: RequestParams = {}) =>
       this.request<Record<string, string>, string>({
         path: `/auth/tg-web-app`,
         method: "POST",
-        query: query,
         body: user,
         type: ContentType.Json,
         format: "json",
@@ -387,174 +453,106 @@ export class Api<
   };
   categories = {
     /**
-     * @description Get a list of all categories for a tenant.
+     * @description Get a list of all registered categories
      *
      * @tags categories
      * @name CategoriesList
-     * @summary List all categories
+     * @summary Get a list of categories
      * @request GET:/categories
-     * @secure
      */
-    categoriesList: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    categoriesList: (params: RequestParams = {}) =>
       this.request<ModelsCategory[], string>({
         path: `/categories`,
         method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Create a new category for a tenant.
+     * @description Create a new category with the provided details
      *
      * @tags categories
      * @name CategoriesCreate
      * @summary Create a new category
      * @request POST:/categories
-     * @secure
      */
     categoriesCreate: (category: ModelsCategory, params: RequestParams = {}) =>
       this.request<ModelsCategory, string>({
         path: `/categories`,
         method: "POST",
         body: category,
-        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Delete a category by its ID for a tenant.
+     * @description Delete a category by its ID
      *
      * @tags categories
      * @name CategoriesDelete
      * @summary Delete a category
      * @request DELETE:/categories/{id}
-     * @secure
      */
-    categoriesDelete: (
-      id: string,
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, string>({
+    categoriesDelete: (id: number, params: RequestParams = {}) =>
+      this.request<string, string>({
         path: `/categories/${id}`,
         method: "DELETE",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Get a category by its ID for a tenant.
+     * @description Get a single category by its ID
      *
      * @tags categories
      * @name CategoriesDetail
-     * @summary Get a category by ID
+     * @summary Get a single category
      * @request GET:/categories/{id}
-     * @secure
      */
-    categoriesDetail: (
-      id: string,
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
+    categoriesDetail: (id: number, params: RequestParams = {}) =>
+      this.request<ModelsCategory, string>({
+        path: `/categories/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update an existing category with the provided details
+     *
+     * @tags categories
+     * @name CategoriesUpdate
+     * @summary Update an existing category
+     * @request PUT:/categories/{id}
+     */
+    categoriesUpdate: (
+      id: number,
+      category: ModelsCategory,
       params: RequestParams = {},
     ) =>
       this.request<ModelsCategory, string>({
         path: `/categories/${id}`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Update an existing category for a tenant.
-     *
-     * @tags categories
-     * @name CategoriesUpdate
-     * @summary Update a category
-     * @request PUT:/categories/{id}
-     * @secure
-     */
-    categoriesUpdate: (
-      id: string,
-      category: ModelsCategory,
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, string>({
-        path: `/categories/${id}`,
         method: "PUT",
         body: category,
-        secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  customers = {
-    /**
-     * @description Get a list of customers (users) associated with a specific tenant.
-     *
-     * @tags users
-     * @name CustomersList
-     * @summary Get customers for a tenant
-     * @request GET:/customers
-     * @secure
-     */
-    customersList: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsUser[], string>({
-        path: `/customers`,
-        method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
   };
   orders = {
     /**
-     * @description Get a list of orders for a given tenant.
+     * @description Get a list of all orders for a given tenant
      *
      * @tags orders
      * @name OrdersList
      * @summary Get a list of orders
      * @request GET:/orders
-     * @secure
      */
-    ordersList: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    ordersList: (params: RequestParams = {}) =>
       this.request<ModelsOrder[], string>({
         path: `/orders`,
         method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
@@ -566,49 +564,16 @@ export class Api<
      * @name OrdersCreate
      * @summary Create a new order
      * @request POST:/orders
-     * @secure
      */
     ordersCreate: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
       order: ModelsCreateOrderRequest,
       params: RequestParams = {},
     ) =>
       this.request<ModelsOrder, string>({
         path: `/orders`,
         method: "POST",
-        query: query,
         body: order,
-        secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Get a single order by its ID for a given tenant.
-     *
-     * @tags orders
-     * @name OrdersDetail
-     * @summary Get a single order by ID
-     * @request GET:/orders/{id}
-     * @secure
-     */
-    ordersDetail: (
-      id: number,
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsOrder, string>({
-        path: `/orders/${id}`,
-        method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
@@ -620,18 +585,16 @@ export class Api<
      * @name StatusUpdate
      * @summary Update order status
      * @request PUT:/orders/{id}/status
-     * @secure
      */
     statusUpdate: (
       id: number,
       status: ModelsUpdateOrderStatusRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsUpdateOrderStatusResponse, string>({
+      this.request<string, string>({
         path: `/orders/${id}/status`,
         method: "PUT",
         body: status,
-        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -645,39 +608,31 @@ export class Api<
      * @name ProductsList
      * @summary Get a list of products
      * @request GET:/products
-     * @secure
      */
-    productsList: (
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    productsList: (params: RequestParams = {}) =>
       this.request<ModelsProduct[], string>({
         path: `/products`,
         method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Create a new product for a tenant.
+     * @description Create a new product with the provided details.
      *
      * @tags products
      * @name ProductsCreate
      * @summary Create a new product
      * @request POST:/products
-     * @secure
      */
-    productsCreate: (product: ModelsProduct, params: RequestParams = {}) =>
+    productsCreate: (
+      product: ModelsCreateProductRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<ModelsProduct, string>({
         path: `/products`,
         method: "POST",
         body: product,
-        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -690,21 +645,11 @@ export class Api<
      * @name ProductsDelete
      * @summary Delete a product
      * @request DELETE:/products/{id}
-     * @secure
      */
-    productsDelete: (
-      id: string,
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, string>({
+    productsDelete: (id: string, params: RequestParams = {}) =>
+      this.request<string, string>({
         path: `/products/${id}`,
         method: "DELETE",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
@@ -716,44 +661,124 @@ export class Api<
      * @name ProductsDetail
      * @summary Get a single product
      * @request GET:/products/{id}
-     * @secure
      */
-    productsDetail: (
-      id: string,
-      query: {
-        /** Tenant ID */
-        tenant: string;
-      },
-      params: RequestParams = {},
-    ) =>
+    productsDetail: (id: string, params: RequestParams = {}) =>
       this.request<ModelsProduct, string>({
         path: `/products/${id}`,
         method: "GET",
-        query: query,
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Update an existing product.
+     * @description Update an existing product with the provided details.
      *
      * @tags products
      * @name ProductsUpdate
-     * @summary Update a product
+     * @summary Update an existing product
      * @request PUT:/products/{id}
-     * @secure
      */
     productsUpdate: (
       id: string,
       product: ModelsProduct,
       params: RequestParams = {},
     ) =>
-      this.request<Record<string, string>, string>({
+      this.request<ModelsProduct, string>({
         path: `/products/${id}`,
         method: "PUT",
         body: product,
-        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  shopOwners = {
+    /**
+     * @description Get a list of all registered shop owners.
+     *
+     * @tags shop-owners
+     * @name ShopOwnersList
+     * @summary Get a list of shop owners
+     * @request GET:/shop-owners
+     */
+    shopOwnersList: (params: RequestParams = {}) =>
+      this.request<ModelsShopOwner[], string>({
+        path: `/shop-owners`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create a new shop owner with the provided details.
+     *
+     * @tags shop-owners
+     * @name ShopOwnersCreate
+     * @summary Create a new shop owner
+     * @request POST:/shop-owners
+     */
+    shopOwnersCreate: (
+      shopOwner: ModelsShopOwner,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/shop-owners`,
+        method: "POST",
+        body: shopOwner,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Delete a shop owner by its ID.
+     *
+     * @tags shop-owners
+     * @name ShopOwnersDelete
+     * @summary Delete a shop owner
+     * @request DELETE:/shop-owners/{id}
+     */
+    shopOwnersDelete: (id: string, params: RequestParams = {}) =>
+      this.request<string, string>({
+        path: `/shop-owners/${id}`,
+        method: "DELETE",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get a single shop owner by its ID.
+     *
+     * @tags shop-owners
+     * @name ShopOwnersDetail
+     * @summary Get a single shop owner
+     * @request GET:/shop-owners/{id}
+     */
+    shopOwnersDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/shop-owners/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update an existing shop owner with the provided details.
+     *
+     * @tags shop-owners
+     * @name ShopOwnersUpdate
+     * @summary Update an existing shop owner
+     * @request PUT:/shop-owners/{id}
+     */
+    shopOwnersUpdate: (
+      id: string,
+      shopOwner: ModelsShopOwner,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsShopOwner, string>({
+        path: `/shop-owners/${id}`,
+        method: "PUT",
+        body: shopOwner,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -761,116 +786,89 @@ export class Api<
   };
   tenants = {
     /**
-     * @description Get a list of all tenants. Admin only.
+     * @description Get a list of all registered tenants
      *
      * @tags tenants
      * @name TenantsList
-     * @summary List all tenants
+     * @summary Get a list of tenants
      * @request GET:/tenants
-     * @secure
      */
     tenantsList: (params: RequestParams = {}) =>
       this.request<ModelsTenant[], string>({
         path: `/tenants`,
         method: "GET",
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Create a new tenant. Admin only.
+     * @description Create a new tenant with the provided details
      *
      * @tags tenants
      * @name TenantsCreate
      * @summary Create a new tenant
      * @request POST:/tenants
-     * @secure
      */
     tenantsCreate: (tenant: ModelsTenant, params: RequestParams = {}) =>
       this.request<ModelsTenant, string>({
         path: `/tenants`,
         method: "POST",
         body: tenant,
-        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Delete a tenant by its ID. Admin only.
+     * @description Delete a tenant by its ID
      *
      * @tags tenants
      * @name TenantsDelete
      * @summary Delete a tenant
-     * @request DELETE:/tenants/{tenantID}
-     * @secure
+     * @request DELETE:/tenants/{id}
      */
-    tenantsDelete: (tenantId: string, params: RequestParams = {}) =>
-      this.request<Record<string, string>, string>({
-        path: `/tenants/${tenantId}`,
+    tenantsDelete: (id: number, params: RequestParams = {}) =>
+      this.request<string, string>({
+        path: `/tenants/${id}`,
         method: "DELETE",
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Get a tenant by its ID. Admin only.
+     * @description Get a single tenant by its ID
      *
      * @tags tenants
      * @name TenantsDetail
-     * @summary Get a tenant by ID
-     * @request GET:/tenants/{tenantID}
-     * @secure
+     * @summary Get a single tenant
+     * @request GET:/tenants/{id}
      */
-    tenantsDetail: (tenantId: string, params: RequestParams = {}) =>
+    tenantsDetail: (id: number, params: RequestParams = {}) =>
       this.request<ModelsTenant, string>({
-        path: `/tenants/${tenantId}`,
+        path: `/tenants/${id}`,
         method: "GET",
-        secure: true,
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Update an existing tenant. Admin only.
+     * @description Update an existing tenant with the provided details
      *
      * @tags tenants
      * @name TenantsUpdate
-     * @summary Update a tenant
-     * @request PUT:/tenants/{tenantID}
-     * @secure
+     * @summary Update an existing tenant
+     * @request PUT:/tenants/{id}
      */
     tenantsUpdate: (
-      tenantId: string,
+      id: number,
       tenant: ModelsTenant,
       params: RequestParams = {},
     ) =>
-      this.request<Record<string, string>, string>({
-        path: `/tenants/${tenantId}`,
+      this.request<ModelsTenant, string>({
+        path: `/tenants/${id}`,
         method: "PUT",
         body: tenant,
-        secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  users = {
-    /**
-     * @description Get a list of all registered users
-     *
-     * @tags users
-     * @name UsersList
-     * @summary Get all users
-     * @request GET:/users
-     */
-    usersList: (params: RequestParams = {}) =>
-      this.request<ModelsUser[], string>({
-        path: `/users`,
-        method: "GET",
         format: "json",
         ...params,
       }),

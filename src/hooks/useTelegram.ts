@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { WebApp } from "telegram-web-app";
 
-const tg: WebApp = (window as any).Telegram?.WebApp;
+const tg = window.Telegram?.WebApp;
 
 // Helper to safely execute Telegram API calls
 const safeTgCall = (callback: () => void) => {

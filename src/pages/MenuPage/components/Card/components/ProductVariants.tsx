@@ -1,10 +1,11 @@
 import React, { FC } from "react";
-import { ProductVariant, VariantState } from "@/types";
+import { ModelsProductVariant } from "@/backendApi";
+import { VariantState } from "@/types";
 import styles from '@/pages/MenuPage/components/Card/components/ProductVariants.module.css';
 
 const ProductVariants: FC<{
-  variants?: ProductVariant[];
-  setSelectVariant: (v: ProductVariant) => void;
+  variants?: ModelsProductVariant[];
+  setSelectVariant: (v: ModelsProductVariant) => void;
   selected?: string;
   variantState?: VariantState;
 }> = ({ variants, setSelectVariant, selected, variantState = {} }) => {
@@ -16,10 +17,10 @@ const ProductVariants: FC<{
           <div
             className={`${styles.variantItem} ${isSelected ? styles.selected : ''}`}
             onClick={() => setSelectVariant(variant)}
-            key={variant.id}
+            key={variant.value}
           >
             {variant.value}
-            {Boolean(variantState[variant.id]) && (
+            {variant.id && Boolean(variantState[variant.id]) && (
               <span className={styles.count}>
                 {variantState[variant.id]}
               </span>

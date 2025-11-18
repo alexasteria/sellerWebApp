@@ -4,13 +4,13 @@ import styles from "@/pages/MenuPage/components/Card/ExpandableCard.module.css";
 import CardHeader from "@/pages/MenuPage/components/Card/CardHeader";
 import CardExpandedContent from "@/pages/MenuPage/components/Card/CardExpandedContent";
 import { useExpandedCard } from "@/contexts/ExpandedCardContext";
-import { ModelsProduct } from "@/backendApi.ts";
+import { ModelsProduct, ModelsProductVariant } from "@/backendApi.ts";
 
 interface ExpandableCardProps {
   item: ModelsProduct;
   variantState?: VariantState;
-  onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (product: Product, variantID: string) => void;
+  onIncrement: (product: ModelsProduct, variantID: string) => void;
+  onDecrement: (product: ModelsProduct, variantID: string) => void;
 }
 
 const ExpandableCard: FC<ExpandableCardProps> = ({
@@ -21,7 +21,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
 }) => {
   const { expandedCardId, setExpandedCardId } = useExpandedCard();
   const isExpanded = expandedCardId === item.id;
-  const [selectVariant, setSelectVariant] = useState(item.variants[0]);
+  const [selectVariant, setSelectVariant] = useState<ModelsProductVariant>(item.variants[0]);
 
   const price = useMemo(() => {
     if (!selectVariant) throw Error("не выбра вариант");
@@ -30,10 +30,12 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
 
   const discountPrice = useMemo(() => {
     if (!item.discount) return price;
-    return price * (1 - item.discount / 100);
+    const calculatedPrice = price * (1 - item.discount / 100);
+    return parseFloat(calculatedPrice.toFixed(2));
   }, [price]);
 
   const quantity = useMemo(() => {
+    if (!selectVariant || !selectVariant.id) return 0;
     return variantState?.[selectVariant.id] || 0;
   }, [selectVariant, variantState]);
 
@@ -44,7 +46,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   }, [variantState]);
 
   const toggleExpand = () => {
-    setExpandedCardId(isExpanded ? null : item.id);
+    setExpandedCardId(isExpanded ? null : (item.id || null));
   };
 
   return (

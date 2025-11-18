@@ -5,10 +5,9 @@ import {
   useState,
   useEffect,
 } from "react";
-import { useParams } from "react-router-dom";
-import { ModelsProduct, ModelsCategory } from "@/backendApi";
+import { ModelsProduct } from "@/backendApi";
 import { productService } from "@/services/ProductService";
-import { categoryService } from "@/services/CategoryService";
+// import { categoryService } from "@/services/CategoryService"; // Categories API is missing
 
 // Hardcoded initial data (can be used for development or as a fallback)
 const prod: ModelsProduct[] = [
@@ -17,8 +16,8 @@ const prod: ModelsProduct[] = [
 
 interface ProductsContextType {
   products: ModelsProduct[];
-  categories: ModelsCategory[];
   isLoading: boolean;
+  error: Error | null;
 }
 
 const ProductsContext = createContext<ProductsContextType | undefined>(
@@ -27,56 +26,41 @@ const ProductsContext = createContext<ProductsContextType | undefined>(
 
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<ModelsProduct[]>([]);
-  const [categories, setCategories] = useState<ModelsCategory[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { tenantId } = useParams<{ tenantId: string }>();
+  const [error, setError] = useState<Error | null>(null);
+  const tenantCode = import.meta.env.VITE_TENANT_CODE;
 
   useEffect(() => {
     const loadData = async () => {
-      if (!tenantId) {
-        setIsLoading(false);
-        setProducts(prod); // fallback to mock
-        setCategories([]);
-        return;
-      }
-
       setIsLoading(true);
+      setError(null);
       try {
-        const [fetchedProducts, fetchedCategories] = await Promise.all([
-          productService.getProducts(tenantId),
-          categoryService.getCategories(tenantId),
-        ]);
+        const fetchedProducts = await productService.getProducts();
 
         if (fetchedProducts.length > 0) {
           setProducts(fetchedProducts);
         } else {
           setProducts([]);
         }
-
-        if (fetchedCategories.length > 0) {
-          setCategories(fetchedCategories);
-        } else {
-          setCategories([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
+        setError(err as Error);
         setProducts(prod); // fallback to mock on error
-        setCategories([]);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadData();
-  }, [tenantId]);
+  }, [tenantCode]);
 
   const value = useMemo(
     () => ({
       products,
-      categories,
       isLoading,
+      error,
     }),
-    [products, categories, isLoading],
+    [products, isLoading, error],
   );
 
   return (

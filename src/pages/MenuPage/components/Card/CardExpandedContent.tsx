@@ -1,15 +1,16 @@
 import React, { FC } from "react";
-import { Product, ProductVariant, VariantState } from "@/types";
+import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
+import { VariantState } from "@/types";
 import ProductVariants from "@/pages/MenuPage/components/Card/components/ProductVariants";
 import styles from "@/pages/MenuPage/components/Card/CardExpandedContent.module.css";
 
 interface CardExpandedContentProps {
-  item: Product;
+  item: ModelsProduct;
   variantState: VariantState;
-  onIncrement: (product: Product, variantID: string) => void;
-  onDecrement: (product: Product, variantID: string) => void;
-  selectVariant: ProductVariant;
-  setSelectVariant: (v: ProductVariant) => void;
+  onIncrement: (product: ModelsProduct, variantID: string) => void;
+  onDecrement: (product: ModelsProduct, variantID: string) => void;
+  selectVariant: ModelsProductVariant;
+  setSelectVariant: (v: ModelsProductVariant) => void;
   quantity: number;
   discountPrice: number;
   isExpanded: boolean;
@@ -39,7 +40,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
         <div className={styles.cardExpandedIngredients}>
           <div className={styles.ingredientsTitle}>{item.tags.name}:</div>
           <div className={styles.ingredientsList}>
-            {item.tags.tags.map((value, index) => (
+            {item.tags.tags.map((value: string, index: number) => (
               <span key={index} className={styles.ingredientItem}>
                 {value}
               </span>
@@ -64,7 +65,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
               className={styles.cardExpandedBtn}
               onClick={(e) => {
                 e.stopPropagation();
-                onDecrement(item, selectVariant.id);
+                onDecrement(item, selectVariant.id!);
               }}
               aria-label="Уменьшить количество"
             >
@@ -75,7 +76,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
               className={styles.cardExpandedBtn}
               onClick={(e) => {
                 e.stopPropagation();
-                onIncrement(item, selectVariant.id);
+                onIncrement(item, selectVariant.id!);
               }}
               aria-label="Увеличить количество"
             >
@@ -87,7 +88,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
             className={styles.cardExpandedAddBtn}
             onClick={(e) => {
               e.stopPropagation();
-              onIncrement(item, selectVariant.id);
+              onIncrement(item, selectVariant.id!);
             }}
             aria-label={`Добавить ${item.title}`}
           >

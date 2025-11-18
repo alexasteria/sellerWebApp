@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { Product } from "@/types";
-import styles from "@/pages/MenuPage/components/Card/CardHeader.module.css";
+import { ModelsProduct } from "@/backendApi";
+import styles from './CardHeader.module.css';
 
 interface CardHeaderProps {
-  item: Product;
+  item: ModelsProduct;
   isExpanded: boolean;
   totalCount: number;
   discountPrice: number;

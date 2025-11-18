@@ -1,9 +1,15 @@
-import { apiClient, ModelsCategory } from "@/backendApi";
+// TODO: Categories API is missing. This service needs to be re-evaluated once the API is available.
+// import { ModelsCategory } from "@/backendApi";
+
+import { Api } from "@/backendApi";
+
+export const apiClient = new Api({});
 
 /**
  * Service class for handling category-related operations.
  * Follows the Singleton pattern.
  */
+/*
 class CategoryService {
   private static instance: CategoryService;
 
@@ -21,6 +27,7 @@ class CategoryService {
    * @param tenantId - The ID of the tenant.
    * @returns A promise that resolves to an array of categories.
    */
+/*
   public async getCategories(tenantId: string): Promise<ModelsCategory[]> {
     try {
       const response = await apiClient.categories.categoriesList({ tenant: tenantId });
@@ -33,3 +40,4 @@ class CategoryService {
 }
 
 export const categoryService = CategoryService.getInstance();
+*/
