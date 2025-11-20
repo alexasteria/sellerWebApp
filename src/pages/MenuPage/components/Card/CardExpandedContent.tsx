@@ -36,17 +36,23 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
         <p className={styles.cardExpandedDescription}>{item.description}</p>
       )}
 
-      {item.tags && (
-        <div className={styles.cardExpandedIngredients}>
-          <div className={styles.ingredientsTitle}>{item.tags.name}:</div>
-          <div className={styles.ingredientsList}>
-            {item.tags.tags.map((value: string, index: number) => (
-              <span key={index} className={styles.ingredientItem}>
-                {value}
-              </span>
-            ))}
-          </div>
-        </div>
+      {!!item.tags && (
+        (Array.isArray(item.tags) ? item.tags : [item.tags]).map((group, idx) => {
+          if (!group || !group.tags?.length) return null;
+          const groupKey = ("id" in group && group.id) || `${group.name}-${idx}`;
+          return (
+            <div key={groupKey} className={styles.cardExpandedIngredients}>
+              <div className={styles.ingredientsTitle}>{group.name}:</div>
+              <div className={styles.ingredientsList}>
+                {group.tags.map((value: string, index: number) => (
+                  <span key={`${groupKey}-${index}`} className={styles.ingredientItem}>
+                    {value}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })
       )}
 
       {selectVariant && (
