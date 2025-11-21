@@ -1,0 +1,20 @@
+.skeletonButton {
+  height: 36px; /* Match category button height */
+  width: 80px;  /* Approximate width, can vary */
+  margin: 5px;
+  border-radius: 18px; /* Match category button border-radius */
+  background: var(--tg-theme-secondary-bg-color);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}

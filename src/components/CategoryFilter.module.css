@@ -1,0 +1,38 @@
+.filterContainer {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  gap: 10px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap; /* Prevent buttons from wrapping */
+}
+
+.filterButton {
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.filterButton:hover {
+  background-color: #e0e0e0;
+}
+
+.filterButton.active {
+  background-color: #ff6f61; /* A distinct accent color for active state */
+  color: #fff;
+  border-color: #ff6f61;
+}
+
+.filterButton:active {
+  transform: translateY(1px);
+}
