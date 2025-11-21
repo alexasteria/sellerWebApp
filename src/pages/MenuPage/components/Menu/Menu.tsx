@@ -1,17 +1,35 @@
 import React, { FC } from "react";
 import ExpandableCard from "@/pages/MenuPage/components/Card/ExpandableCard";
-import { CartState, Product } from "@/types";
 import styles from "@/pages/MenuPage/components/Menu/Menu.module.css";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { increment as cartIncrement, decrement as cartDecrement, selectCart } from "@/store/cartSlice";
 import { ModelsProduct } from "@/backendApi.ts";
+import ProductCardSkeleton from "@/components/skeletons/ProductCardSkeleton"; // Import skeleton
 
-interface MenuProps {
-  cart: CartState;
-  products: ModelsProduct[];
-  onIncrement: (product: ModelsProduct, variantID: string) => void;
-  onDecrement: (product: ModelsProduct, variantID: string) => void;
-}
+const Menu: FC = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.products.products);
+  const productsLoading = useAppSelector((state) => state.products.isLoading); // Get products loading state
+  const cart = useAppSelector(selectCart);
 
-const Menu: FC<MenuProps> = ({ cart, products, onIncrement, onDecrement }) => {
+  const handleIncrement = (product: ModelsProduct, variantID: number | undefined) => {
+    dispatch(cartIncrement({ product, variantID }));
+  };
+
+  const handleDecrement = (product: ModelsProduct, variantID: number | undefined) => {
+    dispatch(cartDecrement({ product, variantID }));
+  };
+
+  if (productsLoading) {
+    return (
+      <section className={styles.grid}>
+        {[...Array(6)].map((_, index) => ( // Render 6 skeleton cards
+          <ProductCardSkeleton key={index} />
+        ))}
+      </section>
+    );
+  }
+
   return (
     <section className={styles.grid}>
       {products.map((item) => (
@@ -19,8 +37,8 @@ const Menu: FC<MenuProps> = ({ cart, products, onIncrement, onDecrement }) => {
           key={item.id}
           item={item}
           variantState={item.id ? cart[item.id] : undefined}
-          onIncrement={onIncrement}
-          onDecrement={onDecrement}
+          onIncrement={handleIncrement}
+          onDecrement={handleDecrement}
         />
       ))}
     </section>

@@ -10,18 +10,29 @@
  * ---------------------------------------------------------------
  */
 
+export interface HandlersErrorResponse {
+  code?: number;
+  message?: string;
+}
+
 export interface ModelsCartItem {
   price: number;
-  productID: string;
+  productID: number;
   quantity: number;
-  variantID: string;
+  variantID: number;
 }
 
 export interface ModelsCategory {
   created_at?: string;
-  id?: string;
+  deleted_at?: string;
+  id?: number;
   name?: string;
+  tenant_id?: number;
   updated_at?: string;
+}
+
+export interface ModelsCreateCategoryRequest {
+  name?: string;
 }
 
 export interface ModelsCreateOrderRequest {
@@ -34,9 +45,46 @@ export interface ModelsCreateProductRequest {
   description?: string;
   discount?: number;
   img?: string;
-  tags?: ModelsProductTagGroup;
+  is_available?: boolean;
+  tags?: ModelsProductTagGroup[];
   title: string;
-  variants: ModelsProductVariant[];
+  variants: ModelsCreateProductVariantRequest[];
+}
+
+export interface ModelsCreateProductVariantRequest {
+  cost: number;
+  stock: number;
+  value: string;
+}
+
+export interface ModelsCreateShopOwnerRequest {
+  email: string;
+  first_name: string;
+  last_name?: string;
+  login: string;
+  password: string;
+  phone_number?: string;
+}
+
+export interface ModelsCreateTenantRequest {
+  code: string;
+  is_active?: boolean;
+  name: string;
+}
+
+export interface ModelsCreateTgBotUserRequest {
+  auth_date?: string;
+  contact_info?: string;
+  delivery_address?: string;
+  email?: string;
+  first_name?: string;
+  id?: number;
+  is_bot?: boolean;
+  language_code?: string;
+  last_name?: string;
+  photo_url?: string;
+  role?: string;
+  username?: string;
 }
 
 export interface ModelsLoginRequest {
@@ -49,7 +97,8 @@ export interface ModelsOrder {
   id: number;
   order_items?: ModelsOrderItem[];
   status: string;
-  tg_user_id: number;
+  tenant_id?: number;
+  tg_user?: ModelsTgUser;
   total_amount: number;
   updated_at: string;
 }
@@ -58,47 +107,63 @@ export interface ModelsOrderItem {
   created_at?: string;
   order_id?: number;
   price?: number;
-  product_id?: string;
+  product?: ModelsProduct;
   quantity?: number;
+  tenant_id?: number;
   total_price?: number;
-  variant_id?: string;
+  variant?: ModelsProductVariant;
 }
 
 export interface ModelsProduct {
-  categoryID: string;
+  categoryID: number;
   createdAt?: string;
+  deleted_at?: string;
   description?: string;
   discount?: number;
-  id?: string;
+  id?: number;
   img?: string;
-  tags?: ModelsProductTagGroup;
+  is_available?: boolean;
+  tags?: ModelsProductTagGroup[];
+  tenant_id?: number;
   title: string;
   updatedAt?: string;
   variants: ModelsProductVariant[];
 }
 
 export interface ModelsProductTagGroup {
-  id?: string;
+  created_at?: string;
+  id?: number;
   name: string;
-  product_id?: string;
+  product_id?: number;
   tags: string[];
+  tenant_id?: number;
+  updated_at?: string;
+}
+
+export interface ModelsProductTagGroupName {
+  created_at?: string;
+  name?: string;
+  tenant_id?: number;
+  updated_at?: string;
 }
 
 export interface ModelsProductVariant {
   cost: number;
   createdAt?: string;
-  id?: string;
-  product_id?: string;
+  id?: number;
+  product_id?: number;
   stock: number;
+  tenant_id?: number;
   updatedAt?: string;
   value: string;
 }
 
 export interface ModelsShopOwner {
   created_at?: string;
+  deleted_at?: string;
   email?: string;
   first_name?: string;
-  id?: string;
+  id?: number;
   /** Nullable */
   last_name?: string;
   login?: string;
@@ -112,16 +177,19 @@ export interface ModelsShopOwner {
 export interface ModelsTenant {
   code?: string;
   created_at?: string;
-  id?: string;
+  deleted_at?: string;
+  id?: number;
   is_active?: boolean;
   name?: string;
+  shop_owner_id?: number;
   updated_at?: string;
 }
 
-export interface ModelsTgBotUser {
+export interface ModelsTgUser {
   auth_date?: string;
   contact_info?: string;
   created_at?: string;
+  deleted_at?: string;
   delivery_address?: string;
   email?: string;
   first_name?: string;
@@ -131,12 +199,17 @@ export interface ModelsTgBotUser {
   last_name?: string;
   photo_url?: string;
   role?: string;
+  tenant_id?: number;
   updated_at?: string;
   username?: string;
 }
 
 export interface ModelsUpdateOrderStatusRequest {
   status: string;
+}
+
+export interface ModelsUpdateProductAvailabilityRequest {
+  is_available?: boolean;
 }
 
 import type {
@@ -203,7 +276,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || import.meta.env.VITE_API_BASE_URL || "/api",
+      baseURL: axiosConfig.baseURL || "//localhost:8085",
     });
     this.secure = secure;
     this.format = format;
@@ -350,7 +423,10 @@ export class Api<
      * @summary Create a new shop owner
      * @request POST:/admin/users
      */
-    usersCreate: (shopOwner: ModelsShopOwner, params: RequestParams = {}) =>
+    usersCreate: (
+      shopOwner: ModelsCreateShopOwnerRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<ModelsShopOwner, string>({
         path: `/admin/users`,
         method: "POST",
@@ -368,7 +444,7 @@ export class Api<
      * @summary Delete a shop owner
      * @request DELETE:/admin/users/{id}
      */
-    usersDelete: (id: string, params: RequestParams = {}) =>
+    usersDelete: (id: number, params: RequestParams = {}) =>
       this.request<string, string>({
         path: `/admin/users/${id}`,
         method: "DELETE",
@@ -384,7 +460,7 @@ export class Api<
      * @summary Get a single shop owner
      * @request GET:/admin/users/{id}
      */
-    usersDetail: (id: string, params: RequestParams = {}) =>
+    usersDetail: (id: number, params: RequestParams = {}) =>
       this.request<ModelsShopOwner, string>({
         path: `/admin/users/${id}`,
         method: "GET",
@@ -401,7 +477,7 @@ export class Api<
      * @request PUT:/admin/users/{id}
      */
     usersUpdate: (
-      id: string,
+      id: number,
       shopOwner: ModelsShopOwner,
       params: RequestParams = {},
     ) =>
@@ -441,7 +517,10 @@ export class Api<
      * @summary Authenticate a Telegram Web App user
      * @request POST:/auth/tg-web-app
      */
-    tgWebAppCreate: (user: ModelsTgBotUser, params: RequestParams = {}) =>
+    tgWebAppCreate: (
+      user: ModelsCreateTgBotUserRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<Record<string, string>, string>({
         path: `/auth/tg-web-app`,
         method: "POST",
@@ -476,7 +555,10 @@ export class Api<
      * @summary Create a new category
      * @request POST:/categories
      */
-    categoriesCreate: (category: ModelsCategory, params: RequestParams = {}) =>
+    categoriesCreate: (
+      category: ModelsCreateCategoryRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<ModelsCategory, string>({
         path: `/categories`,
         method: "POST",
@@ -600,19 +682,64 @@ export class Api<
         ...params,
       }),
   };
+  productTagGroupNames = {
+    /**
+     * @description Get a list of all product tag group names for a given tenant
+     *
+     * @tags product-tag-group-names
+     * @name ProductTagGroupNamesList
+     * @summary Get a list of product tag group names
+     * @request GET:/product-tag-group-names
+     */
+    productTagGroupNamesList: (params: RequestParams = {}) =>
+      this.request<string[], string>({
+        path: `/product-tag-group-names`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Create a new product tag group name for a given tenant
+     *
+     * @tags product-tag-group-names
+     * @name ProductTagGroupNamesCreate
+     * @summary Create a new product tag group name
+     * @request POST:/product-tag-group-names
+     */
+    productTagGroupNamesCreate: (
+      name: ModelsProductTagGroupName,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsProductTagGroupName, string>({
+        path: `/product-tag-group-names`,
+        method: "POST",
+        body: name,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
   products = {
     /**
-     * @description Get a list of products for a given tenant.
+     * @description Get a list of products for a given tenant, optionally filtered by category.
      *
      * @tags products
      * @name ProductsList
      * @summary Get a list of products
      * @request GET:/products
      */
-    productsList: (params: RequestParams = {}) =>
-      this.request<ModelsProduct[], string>({
+    productsList: (
+      query?: {
+        /** Category ID to filter products */
+        category_id?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsProduct[], HandlersErrorResponse>({
         path: `/products`,
         method: "GET",
+        query: query,
         format: "json",
         ...params,
       }),
@@ -629,7 +756,7 @@ export class Api<
       product: ModelsCreateProductRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsProduct, string>({
+      this.request<ModelsProduct, HandlersErrorResponse>({
         path: `/products`,
         method: "POST",
         body: product,
@@ -647,7 +774,7 @@ export class Api<
      * @request DELETE:/products/{id}
      */
     productsDelete: (id: string, params: RequestParams = {}) =>
-      this.request<string, string>({
+      this.request<string, HandlersErrorResponse>({
         path: `/products/${id}`,
         method: "DELETE",
         format: "json",
@@ -663,7 +790,7 @@ export class Api<
      * @request GET:/products/{id}
      */
     productsDetail: (id: string, params: RequestParams = {}) =>
-      this.request<ModelsProduct, string>({
+      this.request<ModelsProduct, HandlersErrorResponse>({
         path: `/products/${id}`,
         method: "GET",
         format: "json",
@@ -683,10 +810,32 @@ export class Api<
       product: ModelsProduct,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsProduct, string>({
+      this.request<ModelsProduct, HandlersErrorResponse>({
         path: `/products/${id}`,
         method: "PUT",
         body: product,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update the availability status of a product.
+     *
+     * @tags products
+     * @name AvailabilityPartialUpdate
+     * @summary Update product availability
+     * @request PATCH:/products/{id}/availability
+     */
+    availabilityPartialUpdate: (
+      id: string,
+      availability: ModelsUpdateProductAvailabilityRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<HandlersErrorResponse, HandlersErrorResponse>({
+        path: `/products/${id}/availability`,
+        method: "PATCH",
+        body: availability,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -718,7 +867,7 @@ export class Api<
      * @request POST:/shop-owners
      */
     shopOwnersCreate: (
-      shopOwner: ModelsShopOwner,
+      shopOwner: ModelsCreateShopOwnerRequest,
       params: RequestParams = {},
     ) =>
       this.request<ModelsShopOwner, string>({
@@ -738,7 +887,7 @@ export class Api<
      * @summary Delete a shop owner
      * @request DELETE:/shop-owners/{id}
      */
-    shopOwnersDelete: (id: string, params: RequestParams = {}) =>
+    shopOwnersDelete: (id: number, params: RequestParams = {}) =>
       this.request<string, string>({
         path: `/shop-owners/${id}`,
         method: "DELETE",
@@ -754,7 +903,7 @@ export class Api<
      * @summary Get a single shop owner
      * @request GET:/shop-owners/{id}
      */
-    shopOwnersDetail: (id: string, params: RequestParams = {}) =>
+    shopOwnersDetail: (id: number, params: RequestParams = {}) =>
       this.request<ModelsShopOwner, string>({
         path: `/shop-owners/${id}`,
         method: "GET",
@@ -771,7 +920,7 @@ export class Api<
      * @request PUT:/shop-owners/{id}
      */
     shopOwnersUpdate: (
-      id: string,
+      id: number,
       shopOwner: ModelsShopOwner,
       params: RequestParams = {},
     ) =>
@@ -809,7 +958,10 @@ export class Api<
      * @summary Create a new tenant
      * @request POST:/tenants
      */
-    tenantsCreate: (tenant: ModelsTenant, params: RequestParams = {}) =>
+    tenantsCreate: (
+      tenant: ModelsCreateTenantRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<ModelsTenant, string>({
         path: `/tenants`,
         method: "POST",
@@ -869,6 +1021,23 @@ export class Api<
         method: "PUT",
         body: tenant,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  tgUsers = {
+    /**
+     * @description Get a list of all Telegram users for a given tenant
+     *
+     * @tags tg-users
+     * @name TgUsersList
+     * @summary Get a list of Telegram users
+     * @request GET:/tg-users
+     */
+    tgUsersList: (params: RequestParams = {}) =>
+      this.request<ModelsTgUser[], string>({
+        path: `/tg-users`,
+        method: "GET",
         format: "json",
         ...params,
       }),

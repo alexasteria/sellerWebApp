@@ -7,8 +7,8 @@ import styles from "@/pages/MenuPage/components/Card/CardExpandedContent.module.
 interface CardExpandedContentProps {
   item: ModelsProduct;
   variantState: VariantState;
-  onIncrement: (product: ModelsProduct, variantID: string) => void;
-  onDecrement: (product: ModelsProduct, variantID: string) => void;
+  onIncrement: (product: ModelsProduct, variantID: number | undefined) => void;
+  onDecrement: (product: ModelsProduct, variantID: number | undefined) => void;
   selectVariant: ModelsProductVariant;
   setSelectVariant: (v: ModelsProductVariant) => void;
   quantity: number;
@@ -71,7 +71,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
               className={styles.cardExpandedBtn}
               onClick={(e) => {
                 e.stopPropagation();
-                onDecrement(item, selectVariant.id!);
+                onDecrement(item, selectVariant.id);
               }}
               aria-label="Уменьшить количество"
             >
@@ -82,7 +82,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
               className={styles.cardExpandedBtn}
               onClick={(e) => {
                 e.stopPropagation();
-                onIncrement(item, selectVariant.id!);
+                onIncrement(item, selectVariant.id);
               }}
               aria-label="Увеличить количество"
             >
@@ -94,7 +94,7 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
             className={styles.cardExpandedAddBtn}
             onClick={(e) => {
               e.stopPropagation();
-              onIncrement(item, selectVariant.id!);
+              onIncrement(item, selectVariant.id);
             }}
             aria-label={`Добавить ${item.title}`}
           >

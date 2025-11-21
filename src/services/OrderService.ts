@@ -4,7 +4,7 @@ import {
   ModelsProduct,
 } from "@/backendApi";
 import { apiClient } from "@/apiClient";
-import { CartState } from "@/types";
+import { CartState, DeliveryInfo } from "@/types"; // Import DeliveryInfo
 import { WebAppUser } from "telegram-web-app";
 import { userService } from "./UserService";
 
@@ -29,34 +29,51 @@ class OrderService {
    * @param cart - The current cart state.
    * @param products - The list of all available products.
    * @param user - The authenticated user.
+   * @param deliveryInfo - The delivery information.
    * @returns The formatted request payload.
    */
   private createOrderPayload(
     cart: CartState,
     products: ModelsProduct[],
     user: WebAppUser,
+    deliveryInfo: DeliveryInfo | null, // Added deliveryInfo
   ): ModelsCreateOrderRequest {
     const cartItems: ModelsCreateOrderRequest["cart"] = [];
 
-    Object.entries(cart).forEach(([productId, variantState]) => {
+    Object.entries(cart).forEach(([productIdStr, variantState]) => {
+      const productId = Number(productIdStr); // Convert string key to number
       const product = products.find((p) => p.id === productId);
-      if (!product) return;
+      if (!product) {
+        console.warn(`Product with ID ${productId} not found.`);
+        return;
+      }
 
-      Object.entries(variantState).forEach(([variantId, count]) => {
+      Object.entries(variantState).forEach(([variantIdStr, count]) => {
         if (count <= 0) return;
+        const variantId = Number(variantIdStr); // Convert string key to number
         const variant = product.variants?.find((v) => v.id === variantId);
-        if (!variant) return;
+        if (!variant) {
+          console.warn(`Variant with ID ${variantId} not found for product ${product.id}.`);
+          return;
+        }
+
+        console.log(`Product ID: ${product.id}, Variant ID: ${variant.id}`);
 
         const discountedPrice = product.discount
           ? variant.cost * (1 - product.discount / 100)
           : variant.cost;
 
+        // Ensure product.id and variant.id are not undefined before pushing
+        if (product.id === undefined || variant.id === undefined) {
+            console.error(`Attempted to add cart item with undefined product.id (${product.id}) or variant.id (${variant.id})`);
+            return;
+        }
+
         cartItems.push({
-          productID: product.id as string,
-          variantID: variant.id as string,
+          productID: product.id,
+          variantID: variant.id,
           quantity: count,
-          price: discountedPrice, // Assuming the backend wants the final price per item
-          // tenantID: tenantId, // Removed: tenantID is not part of ModelsCartItem
+          price: discountedPrice,
         });
       });
     });
@@ -64,21 +81,14 @@ class OrderService {
     if (!user.id) {
         throw new Error("User ID is missing, cannot create order.");
     }
-
-    // Removed tgUser as it's not part of ModelsCreateOrderRequest
-    // const tgUser: ModelsCreateOrderRequest["tgUser"] = {
-    //     id: user.id,
-    //     first_name: user.first_name,
-    //     last_name: user.last_name,
-    //     username: user.username,
-    //     language_code: user.language_code,
-    //     photo_url: user.photo_url,
-    //     tenant: import.meta.env.VITE_TENANT_CODE,
-    // };
+    
+    // Delivery information is not directly part of ModelsCreateOrderRequest based on backendApi.ts
+    // It should be handled by updating the user profile separately if needed.
+    if (deliveryInfo) {
+        console.warn("Delivery information provided but ModelsCreateOrderRequest does not support it directly. Consider updating user profile separately.");
+    }
 
     return {
-      // tenantID: tenantId, // Removed: tenantID is not part of ModelsCreateOrderRequest
-      // tgUser: tgUser, // Removed: tgUser is not part of ModelsCreateOrderRequest
       cart: cartItems,
       userID: user.id, // Added userID as per ModelsCreateOrderRequest
     };
@@ -89,15 +99,17 @@ class OrderService {
    * @param cart - The current cart state.
    * @param products - The list of all available products.
    * @param user - The authenticated user.
+   * @param deliveryInfo - The delivery information.
    * @returns A promise that resolves to the created order or null on failure.
    */
   public async submitOrder(
     cart: CartState,
     products: ModelsProduct[],
     user: WebAppUser,
+    deliveryInfo: DeliveryInfo | null, // Added deliveryInfo
   ): Promise<ModelsOrder | null> {
     try {
-      const payload = this.createOrderPayload(cart, products, user);
+      const payload = this.createOrderPayload(cart, products, user, deliveryInfo); // Pass deliveryInfo
       
       if (payload.cart.length === 0) {
         console.warn("Cannot submit an empty order.");

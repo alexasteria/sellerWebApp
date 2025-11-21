@@ -6,7 +6,7 @@ import styles from '@/pages/MenuPage/components/Card/components/ProductVariants.
 const ProductVariants: FC<{
   variants?: ModelsProductVariant[];
   setSelectVariant: (v: ModelsProductVariant) => void;
-  selected?: string;
+  selected?: number;
   variantState?: VariantState;
 }> = ({ variants, setSelectVariant, selected, variantState = {} }) => {
   return (
@@ -20,9 +20,9 @@ const ProductVariants: FC<{
             key={variant.value}
           >
             {variant.value}
-            {variant.id && Boolean(variantState[variant.id]) && (
+            {variant.id && Boolean(variantState[String(variant.id)]) && (
               <span className={styles.count}>
-                {variantState[variant.id]}
+                {variantState[String(variant.id)]}
               </span>
             )}
           </div>

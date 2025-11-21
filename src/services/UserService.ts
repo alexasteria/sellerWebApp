@@ -1,4 +1,4 @@
-import { ModelsTgBotUser } from "@/backendApi";
+import { ModelsTgUser } from "@/backendApi";
 import { WebAppUser } from "telegram-web-app";
 import { apiClient } from "@/apiClient";
 
@@ -29,8 +29,8 @@ class UserService {
    * @returns A promise that resolves to the authentication token or response string.
    */
   public async authenticateUser(user: WebAppUser): Promise<string | null> {
-    // The backend expects a ModelsTgBotUser object. We map the WebAppUser to it.
-    const userData: ModelsTgBotUser = {
+    // The backend expects a ModelsTgUser object. We map the WebAppUser to it.
+    const userData: ModelsTgUser = {
       id: user.id,
       first_name: user.first_name,
       last_name: user.last_name,

@@ -1,13 +1,12 @@
 import React, { FC } from "react";
 import styles from "./Footer.module.css";
 import { useNavigate } from "react-router-dom";
+import {useAppSelector} from "@/store/hooks.ts";
+import {selectCartTotal} from "@/store/cartSlice.ts";
 
-interface FooterProps {
-  total: number;
-}
-
-const Footer: FC<FooterProps> = ({ total }) => {
+const Footer: FC = () => {
   const navigate = useNavigate();
+  const total = useAppSelector(selectCartTotal);
   return (
     <footer className={styles.footer}>
       <div className={styles.summary}>

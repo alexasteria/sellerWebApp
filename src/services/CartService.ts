@@ -33,11 +33,13 @@ class CartService {
    * @returns The total price, formatted to two decimal places.
    */
   public calculateTotal(cart: CartState, products: ModelsProduct[]): number {
-    const total = Object.entries(cart).reduce((sum, [productId, variantState]) => {
+    const total = Object.entries(cart).reduce((sum, [productIdStr, variantState]) => {
+      const productId = Number(productIdStr); // Convert string key to number
       const item = products.find((p) => p.id === productId);
       if (!item) return sum;
 
-      const itemTotal = Object.entries(variantState).reduce((variantSum, [variantId, count]) => {
+      const itemTotal = Object.entries(variantState).reduce((variantSum, [variantIdStr, count]) => {
+        const variantId = Number(variantIdStr); // Convert string key to number
         const variant = item.variants.find((v) => v.id === variantId);
         if (!variant) return variantSum;
 
@@ -62,14 +64,16 @@ class CartService {
    * @param variantId - The ID of the product variant to add.
    * @returns The new cart state.
    */
-  public addItem(prevCart: CartState, productId: string, variantId: string | undefined): CartState {
+  public addItem(prevCart: CartState, productId: number, variantId: number | undefined): CartState {
     if (variantId === undefined) return prevCart;
     const newCart = { ...prevCart };
-    const variantState = newCart[productId] || {};
+    const productIdStr = String(productId); // Convert number ID to string key
+    const variantIdStr = String(variantId); // Convert number ID to string key
+    const variantState = newCart[productIdStr] || {};
     
-    newCart[productId] = {
+    newCart[productIdStr] = {
       ...variantState,
-      [variantId]: (variantState[variantId] || 0) + 1,
+      [variantIdStr]: (variantState[variantIdStr] || 0) + 1,
     };
 
     return newCart;
@@ -82,25 +86,27 @@ class CartService {
    * @param variantId - The ID of the product variant to remove.
    * @returns The new cart state.
    */
-  public removeItem(prevCart: CartState, productId: string, variantId: string | undefined): CartState {
+  public removeItem(prevCart: CartState, productId: number, variantId: number | undefined): CartState {
     if (variantId === undefined) return prevCart;
     const newCart = { ...prevCart };
-    const variantState = newCart[productId];
+    const productIdStr = String(productId); // Convert number ID to string key
+    const variantIdStr = String(variantId); // Convert number ID to string key
+    const variantState = newCart[productIdStr];
 
-    if (!variantState || !variantState[variantId]) {
+    if (!variantState || !variantState[variantIdStr]) {
       return prevCart; // Item not in cart, do nothing
     }
 
-    const newCount = variantState[variantId] - 1;
+    const newCount = variantState[variantIdStr] - 1;
 
     if (newCount <= 0) {
-      delete variantState[variantId];
+      delete variantState[variantIdStr];
       // If no variants are left for this product, remove the product entry itself
       if (Object.keys(variantState).length === 0) {
-        delete newCart[productId];
+        delete newCart[productIdStr];
       }
     } else {
-      variantState[variantId] = newCount;
+      variantState[variantIdStr] = newCount;
     }
 
     return newCart;

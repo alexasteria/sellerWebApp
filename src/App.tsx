@@ -1,20 +1,21 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { CartProvider } from "@/contexts/CartContext";
-import { ExpandedCardProvider } from "@/contexts/ExpandedCardContext";
-import { ProductsProvider } from "@/contexts/ProductsContext";
 import { UserProvider } from "@/contexts/UserContext";
+import { useAppDispatch } from "./store/hooks";
+import { fetchProducts } from "./store/productsSlice";
+import { fetchCategories } from "./store/categoriesSlice"; // Import fetchCategories
 
 const App: FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts(null));
+    dispatch(fetchCategories()); // Dispatch fetchCategories
+  }, [dispatch]);
+
   return (
     <UserProvider>
-      <ProductsProvider>
-        <CartProvider>
-          <ExpandedCardProvider>
-            <Outlet />
-          </ExpandedCardProvider>
-        </CartProvider>
-      </ProductsProvider>
+      <Outlet />
     </UserProvider>
   );
 };

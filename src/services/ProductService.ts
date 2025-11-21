@@ -29,9 +29,16 @@ class ProductService {
    * @param tenantId - The ID of the tenant.
    * @returns A promise that resolves to an array of products.
    */
-  public async getProducts(): Promise<ModelsProduct[]> {
+  public async getProducts(categoryId: number | null = null): Promise<ModelsProduct[]> {
     try {
-      const response = await apiClient.products.productsList({ headers: { "Tenant-Code": import.meta.env.VITE_TENANT_CODE } });
+      const response = await apiClient.products.productsList(
+        { category_id: categoryId === null ? undefined : categoryId }, // Pass category_id if not null
+        {
+          headers: {
+            "Tenant-Code": import.meta.env.VITE_TENANT_CODE,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch products:", error);

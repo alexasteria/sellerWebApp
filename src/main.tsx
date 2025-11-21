@@ -5,6 +5,8 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./store/store"; // Import the Redux store
 import App from "@/App";
 import MenuPage from "@/pages/MenuPage/MenuPage";
 import DeliveryPage from "@/pages/DeliveryPage/DeliveryPage";
@@ -38,6 +40,8 @@ const router = createBrowserRouter([
 
 createRoot(container).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}> {/* Wrap with Redux Provider */}
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 );

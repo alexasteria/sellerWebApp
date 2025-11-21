@@ -1,18 +1,18 @@
 import React, { FC, useState } from "react";
 import { DeliveryInfo } from "@/types";
 import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
-import { useCart } from "@/contexts/CartContext";
 import styles from "./DeliveryScreen.module.css";
 import { useUser } from "@/contexts/UserContext.tsx";
-import { useProducts } from "@/contexts/ProductsContext.tsx";
+import { useAppSelector } from "@/store/hooks";
+import { selectCart, selectDeliveryInfo } from "@/store/cartSlice"; // Import selectCart and selectDeliveryInfo
 import { WebApp } from "telegram-web-app";
 import { orderService } from "@/services/OrderService";
 
 interface DeliveryScreenProps {
   subtotal: number;
   onBack: () => void;
-  onConfirm: (deliveryInfo: DeliveryInfo) => void;
-  onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void;
+  // onConfirm: (deliveryInfo: DeliveryInfo) => void; // Removed
+  // onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void; // Removed
 }
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
@@ -32,8 +32,9 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
   subtotal,
   onBack,
 }) => {
-  const { cart } = useCart();
-  const { products } = useProducts();
+  const cart = useAppSelector(selectCart);
+  const deliveryInfo = useAppSelector(selectDeliveryInfo); // Get deliveryInfo from Redux
+  const { products } = useAppSelector((state) => state.products);
   const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const tenantCode = import.meta.env.VITE_TENANT_CODE;
@@ -46,7 +47,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
     setIsSubmitting(true);
     safeTgCall(() => tg.MainButton.showProgress());
 
-    const orderResult = await orderService.submitOrder(cart, products, user);
+    const orderResult = await orderService.submitOrder(cart, products, user, deliveryInfo); // Pass deliveryInfo
 
     safeTgCall(() => tg.MainButton.hideProgress());
     setIsSubmitting(false);

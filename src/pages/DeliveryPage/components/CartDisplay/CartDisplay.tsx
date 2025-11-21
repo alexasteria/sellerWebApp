@@ -1,19 +1,21 @@
 import React, { FC } from 'react';
 import { CartState } from '@/types';
 import styles from './CartDisplay.module.css';
-import { useProducts } from "@/contexts/ProductsContext";
+import { useAppSelector } from "@/store/hooks";
+import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
 
 interface CartDisplayProps {
   cart: CartState;
 }
 
 const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
-  const { products } = useProducts();
+  const { products } = useAppSelector((state) => state.products);
 
   return (
     <div className={styles.cartDisplayContainer}>
-      {Object.entries(cart).map(([productID, variants]) => {
-        const item = products.find(p => p.id === productID);
+      {Object.entries(cart).map(([productIDStr, variants]) => {
+        const productID = Number(productIDStr); // Convert to number
+        const item = products.find((p: ModelsProduct) => p.id === productID);
         if (!item) return null; // or some placeholder
 
         return (
@@ -22,8 +24,9 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
             <div className={styles.cartItemDetails}>
               <div className={styles.cartItemTitle}>{item.title}</div>
               <div className={styles.cartItemVariants}>
-                {Object.entries(variants).map(([variantID, count]) => {
-                  const v = item.variants.find((v) => v.id === variantID);
+                {Object.entries(variants).map(([variantIDStr, count]) => {
+                  const variantID = Number(variantIDStr); // Convert to number
+                  const v = item.variants?.find((v: ModelsProductVariant) => v.id === variantID);
                   if (!v) return null; // or some placeholder
 
                   return (
