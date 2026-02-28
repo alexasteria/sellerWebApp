@@ -1,58 +1,59 @@
 .skeletonCard {
-  border-radius: 8px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  background: var(--tg-theme-bg-color);
-  animation: pulse 1.5s infinite ease-in-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  background: var(--tg-theme-bg-color, #ffffff);
   display: flex;
   flex-direction: column;
-  width: 100%; /* Adjust as needed */
+  width: 100%;
+}
+
+.shimmer {
+  background: #e0e0e0;
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .skeletonImage {
   width: 100%;
-  height: 150px; /* Adjust height as needed */
-  background: var(--tg-theme-secondary-bg-color);
+  height: 200px;
 }
 
 .skeletonTitle {
   height: 20px;
-  margin: 10px;
-  background: var(--tg-theme-secondary-bg-color);
+  margin: 16px 16px 8px;
+  border-radius: 4px;
   width: 70%;
 }
 
 .skeletonDescription {
   height: 15px;
-  margin: 10px;
-  background: var(--tg-theme-secondary-bg-color);
-  width: 90%;
+  margin: 0 16px 16px;
+  border-radius: 4px;
+  width: 50%;
 }
 
 .skeletonPrice {
-  height: 20px;
-  margin: 10px;
-  background: var(--tg-theme-secondary-bg-color);
+  height: 24px;
+  margin: 0 16px 16px;
+  border-radius: 4px;
   width: 40%;
-  align-self: flex-end;
 }
 
 .skeletonButton {
-  height: 40px;
-  margin: 10px;
-  background: var(--tg-theme-button-color);
-  width: calc(100% - 20px);
-  border-radius: 4px;
+  height: 48px;
+  margin: auto 16px 16px;
+  border-radius: 24px;
+  width: calc(100% - 32px);
 }
 
-@keyframes pulse {
+@keyframes shimmer {
   0% {
-    opacity: 0.8;
+    background-position: 200% 0;
   }
-  50% {
-    opacity: 0.5;
-  }
+
   100% {
-    opacity: 0.8;
+    background-position: -200% 0;
   }
 }

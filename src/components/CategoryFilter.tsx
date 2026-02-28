@@ -21,9 +21,7 @@ const CategoryFilter: FC = () => {
   if (isLoading) {
     return (
       <div className={styles.filterContainer}>
-        {[...Array(4)].map((_, index) => ( // Render 4 skeleton buttons
-          <CategoryButtonSkeleton key={index} />
-        ))}
+        <CategoryButtonSkeleton count={4} />
       </div>
     );
   }
@@ -39,9 +37,8 @@ const CategoryFilter: FC = () => {
   return (
     <div className={styles.filterContainer}>
       <button
-        className={`${styles.filterButton} ${
-          selectedCategoryId === null ? styles.active : ""
-        }`}
+        className={`${styles.filterButton} ${selectedCategoryId === null ? styles.active : ""
+          }`}
         onClick={() => handleSelectCategory(null)}
       >
         Все
@@ -49,9 +46,8 @@ const CategoryFilter: FC = () => {
       {categories.map((category: ModelsCategory) => (
         <button
           key={category.id}
-          className={`${styles.filterButton} ${
-            selectedCategoryId === (category.id ?? null) ? styles.active : ""
-          }`}
+          className={`${styles.filterButton} ${selectedCategoryId === (category.id ?? null) ? styles.active : ""
+            }`}
           onClick={() => handleSelectCategory(category.id ?? null)}
         >
           {category.name}

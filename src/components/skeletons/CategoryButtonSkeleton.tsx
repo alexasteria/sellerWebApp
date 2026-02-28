@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './CategoryButtonSkeleton.module.css';
 
-const CategoryButtonSkeleton: React.FC = () => {
+interface CategoryButtonSkeletonProps {
+  count?: number;
+}
+
+const CategoryButtonSkeleton: FC<CategoryButtonSkeletonProps> = ({ count = 1 }) => {
   return (
-    <div className={styles.skeletonButton}></div>
+    <>
+      {Array.from({ length: count }).map((_, index) => (
+        <div key={index} className={`${styles.skeletonButton} ${styles.shimmer}`}></div>
+      ))}
+    </>
   );
 };
 

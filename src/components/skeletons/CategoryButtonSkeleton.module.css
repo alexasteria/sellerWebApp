@@ -1,20 +1,24 @@
 .skeletonButton {
-  height: 36px; /* Match category button height */
-  width: 80px;  /* Approximate width, can vary */
+  height: 36px;
+  width: 90px;
   margin: 5px;
-  border-radius: 18px; /* Match category button border-radius */
-  background: var(--tg-theme-secondary-bg-color);
-  animation: pulse 1.5s infinite ease-in-out;
+  border-radius: 18px;
+  flex-shrink: 0;
 }
 
-@keyframes pulse {
+.shimmer {
+  background: #e0e0e0;
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
   0% {
-    opacity: 0.8;
+    background-position: 200% 0;
   }
-  50% {
-    opacity: 0.5;
-  }
+
   100% {
-    opacity: 0.8;
+    background-position: -200% 0;
   }
 }

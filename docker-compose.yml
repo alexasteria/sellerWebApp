@@ -1,7 +1,9 @@
 version: '3.8'
 
 services:
-  webapp:
+  TgSellerWebApp:
+    # Это имя будет использоваться для сохранения образа после сборки.
+    image: tg_seller_web_app:latest
     build:
       context: .
       dockerfile: Dockerfile

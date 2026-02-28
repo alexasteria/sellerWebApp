@@ -54,6 +54,9 @@ ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "
   echo '--- Развертывание на сервере ---'
   cd '$REMOTE_PROJECT_PATH'
 
+  echo 'Удаляем старый образ Docker (если существует)...'
+  docker rmi -f seller-webapp || true
+
   echo 'Собираем и развертываем Docker-контейнеры...'
   docker compose up --build -d
 

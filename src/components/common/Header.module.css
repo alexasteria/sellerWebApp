@@ -1,19 +1,39 @@
 .header {
-  padding: 20px 16px 16px;
+  padding: 24px 20px 20px;
   text-align: center;
-  border-bottom: 1px solid var(--sec-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    background: rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 .header h1 {
-  margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 600;
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--text);
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--text) 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 .hint {
   margin: 0;
   color: var(--hint);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
+  opacity: 0.9;
 }

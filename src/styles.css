@@ -26,9 +26,11 @@ body {
   overscroll-behavior: none;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -54,9 +56,10 @@ body {
 
 .header h1 {
   margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--text);
+  letter-spacing: -0.5px;
 }
 
 .hint {
@@ -157,13 +160,13 @@ body {
   border: none;
   background: var(--sec-bg);
   color: var(--text);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
   min-width: 80px;
-  transition: background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
@@ -198,8 +201,14 @@ body {
 }
 
 .btn.primary {
-  background: var(--button);
+  background: linear-gradient(135deg, var(--button) 0%, #ff6b6b 100%);
   color: var(--button-text);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn:active {
@@ -212,8 +221,8 @@ body {
   align-items: center;
   gap: 12px;
   background: var(--sec-bg);
-  border-radius: 8px;
-  padding: 4px;
+  border-radius: 100px;
+  padding: 6px;
 }
 
 .counter .btn {
@@ -480,7 +489,8 @@ body {
   .field-input,
   .field-textarea {
     padding: 12px 14px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
+    /* Prevents zoom on iOS */
   }
 }
 
@@ -726,7 +736,7 @@ body {
 .summary-row.total {
   font-size: 16px;
   font-weight: 600;
-  border-top: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 8px;
   margin-top: 8px;
 }
@@ -786,24 +796,24 @@ body {
 /* Classic Card */
 .classic-card {
   background: var(--bg);
-  border: 1px solid var(--sec-bg);
-  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
   padding: 0;
   margin: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.4s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .classic-card.expanded {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 .classic-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
 }
 
 .classic-card .card-image-container {
@@ -853,7 +863,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -1164,20 +1174,22 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--button);
+  background: linear-gradient(135deg, var(--button) 0%, #ff6b6b 100%);
   color: var(--button-text);
   border: none;
-  border-radius: 24px;
-  padding: 12px 24px;
-  font-weight: 600;
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   width: 100%;
   justify-content: center;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
 .classic-card .card-expanded-add-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
 .classic-card .btn-text {
@@ -1352,21 +1364,21 @@ body {
 /* Premium Card */
 .premium-card {
   background: var(--bg);
-  border: 1px solid var(--sec-bg);
-  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  border-radius: 24px;
   padding: 0;
   margin: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
 .premium-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
 .premium-card .premium-image-container {
@@ -1403,7 +1415,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.6) 100%);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -1581,18 +1593,20 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--button);
+  background: linear-gradient(135deg, var(--button) 0%, #ff6b6b 100%);
   color: var(--button-text);
   border: none;
-  border-radius: 24px;
-  padding: 12px 24px;
-  font-weight: 600;
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
 .premium-card .premium-add-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
 .premium-card .btn-text {
@@ -1608,6 +1622,7 @@ body {
 
 /* Responsive adjustments for cards */
 @media (max-width: 768px) {
+
   .classic-card,
   .premium-card {
     margin: 4px;
@@ -1632,6 +1647,7 @@ body {
 }
 
 @media (max-width: 480px) {
+
   .classic-card,
   .premium-card {
     margin: 2px;
@@ -1858,6 +1874,7 @@ body {
 
 /* Специальные стили для iPhone в Telegram */
 @media (max-width: 375px) {
+
   /* Безопасная зона для iPhone с notch */
   .container {
     padding-top: env(safe-area-inset-top);
@@ -1865,6 +1882,7 @@ body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
+
   .grid {
     padding: 2px;
   }
@@ -2100,5 +2118,3 @@ body {
     font-size: 13px;
   }
 }
-
-

@@ -1,36 +1,52 @@
 .filterContainer {
   display: flex;
   overflow-x: auto;
-  padding: 10px 0;
-  gap: 10px;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #eee;
-  white-space: nowrap; /* Prevent buttons from wrapping */
+  padding: 12px 16px;
+  gap: 12px;
+  background: transparent;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.filterContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .filterButton {
-  flex-shrink: 0; /* Prevent buttons from shrinking */
-  padding: 8px 15px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  background-color: #fff;
+  flex-shrink: 0;
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 24px;
+  background: var(--bg);
   cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition:
-    background-color 0.2s,
-    color 0.2s,
-    border-color 0.2s;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  font-family: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  .filterButton {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .filterButton:hover {
-  background-color: #e0e0e0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .filterButton.active {
-  background-color: #ff6f61; /* A distinct accent color for active state */
+  background: linear-gradient(135deg, var(--button, #2481cc) 0%, #ff6b6b 100%);
   color: #fff;
-  border-color: #ff6f61;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  padding: 11px 21px;
+  /* Compensate for loss of border */
 }
 
 .filterButton:active {

@@ -23,9 +23,7 @@ const Menu: FC = () => {
   if (productsLoading) {
     return (
       <section className={styles.grid}>
-        {[...Array(6)].map((_, index) => ( // Render 6 skeleton cards
-          <ProductCardSkeleton key={index} />
-        ))}
+        <ProductCardSkeleton count={6} />
       </section>
     );
   }
