@@ -11,6 +11,12 @@ const App: FC = () => {
   useEffect(() => {
     dispatch(fetchProducts(null));
     dispatch(fetchCategories()); // Dispatch fetchCategories
+
+    // Automatically expand the Telegram Web App to maximum height
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg && tg.expand) {
+      tg.expand();
+    }
   }, [dispatch]);
 
   return (

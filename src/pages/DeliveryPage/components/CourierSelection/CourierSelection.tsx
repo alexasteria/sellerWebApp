@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { CourierService } from '@/types';
 import { COURIER_SERVICES } from '@/data/couriers';
 import styles from '@/pages/DeliveryPage/components/CourierSelection/CourierSelection.module.css';
+import { motion } from 'framer-motion';
+import { Check, Clock } from 'lucide-react';
 
 interface CourierSelectionProps {
   selectedCourier: CourierService | null;
@@ -12,46 +14,48 @@ interface CourierSelectionProps {
 const CourierSelection: FC<CourierSelectionProps> = ({ selectedCourier, onSelect, subtotal }) => {
   return (
     <div className={styles.courierSelection}>
-      <div className={styles.courierHeader}>
-        <h3>🚚 Способ доставки</h3>
-        <p className={styles.courierSubtitle}>Выберите удобный для вас способ доставки</p>
-      </div>
-      
+      <h3 className={styles.sectionTitle}>Способ доставки</h3>
+
       <div className={styles.courierList}>
         {COURIER_SERVICES.map((courier) => {
           const isSelected = selectedCourier?.id === courier.id;
           const totalWithDelivery = subtotal + courier.price;
-          
+
           return (
-            <div 
+            <motion.div
               key={courier.id}
               className={`${styles.courierCard} ${isSelected ? styles.selected : ''}`}
               onClick={() => onSelect(courier)}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className={styles.courierCardContent}>
-                <div className={styles.courierInfo}>
-                  <div className={styles.courierName}>{courier.name}</div>
-                  <div className={styles.courierDescription}>{courier.description}</div>
-                  <div className={styles.courierTime}>
-                    <span className={styles.timeIcon}>⏱</span>
-                    {courier.time}
-                  </div>
-                </div>
-                
-                <div className={styles.courierPrice}>
-                  <div className={styles.deliveryPrice}>+${courier.price.toFixed(2)}</div>
-                  <div className={styles.totalPrice}>${totalWithDelivery.toFixed(2)}</div>
+              <div className={styles.courierInfo}>
+                <div className={styles.courierName}>{courier.name}</div>
+                <div className={styles.courierDescription}>{courier.description}</div>
+                <div className={styles.courierTime}>
+                  <Clock size={14} className={styles.timeIcon} />
+                  {courier.time}
                 </div>
               </div>
-              
-              {isSelected && (
-                <div className={styles.selectedIndicator}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                  </svg>
+
+              <div className={styles.courierPriceBox}>
+                <div className={styles.deliveryPrice}>
+                  {courier.price === 0 ? 'Бесплатно' : `+${courier.price.toFixed(2)}₽`}
                 </div>
-              )}
-            </div>
+
+                <div className={styles.radioWrapper}>
+                  {isSelected && (
+                    <motion.div
+                      className={styles.radioChecked}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    >
+                      <Check size={14} strokeWidth={3} />
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
           );
         })}
       </div>

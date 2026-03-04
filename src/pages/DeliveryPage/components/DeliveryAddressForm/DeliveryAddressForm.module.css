@@ -1,213 +1,91 @@
-/* Enhanced Delivery Address Form */
-.deliveryAddressForm {
-  background: var(--bg);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-}
-
-.formHeader {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--sec-bg);
-  background: linear-gradient(135deg, var(--button) 0%, var(--link) 100%);
-  color: white;
-}
-
-.formHeader h3 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.formSubtitle {
-  font-size: 14px;
-  opacity: 0.9;
-  margin: 0;
-  font-weight: 400;
-}
-
-.formSections {
-  padding: 0;
-}
-
-.formSection {
-  padding: 20px;
-  border-bottom: 1px solid var(--sec-bg);
-}
-
-.formSection:last-child {
-  border-bottom: none;
+.container {
+  margin-bottom: 24px;
 }
 
 .sectionTitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0 0 16px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sectionTitle::before {
-  content: '';
-  width: 4px;
-  height: 16px;
-  background: var(--button);
-  border-radius: 2px;
-}
-
-.formFields {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.formField {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.required .fieldLabel {
-  color: var(--text);
-}
-
-.fieldLabel {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--hint);
-}
-
-.labelText {
-  font-weight: 600;
-}
-
-.requiredMark {
-  color: #e74c3c;
-  font-weight: 600;
-}
-
-.optionalMark {
-  color: var(--hint);
-  font-weight: 400;
-  font-size: 12px;
-}
-
-.fieldInput,
-.fieldTextarea {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid var(--sec-bg);
-  border-radius: 12px;
-  font-size: 16px;
-  background: var(--bg);
-  color: var(--text);
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.fieldInput:focus,
-.fieldTextarea:focus {
-  outline: none;
-  border-color: var(--button);
-  box-shadow: 0 0 0 3px rgba(36, 129, 204, 0.1);
-  transform: translateY(-1px);
-}
-
-.fieldInput::placeholder,
-.fieldTextarea::placeholder {
-  color: var(--hint);
-  opacity: 0.7;
-}
-
-.fieldTextarea {
-  resize: vertical;
-  min-height: 100px;
-  line-height: 1.5;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-/* Mobile optimizations */
-@media (max-width: 480px) {
-  .formSection {
-    padding: 16px;
-  }
-
-  .formHeader {
-    padding: 16px 16px 12px;
-  }
-
-  .formHeader h3 {
-    font-size: 18px;
-  }
-
-  .formRow {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .fieldInput,
-  .fieldTextarea {
-    padding: 12px 14px;
-    font-size: 16px; /* Prevents zoom on iOS */
-  }
-}
-
-.formTitle {
   font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 16px;
-  color: var(--text);
-}
-
-.deliveryForm {
-  margin-bottom: 32px;
+  font-weight: 700;
+  color: var(--tg-text, #000);
+  margin: 0 0 12px;
+  padding: 0 4px;
 }
 
 .formGroup {
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  background: var(--tg-bg, #ffffff);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
-.formLabel {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: var(--text);
+.row {
+  display: flex;
+  border-bottom: 1px solid var(--tg-sec-bg, #f2f2f7);
 }
 
-.formInput,
-.formTextarea {
+.row .inputWrapper {
+  flex: 1;
+  border-bottom: none;
+}
+
+.row .inputWrapper:first-child {
+  border-right: 1px solid var(--tg-sec-bg, #f2f2f7);
+}
+
+.inputWrapper {
+  border-bottom: 1px solid var(--tg-sec-bg, #f2f2f7);
+}
+
+.inputWrapper:last-child {
+  border-bottom: none;
+}
+
+.input,
+.textarea {
   width: 100%;
-  padding: 12px;
-  border: 1px solid var(--sec-bg);
-  border-radius: 8px;
+  padding: 16px;
+  background: transparent;
+  border: none;
   font-size: 16px;
-  background: var(--bg);
-  color: var(--text);
-  transition: border-color 0.2s;
-}
-
-.formInput:focus,
-.formTextarea:focus {
+  color: var(--tg-text, #000);
+  font-family: inherit;
   outline: none;
-  border-color: var(--link);
+  -webkit-appearance: none;
 }
 
-.formTextarea {
-  resize: vertical;
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--tg-hint, #8e8e93);
+  opacity: 1;
+}
+
+.textarea {
+  resize: none;
   min-height: 80px;
+  line-height: 1.4;
+}
+
+/* iOS focus styles */
+.input:focus,
+.textarea:focus {
+  background: rgba(0, 122, 255, 0.02);
+}
+
+@media (prefers-color-scheme: dark) {
+  .formGroup {
+    background: #1c1c1e;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .inputWrapper,
+  .row,
+  .row .inputWrapper:first-child {
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .input:focus,
+  .textarea:focus {
+    background: rgba(0, 122, 255, 0.05);
+  }
 }

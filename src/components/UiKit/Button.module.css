@@ -1,0 +1,96 @@
+.button {
+  appearance: none;
+  border: none;
+  border-radius: 16px;
+  font-family: inherit;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, opacity 0.2s;
+  will-change: transform;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Variants */
+.variant-primary {
+  background: linear-gradient(135deg, var(--tg-button, #007aff) 0%, rgba(0, 122, 255, 0.8) 100%);
+  color: var(--tg-button-text, #ffffff);
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
+}
+
+.variant-secondary {
+  background: var(--tg-sec-bg, #f2f2f7);
+  color: var(--tg-text, #000000);
+}
+
+.variant-ghost {
+  background: transparent;
+  color: var(--tg-link, #007aff);
+}
+
+.variant-glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--tg-text, #000000);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Sizes */
+.size-sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.size-md {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+  border-radius: 14px;
+}
+
+.size-lg {
+  height: 56px;
+  padding: 0 24px;
+  font-size: 18px;
+  border-radius: 16px;
+}
+
+.size-icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+}

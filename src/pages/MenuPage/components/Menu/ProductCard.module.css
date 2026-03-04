@@ -1,0 +1,148 @@
+.card {
+    background: var(--tg-bg, #ffffff);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: #1c1c1e;
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.imageContainer {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--tg-sec-bg, #f2f2f7);
+    position: relative;
+    overflow: hidden;
+}
+
+.imageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #ff3b30;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+}
+
+.content {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--tg-text, #000);
+    margin: 0 0 4px;
+    line-height: 1.2;
+}
+
+.description {
+    font-size: 13px;
+    color: var(--tg-hint, #8e8e93);
+    margin: 0 0 12px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    gap: 4px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--tg-text, #000);
+}
+
+.addButton {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background: var(--tg-sec-bg, #f2f2f7);
+    color: var(--tg-button, #007aff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    position: relative;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.addButton:active {
+    background: var(--tg-hint, #e5e5ea);
+}
+
+@media (prefers-color-scheme: dark) {
+    .addButton:active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    background: var(--tg-sec-bg, #f2f2f7);
+    border-radius: 16px;
+    height: 32px;
+    padding: 0 4px;
+}
+
+.stepperBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tg-text, #000);
+    border: none;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.stepperBtn:active {
+    opacity: 0.6;
+}
+
+.quantityNum {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    color: var(--tg-text, #000);
+    display: inline-flex;
+    justify-content: center;
+}

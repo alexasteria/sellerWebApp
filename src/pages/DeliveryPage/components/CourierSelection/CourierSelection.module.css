@@ -1,71 +1,46 @@
-/* Enhanced Courier Selection */
 .courierSelection {
-  background: var(--bg);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
 }
 
-.courierHeader {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--sec-bg);
-  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-  color: white;
-}
-
-.courierHeader h3 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.courierSubtitle {
-  font-size: 14px;
-  opacity: 0.9;
-  margin: 0;
-  font-weight: 400;
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--tg-text, #000);
+  margin: 0 0 12px;
+  padding: 0 4px;
 }
 
 .courierList {
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .courierCard {
-  background: var(--bg);
-  border: 2px solid var(--sec-bg);
+  background: var(--tg-bg, #ffffff);
   border-radius: 16px;
-  padding: 0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.courierCard:hover {
-  border-color: var(--link);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.selected {
-  border-color: #27ae60;
-  background: linear-gradient(135deg, rgba(39, 174, 96, 0.05) 0%, rgba(46, 204, 113, 0.05) 100%);
-  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.2);
-}
-
-.courierCardContent {
-  padding: 20px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  /* Replaces old static borders */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s;
+}
+
+.courierCard.selected {
+  border-color: var(--tg-button, #007aff);
+}
+
+@media (prefers-color-scheme: dark) {
+  .courierCard {
+    background: #1c1c1e;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .courierInfo {
@@ -74,87 +49,68 @@
 }
 
 .courierName {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text);
+  color: var(--tg-text, #000);
+  margin-bottom: 4px;
 }
 
 .courierDescription {
-  font-size: 14px;
-  color: var(--hint);
+  font-size: 13px;
+  color: var(--tg-hint, #8e8e93);
   margin-bottom: 8px;
   line-height: 1.4;
 }
 
 .courierTime {
-  font-size: 14px;
-  color: var(--link);
-  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--tg-hint, #8e8e93);
+  font-weight: 500;
 }
 
 .timeIcon {
-  font-size: 12px;
+  color: var(--tg-button, #007aff);
 }
 
-.courierPrice {
-  text-align: right;
-  flex-shrink: 0;
+.courierPriceBox {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .deliveryPrice {
-  font-size: 14px;
-  color: var(--hint);
-  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--tg-text, #000);
 }
 
-.totalPrice {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.selectedIndicator {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 28px;
-  height: 28px;
-  background: #27ae60;
-  color: white;
-  border-radius: 50%;
+.radioWrapper {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  border: 2px solid var(--tg-hint, #ccc);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+  position: relative;
+  transition: border-color 0.2s;
 }
 
-/* Mobile optimizations for courier selection */
-@media (max-width: 480px) {
-  .courierList {
-    padding: 16px;
-    gap: 12px;
-  }
+.selected .radioWrapper {
+  border-color: var(--tg-button, #007aff);
+}
 
-  .courierCardContent {
-    padding: 16px;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .courierPrice {
-    text-align: left;
-    align-self: flex-start;
-  }
-
-  .courierHeader {
-    padding: 16px 16px 12px;
-  }
-
-  .courierHeader h3 {
-    font-size: 18px;
-  }
+.radioChecked {
+  position: absolute;
+  inset: -2px;
+  /* cover the border entirely */
+  background: var(--tg-button, #007aff);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tg-button-text, #fff);
 }

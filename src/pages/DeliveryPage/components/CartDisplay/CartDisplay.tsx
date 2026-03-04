@@ -8,38 +8,55 @@ interface CartDisplayProps {
   cart: CartState;
 }
 
+const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect fill='%23f2f2f7' width='100' height='100'/></svg>";
+
 const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
   const { products } = useAppSelector((state) => state.products);
 
   return (
     <div className={styles.cartDisplayContainer}>
-      {Object.entries(cart).map(([productIDStr, variants]) => {
-        const productID = Number(productIDStr); // Convert to number
-        const item = products.find((p: ModelsProduct) => p.id === productID);
-        if (!item) return null; // or some placeholder
+      <h3 className={styles.sectionTitle}>Ваш заказ</h3>
+      <div className={styles.cartList}>
+        {Object.entries(cart).map(([productIDStr, variants]) => {
+          const productID = Number(productIDStr);
+          const item = products.find((p: ModelsProduct) => p.id === productID);
+          if (!item) return null;
 
-        return (
-          <div key={productID} className={styles.cartItem}>
-            <img src={item.img} alt={item.title} className={styles.cartItemImage} />
-            <div className={styles.cartItemDetails}>
-              <div className={styles.cartItemTitle}>{item.title}</div>
-              <div className={styles.cartItemVariants}>
-                {Object.entries(variants).map(([variantIDStr, count]) => {
-                  const variantID = Number(variantIDStr); // Convert to number
-                  const v = item.variants?.find((v: ModelsProductVariant) => v.id === variantID);
-                  if (!v) return null; // or some placeholder
+          return (
+            <div key={productID} className={styles.cartItem}>
+              <div className={styles.imageWrapper}>
+                <img
+                  src={item.img || PLACEHOLDER_IMAGE}
+                  alt={item.title}
+                  onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE; }}
+                />
+              </div>
+              <div className={styles.itemInfo}>
+                <div className={styles.itemHeader}>
+                  <div className={styles.itemTitle}>{item.title}</div>
+                </div>
+                <div className={styles.variantList}>
+                  {Object.entries(variants).map(([variantIDStr, count]) => {
+                    const variantID = Number(variantIDStr);
+                    const v = item.variants?.find((v: ModelsProductVariant) => v.id === variantID);
+                    if (!v || count === 0) return null;
 
-                  return (
-                    <div key={variantID} className={styles.variantBadge}>
-                      {v.value} x {count}
-                    </div>
-                  );
-                })}
+                    return (
+                      <div key={variantID} className={styles.variantRow}>
+                        <span className={styles.variantName}>{v.value}</span>
+                        <div className={styles.variantMeta}>
+                          <span className={styles.variantCount}>{count} шт</span>
+                          <span className={styles.variantPrice}>{(v.cost * count).toFixed(2)}₽</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

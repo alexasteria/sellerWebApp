@@ -4,20 +4,19 @@ import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay
 import styles from "./DeliveryScreen.module.css";
 import { useUser } from "@/contexts/UserContext.tsx";
 import { useAppSelector } from "@/store/hooks";
-import { selectCart, selectDeliveryInfo } from "@/store/cartSlice"; // Import selectCart and selectDeliveryInfo
+import { selectCart, selectDeliveryInfo } from "@/store/cartSlice";
 import { WebApp } from "telegram-web-app";
 import { orderService } from "@/services/OrderService";
+import { GlassHeader, Button } from "@/components/UiKit";
+import { ChevronLeft } from "lucide-react";
 
 interface DeliveryScreenProps {
   subtotal: number;
   onBack: () => void;
-  // onConfirm: (deliveryInfo: DeliveryInfo) => void; // Removed
-  // onDeliveryInfoChange?: (deliveryInfo: DeliveryInfo | null) => void; // Removed
 }
 
 const tg: WebApp = (window as any).Telegram?.WebApp;
 
-// Helper to safely execute Telegram API calls
 const safeTgCall = (callback: () => void) => {
   try {
     if (tg) {
@@ -28,16 +27,12 @@ const safeTgCall = (callback: () => void) => {
   }
 };
 
-const DeliveryScreen: FC<DeliveryScreenProps> = ({
-  subtotal,
-  onBack,
-}) => {
+const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
   const cart = useAppSelector(selectCart);
-  const deliveryInfo = useAppSelector(selectDeliveryInfo); // Get deliveryInfo from Redux
+  const deliveryInfo = useAppSelector(selectDeliveryInfo);
   const { products } = useAppSelector((state) => state.products);
   const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const tenantCode = import.meta.env.VITE_TENANT_CODE;
 
   const handleOrderSubmit = async () => {
     if (!user || isSubmitting) {
@@ -47,39 +42,41 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
     setIsSubmitting(true);
     safeTgCall(() => tg.MainButton.showProgress());
 
-    const orderResult = await orderService.submitOrder(cart, products, user, deliveryInfo); // Pass deliveryInfo
+    const orderResult = await orderService.submitOrder(cart, products, user, deliveryInfo);
 
     safeTgCall(() => tg.MainButton.hideProgress());
     setIsSubmitting(false);
 
     if (orderResult) {
-      // Order was successful
       safeTgCall(() => tg.close());
     } else {
-      // Order failed
-      safeTgCall(() =>
-        tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.")
-      );
+      safeTgCall(() => tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз."));
     }
   };
 
+  const backAccessory = (
+    <button className={styles.backBtn} onClick={onBack}>
+      <ChevronLeft size={24} />
+      <span>Назад</span>
+    </button>
+  );
+
   return (
     <div className={styles.deliveryScreen}>
-      <header className={styles.deliveryHeader}>
-        <button className={styles.backBtn} onClick={onBack}>
-          ← Назад к меню
-        </button>
-        <h2>Доставка</h2>
-      </header>
+      <GlassHeader title="Оформление заказа" leftAccessory={backAccessory} />
 
-      <CartDisplay cart={cart} />
+      {/* Spacer for GlassHeader */}
+      <div style={{ height: 60 }} />
 
-      <div className={styles.orderConfirmationInfo}>
-        <p>Пожалуйста, внимательно проверьте ваш заказ.</p>
-        <p>
-          После подтверждения с вами свяжется менеджер для уточнения деталей по
-          телефону.
-        </p>
+      <div className={styles.scrollContent}>
+        <CartDisplay cart={cart} />
+
+        <div className={styles.orderConfirmationInfo}>
+          <div className={styles.infoBox}>
+            <p>Пожалуйста, внимательно проверьте ваш заказ.</p>
+            <p>После подтверждения с вами свяжется менеджер для уточнения деталей по телефону.</p>
+          </div>
+        </div>
       </div>
 
       <footer className={styles.deliveryFooter}>
@@ -94,18 +91,17 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({
           </div>
           <div className={`${styles.summaryRow} ${styles.total}`}>
             <span>Итого к оплате:</span>
-            <strong>
-              {subtotal.toFixed(2)}₽
-            </strong>
+            <strong>{subtotal.toFixed(2)}₽</strong>
           </div>
         </div>
-        <button
-          className={styles.confirmBtn}
+        <Button
+          fullWidth
+          size="lg"
           onClick={handleOrderSubmit}
-          disabled={isSubmitting}
+          isLoading={isSubmitting}
         >
           {isSubmitting ? "Отправка..." : "Оформить заказ"}
-        </button>
+        </Button>
       </footer>
     </div>
   );
