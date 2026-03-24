@@ -3,6 +3,7 @@ import { CartState } from '@/types';
 import styles from './CartDisplay.module.css';
 import { useAppSelector } from "@/store/hooks";
 import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
+import { Card } from '@/components/UiKit';
 
 interface CartDisplayProps {
   cart: CartState;
@@ -12,6 +13,18 @@ const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org
 
 const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
   const { products } = useAppSelector((state) => state.products);
+
+  const hasItems = Object.keys(cart).length > 0;
+
+  if (!hasItems) {
+    return (
+      <div className={styles.cartDisplayContainer}>
+        <div style={{ textAlign: 'center', margin: '40px 0', color: 'var(--app-text-muted)' }}>
+          Корзина пуста
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.cartDisplayContainer}>
@@ -23,7 +36,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
           if (!item) return null;
 
           return (
-            <div key={productID} className={styles.cartItem}>
+            <Card key={productID} className={styles.cartItem} padding="sm">
               <div className={styles.imageWrapper}>
                 <img
                   src={item.img || PLACEHOLDER_IMAGE}
@@ -32,9 +45,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
                 />
               </div>
               <div className={styles.itemInfo}>
-                <div className={styles.itemHeader}>
-                  <div className={styles.itemTitle}>{item.title}</div>
-                </div>
+                <div className={styles.itemTitle}>{item.title}</div>
                 <div className={styles.variantList}>
                   {Object.entries(variants).map(([variantIDStr, count]) => {
                     const variantID = Number(variantIDStr);
@@ -53,7 +64,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
                   })}
                 </div>
               </div>
-            </div>
+            </Card>
           );
         })}
       </div>

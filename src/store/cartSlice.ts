@@ -61,3 +61,14 @@ export const selectCartTotal = (state: { cart: CartSliceState; products: { produ
 export const selectHasItems = (state: { cart: CartSliceState; products: { products: ModelsProduct[] } }) => {
     return cartService.calculateTotal(state.cart.cart, state.products.products) > 0;
 };
+
+export const selectCartItemCount = (state: { cart: CartSliceState }): number => {
+    const cart = state.cart.cart;
+    let count = 0;
+    for (const productId of Object.keys(cart)) {
+        for (const qty of Object.values(cart[Number(productId)])) {
+            count += qty;
+        }
+    }
+    return count;
+};

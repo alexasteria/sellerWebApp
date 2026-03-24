@@ -1,91 +1,26 @@
 .container {
-  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
 }
 
 .sectionTitle {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--tg-text, #000);
-  margin: 0 0 12px;
-  padding: 0 4px;
+  color: var(--app-text-main);
+  margin: 0;
+  letter-spacing: -0.4px;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  background: var(--tg-bg, #ffffff);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  gap: 12px;
 }
 
 .row {
-  display: flex;
-  border-bottom: 1px solid var(--tg-sec-bg, #f2f2f7);
-}
-
-.row .inputWrapper {
-  flex: 1;
-  border-bottom: none;
-}
-
-.row .inputWrapper:first-child {
-  border-right: 1px solid var(--tg-sec-bg, #f2f2f7);
-}
-
-.inputWrapper {
-  border-bottom: 1px solid var(--tg-sec-bg, #f2f2f7);
-}
-
-.inputWrapper:last-child {
-  border-bottom: none;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  padding: 16px;
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: var(--tg-text, #000);
-  font-family: inherit;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-.input::placeholder,
-.textarea::placeholder {
-  color: var(--tg-hint, #8e8e93);
-  opacity: 1;
-}
-
-.textarea {
-  resize: none;
-  min-height: 80px;
-  line-height: 1.4;
-}
-
-/* iOS focus styles */
-.input:focus,
-.textarea:focus {
-  background: rgba(0, 122, 255, 0.02);
-}
-
-@media (prefers-color-scheme: dark) {
-  .formGroup {
-    background: #1c1c1e;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .inputWrapper,
-  .row,
-  .row .inputWrapper:first-child {
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .input:focus,
-  .textarea:focus {
-    background: rgba(0, 122, 255, 0.05);
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }

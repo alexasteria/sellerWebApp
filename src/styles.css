@@ -2,24 +2,45 @@
 
 :root {
   /* Default fallbacks if tg variables are unset, following Apple Human Interface Guidelines */
-  --tg-text: #000000;
-  --tg-bg: #ffffff;
-  --tg-sec-bg: #f2f2f7;
-  --tg-hint: #8e8e93;
-  --tg-link: #007aff;
-  --tg-button: #007aff;
-  --tg-button-text: #ffffff;
+  --tg-text: var(--tg-theme-text-color, #000000);
+  --tg-bg: var(--tg-theme-bg-color, #f4f5f7);
+  --tg-sec-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+  --tg-hint: var(--tg-theme-hint-color, #8e8e93);
+  --tg-link: var(--tg-theme-link-color, #ff6b00);
+  --tg-button: var(--tg-theme-button-color, #ff6b00);
+  --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+
+  /* Premium App Variables */
+  --app-bg: var(--tg-bg);
+  --app-card-bg: var(--tg-sec-bg);
+  --app-text-main: var(--tg-text);
+  --app-text-muted: var(--tg-hint);
+  --app-primary: var(--tg-button);
+  --app-on-primary: var(--tg-button-text);
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --nav-height: 70px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --tg-text: #ffffff;
-    --tg-bg: #000000;
-    --tg-sec-bg: #1c1c1e;
-    --tg-hint: #ebebf599;
-    --tg-link: #0a84ff;
-    --tg-button: #0a84ff;
-    --tg-button-text: #ffffff;
+    --tg-text: var(--tg-theme-text-color, #ffffff);
+    --tg-bg: var(--tg-theme-bg-color, #121212);
+    --tg-sec-bg: var(--tg-theme-secondary-bg-color, #1c1c1e);
+    --tg-hint: var(--tg-theme-hint-color, #ebebf599);
+    --tg-link: var(--tg-theme-link-color, #ff8c33);
+    --tg-button: var(--tg-theme-button-color, #ff8c33);
+    --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+    
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -32,14 +53,13 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--tg-bg, #ffffff);
-  color: var(--tg-text, #000000);
+  background-color: var(--app-bg);
+  color: var(--app-text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
-  /* Prevent bounce effect on iOS */
   overscroll-behavior-y: none;
 }
 
@@ -58,7 +78,7 @@ button {
 }
 
 a {
-  color: var(--tg-link, #007aff);
+  color: var(--app-primary);
   text-decoration: none;
 }
 
@@ -67,11 +87,20 @@ textarea {
   font-family: inherit;
 }
 
-/* Safe Area Insets for modern mobile devices (iPhone notch etc.) */
-.safe-area-top {
-  padding-top: env(safe-area-inset-top);
+/* Utilities */
+.glass {
+  background: rgba(var(--app-card-bg), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.safe-area-top { padding-top: env(safe-area-inset-top); }
+.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }

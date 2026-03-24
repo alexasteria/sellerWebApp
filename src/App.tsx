@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
-import { Outlet } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
+import Layout from "@/components/Layout/Layout"; // Import Layout
 import { useAppDispatch } from "./store/hooks";
 import { fetchProducts } from "./store/productsSlice";
 import { fetchCategories } from "./store/categoriesSlice"; // Import fetchCategories
@@ -21,7 +21,7 @@ const App: FC = () => {
 
   return (
     <UserProvider>
-      <Outlet />
+      <Layout />
     </UserProvider>
   );
 };

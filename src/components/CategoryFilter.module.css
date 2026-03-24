@@ -1,20 +1,18 @@
 .filterContainer {
   position: sticky;
   top: 0;
-  width: 100%;
-  background: var(--tg-bg, rgba(255, 255, 255, 0.8));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 16px 0;
-  padding-top: calc(24px + env(safe-area-inset-top, 0px));
-  z-index: 20;
+  z-index: 40;
+  background: rgba(var(--app-bg), 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 0;
+  margin-bottom: 8px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   .filterContainer {
-    background: rgba(28, 28, 30, 0.8);
-    border-bottom-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -23,8 +21,7 @@
   overflow-x: auto;
   gap: 8px;
   padding: 0 16px;
-  /* Hide scrollbar for webkit and standard */
-  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
@@ -34,31 +31,31 @@
 
 .filterButton {
   position: relative;
-  flex-shrink: 0;
-  height: 38px;
-  padding: 0 18px;
-  background: var(--tg-sec-bg, #f2f2f7);
-  border: none;
-  border-radius: 19px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-text-muted);
+  white-space: nowrap;
+  background: var(--app-card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: color var(--transition-fast);
+}
+
+@media (prefers-color-scheme: dark) {
+  .filterButton {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.activeText {
+  color: var(--app-on-primary);
+  border-color: transparent;
 }
 
 .buttonText {
   position: relative;
-  z-index: 2;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--tg-hint, #8e8e93);
-  transition: color 0.3s;
-}
-
-.activeText .buttonText {
-  color: var(--tg-button-text, #ffffff);
-  font-weight: 600;
+  z-index: 1;
 }
 
 .activeBackground {
@@ -67,12 +64,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--tg-button, #007aff);
-  border-radius: 19px;
-  z-index: 1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(--app-primary);
+  border-radius: var(--radius-pill);
+  z-index: 0;
+  box-shadow: var(--shadow-sm);
 }
 
 .skeletonPill {
-  border-radius: 19px !important;
+  border-radius: var(--radius-pill) !important;
 }

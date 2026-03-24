@@ -2,26 +2,25 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--tg-bg, #ffffff);
+  background: var(--app-bg);
 }
 
 .backBtn {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--tg-link, #007aff);
+  color: var(--app-primary);
   font-size: 16px;
   font-weight: 500;
   -webkit-tap-highlight-color: transparent;
   margin-left: -8px;
-  /* Offset the icon padding visually */
 }
 
 .scrollContent {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
-  background: var(--tg-sec-bg, #f2f2f7);
+  background: var(--app-bg);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -33,16 +32,23 @@
 }
 
 .infoBox {
-  background: var(--tg-bg, #ffffff);
-  border-radius: 16px;
+  background: var(--app-card-bg);
+  border-radius: var(--radius-md);
   padding: 16px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .infoBox {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 .orderConfirmationInfo p {
-  color: var(--tg-hint, #8e8e93);
+  color: var(--app-text-muted);
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
   margin: 0 0 8px;
 }
 
@@ -53,24 +59,37 @@
 .deliveryFooter {
   padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  background: var(--tg-bg, #ffffff);
+  background: var(--app-card-bg);
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.04);
 }
 
+@media (prefers-color-scheme: dark) {
+  .deliveryFooter {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
 .deliverySummary {
-  background: var(--tg-sec-bg, #f2f2f7);
-  border-radius: 16px;
+  background: var(--app-bg);
+  border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .deliverySummary {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 .summaryRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 15px;
-  color: var(--tg-text, #000);
+  color: var(--app-text-muted);
 }
 
 .summaryRow:last-child {
@@ -79,8 +98,15 @@
 
 .summaryRow.total {
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--app-text-main);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding-top: 10px;
-  margin-top: 10px;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .summaryRow.total {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }

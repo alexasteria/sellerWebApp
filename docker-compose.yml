@@ -11,3 +11,10 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+    networks:
+      - seller_go_api
+
+networks:
+  seller_go_api:
+    external: true
+

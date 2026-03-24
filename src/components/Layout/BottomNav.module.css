@@ -1,0 +1,67 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-height) + env(safe-area-inset-bottom, 20px));
+  z-index: 50;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode border */
+@media (prefers-color-scheme: dark) {
+  .nav {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--nav-height);
+  padding: 0 16px;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  color: var(--app-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.navItem.active {
+  color: var(--app-primary);
+}
+
+.iconContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background-color: var(--app-primary);
+  color: var(--app-on-primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  min-width: 18px;
+  text-align: center;
+  border: 2px solid var(--app-card-bg);
+}

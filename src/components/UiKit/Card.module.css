@@ -1,0 +1,40 @@
+.card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.variant-default {
+  background-color: var(--app-card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.variant-elevated {
+  background-color: var(--app-card-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.variant-glass {
+  background: rgba(var(--app-card-bg), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Dark mode tweaks */
+@media (prefers-color-scheme: dark) {
+  .variant-default {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Padding scale */
+.padding-none { padding: 0; }
+.padding-sm { padding: 12px; }
+.padding-md { padding: 16px; }
+.padding-lg { padding: 24px; }
+
+.fullWidth {
+  width: 100%;
+}

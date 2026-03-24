@@ -42,7 +42,7 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
                 <h3 className={styles.title}>
                     {product.title}
                 </h3>
-                <p className={styles.description}>{product.description}</p>
+                {product.description && <p className={styles.description}>{product.description}</p>}
 
                 <div className={styles.footer}>
                     <div className={styles.price}>{price.toFixed(2)}₽</div>
@@ -55,9 +55,9 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={totalQuantity}
-                                    initial={{ y: -10, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: 10, opacity: 0 }}
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0.8, opacity: 0 }}
                                     transition={{ duration: 0.15 }}
                                     className={styles.quantityNum}
                                 >

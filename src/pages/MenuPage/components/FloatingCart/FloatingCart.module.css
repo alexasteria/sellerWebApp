@@ -1,0 +1,70 @@
+.wrapper {
+  position: fixed;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 20px) + 16px);
+  left: 16px;
+  right: 16px;
+  z-index: 45;
+}
+
+.button {
+  width: 100%;
+  padding: 14px 16px;
+  background-color: var(--app-primary);
+  color: var(--app-on-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(var(--app-primary), 0.3);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.button:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 16px rgba(var(--app-primary), 0.2);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--app-card-bg);
+  color: var(--app-primary);
+  font-size: 11px;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total {
+  font-size: 16px;
+  font-weight: 700;
+}
