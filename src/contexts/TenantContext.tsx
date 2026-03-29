@@ -8,12 +8,10 @@ export interface TenantInfo {
     subtitle?: string;
     emoji: string;
 }
-
-const TARGET_TENANT_CODES = ['IKEL', 'DEMO_RESTAURANT', 'DEMO_FLOWERS'];
+const TARGET_TENANT_CODES = ['DEMO_RESTAURANT', 'DEMO_FLOWERS'];
 
 const getEmojiForCode = (code: string) => {
     switch(code) {
-        case 'IKEL': return '🛒';
         case 'DEMO_RESTAURANT': return '🍝';
         case 'DEMO_FLOWERS': return '💐';
         default: return '🏪';
@@ -34,7 +32,7 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [isLoading, setIsLoading] = useState(true);
 
     const [activeTenantCode, setActiveTenantCode] = useState<string>(() => {
-        return localStorage.getItem("demoTenantCode") || import.meta.env.VITE_TENANT_CODE || 'IKEL';
+        return localStorage.getItem("demoTenantCode") || import.meta.env.VITE_TENANT_CODE || 'DEMO_RESTAURANT';
     });
 
     useEffect(() => {

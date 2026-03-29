@@ -26,6 +26,22 @@ const App: FC = () => {
     fetchCategories();
   }, [authenticateTelegram, fetchProducts, fetchCategories]);
 
+  useEffect(() => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (!tg) return;
+
+    const applyTheme = () => {
+      document.documentElement.setAttribute('data-theme', tg.colorScheme);
+    };
+    
+    applyTheme();
+    tg.onEvent('themeChanged', applyTheme);
+    
+    return () => {
+      tg.offEvent('themeChanged', applyTheme);
+    };
+  }, []);
+
   return <Layout />;
 };
 

@@ -4,11 +4,11 @@
     left: 0;
     right: 0;
     height: 60px;
-    background: var(--header-bg, rgba(255, 255, 255, 0.7));
+    background: var(--bg-card-glass);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 100;
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
     padding-top: env(safe-area-inset-top);
     transition: background-color 0.3s;
 }
@@ -27,7 +27,7 @@
 .title {
     font-size: 18px;
     font-weight: 700;
-    color: var(--tg-text, #000);
+    color: var(--text-main);
     margin: 0;
     flex: 1;
     text-align: center;
