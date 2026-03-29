@@ -7,8 +7,19 @@
     <title>Seller Department</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+      // Apply theme immediately to prevent Flash of Unstyled Content (FOUC)
+      try {
+        if (window.Telegram && window.Telegram.WebApp) {
+          const scheme = window.Telegram.WebApp.colorScheme;
+          if (scheme) {
+            document.documentElement.setAttribute('data-theme', scheme);
+          }
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

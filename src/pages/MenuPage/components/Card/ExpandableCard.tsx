@@ -8,15 +8,6 @@ import { useCart } from "@/contexts/CartContext";
 import { ModelsProduct, ModelsProductVariant } from "@/backendApi.ts";
 import { getImageUrl } from '@/utils/getImageUrl';
 
-const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect fill='%23ccc' width='200' height='150'/><text fill='%23555' font-family='sans-serif' font-size='30' dy='10.5' font-weight='bold' x='50%' y='50%' text-anchor='middle'>No Image</text></svg>";
-
-interface ExpandableCardProps {
-  item: ModelsProduct;
-  variantState?: VariantState;
-  onIncrement: (product: ModelsProduct, variantID: number | undefined) => void;
-  onDecrement: (product: ModelsProduct, variantID: number | undefined) => void;
-}
-
 const ExpandableCard: FC<ExpandableCardProps> = ({
   item,
   variantState = {},
@@ -27,15 +18,13 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   const { cart } = useCart();
   const isExpanded = expandedCardId === String(item.id);
   const [selectVariant, setSelectVariant] = useState<ModelsProductVariant>(item.variants[0]);
-  const [currentImageSrc, setCurrentImageSrc] = useState<string>(getImageUrl(item.img) || PLACEHOLDER_IMAGE);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    setCurrentImageSrc(getImageUrl(item.img) || PLACEHOLDER_IMAGE);
+    setImgError(false);
   }, [item.img]);
 
-  const handleImageError = () => {
-    setCurrentImageSrc(PLACEHOLDER_IMAGE);
-  };
+  const hasImage = !!item.img && !imgError;
 
   const price = useMemo(() => {
     if (!selectVariant) throw Error("не выбра вариант");
@@ -69,12 +58,21 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
     >
       {isExpanded && (
         <div className={styles.cardExpandedImageContainer}>
-          <img
-            src={currentImageSrc}
-            alt={item.title}
-            loading="lazy"
-            onError={handleImageError}
-          />
+          {hasImage ? (
+            <img
+              src={getImageUrl(item.img)}
+              alt={item.title}
+              loading="lazy"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 150">
+                <rect fill="var(--app-bg)" width="100%" height="100%"/>
+                <text fill="var(--app-text-muted)" fontFamily="sans-serif" fontSize="16" fontWeight="500" x="50%" y="50%" textAnchor="middle">Нет фото</text>
+              </svg>
+            </div>
+          )}
         </div>
       )}
 

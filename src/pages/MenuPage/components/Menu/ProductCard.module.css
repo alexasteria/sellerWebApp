@@ -20,7 +20,7 @@
   position: relative;
   width: 100%;
   padding-top: 100%; /* 1:1 Aspect Ratio */
-  background-color: var(--tg-sec-bg);
+  background-color: var(--app-border);
   overflow: hidden;
 }
 

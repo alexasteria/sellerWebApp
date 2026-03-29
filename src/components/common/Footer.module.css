@@ -16,7 +16,7 @@
   /* Re-enable clicks for the button */
   width: 100%;
   height: 56px;
-  background: var(--tg-bg, #ffffff);
+  background: var(--app-card-bg);
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 28px;
   display: flex;
@@ -40,21 +40,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--tg-text, #000);
+  color: var(--app-text-main);
   margin-right: 12px;
 }
 
 .cartText {
   font-weight: 600;
   font-size: 16px;
-  color: var(--tg-text, #000);
+  color: var(--app-text-main);
   flex: 1;
   text-align: left;
 }
 
 .cartTotal {
-  background: linear-gradient(135deg, var(--tg-button, #007aff) 0%, rgba(0, 122, 255, 0.8) 100%);
-  color: var(--tg-button-text, #ffffff);
+  background: var(--app-primary);
+  color: var(--app-on-primary);
   height: 40px;
   padding: 0 16px;
   border-radius: 20px;

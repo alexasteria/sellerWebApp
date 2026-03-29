@@ -42,26 +42,26 @@
 
 /* Variants */
 .variant-primary {
-  background: linear-gradient(135deg, var(--tg-button, #007aff) 0%, rgba(0, 122, 255, 0.8) 100%);
-  color: var(--tg-button-text, #ffffff);
+  background: var(--app-primary);
+  color: var(--app-on-primary);
   box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
 }
 
 .variant-secondary {
-  background: var(--tg-sec-bg, #f2f2f7);
-  color: var(--tg-text, #000000);
+  background: var(--app-border);
+  color: var(--app-text-main);
 }
 
 .variant-ghost {
   background: transparent;
-  color: var(--tg-link, #007aff);
+  color: var(--app-primary);
 }
 
 .variant-glass {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  color: var(--tg-text, #000000);
+  color: var(--app-text-main);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }

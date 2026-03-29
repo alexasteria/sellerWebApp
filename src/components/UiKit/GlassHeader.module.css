@@ -8,7 +8,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 100;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--app-border);
     padding-top: env(safe-area-inset-top);
     transition: background-color 0.3s;
 }

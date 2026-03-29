@@ -9,7 +9,7 @@
     aspect-ratio: 4/3;
     border-radius: 16px;
     overflow: hidden;
-    background: var(--tg-sec-bg, #f2f2f7);
+    background: var(--app-border);
     margin-top: -10px;
     /* pull up slightly closer to handle */
 }
@@ -29,14 +29,14 @@
 .title {
     font-size: 24px;
     font-weight: 700;
-    color: var(--tg-text, #000);
+    color: var(--app-text-main);
     margin: 0;
     letter-spacing: -0.02em;
 }
 
 .description {
     font-size: 15px;
-    color: var(--tg-hint, #8e8e93);
+    color: var(--app-text-muted);
     line-height: 1.5;
     margin: 0;
 }
@@ -50,7 +50,7 @@
 .sectionTitle {
     font-size: 16px;
     font-weight: 600;
-    color: var(--tg-text, #000);
+    color: var(--app-text-main);
     margin: 0;
 }
 
@@ -66,7 +66,7 @@
     align-items: center;
     padding: 16px;
     border-radius: 16px;
-    background: var(--tg-sec-bg, #f2f2f7);
+    background: var(--app-border);
     border: 2px solid transparent;
     width: 100%;
     cursor: pointer;
@@ -75,8 +75,8 @@
 }
 
 .variantPill.activeVariant {
-    border-color: var(--tg-button, #007aff);
-    background: var(--tg-bg, #ffffff);
+    border-color: var(--app-primary);
+    background: var(--app-card-bg);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -93,17 +93,17 @@
 .variantName {
     font-size: 16px;
     font-weight: 500;
-    color: var(--tg-text, #000);
+    color: var(--app-text-main);
 }
 
 .variantPrice {
     font-size: 16px;
     font-weight: 600;
-    color: var(--tg-hint, #8e8e93);
+    color: var(--app-text-muted);
 }
 
 .activeVariant .variantPrice {
-    color: var(--tg-button, #007aff);
+    color: var(--app-primary);
 }
 
 .actionArea {
@@ -115,7 +115,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--tg-sec-bg, #f2f2f7);
+    background: var(--app-border);
     border-radius: 28px;
     height: 56px;
     padding: 4px;
@@ -125,8 +125,8 @@
     width: 48px;
     height: 48px;
     border-radius: 24px;
-    background: var(--tg-bg, #ffffff);
-    color: var(--tg-text, #000);
+    background: var(--app-card-bg);
+    color: var(--app-text-main);
     display: flex;
     align-items: center;
     justify-content: center;

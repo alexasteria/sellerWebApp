@@ -16,6 +16,10 @@
   --app-text-muted: var(--text-secondary);
   --app-primary: var(--brand-primary);
   --app-on-primary: var(--brand-on-primary);
+  --app-border: rgba(0, 0, 0, 0.05);
+  
+  --app-skeleton-bg: #e0e0e0;
+  --app-skeleton-shine: #f0f0f0;
   
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -37,6 +41,10 @@
   --text-secondary: #94A3B8;
   --brand-primary: #0066FF;
   --brand-on-primary: #FFFFFF;
+  --app-border: rgba(255, 255, 255, 0.05);
+
+  --app-skeleton-bg: #1e293b;
+  --app-skeleton-shine: #334155;
 
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);

@@ -17,9 +17,6 @@ export const GlassHeader: FC<GlassHeaderProps> = ({ title, leftAccessory, rightA
     return (
         <motion.header
             className={styles.header}
-            style={{
-                borderBottomColor: useTransform(borderOpacity, opacity => `rgba(0,0,0,${opacity * 0.05})`)
-            }}
         >
             <div className={styles.container}>
                 <div className={styles.accessory}>{leftAccessory}</div>

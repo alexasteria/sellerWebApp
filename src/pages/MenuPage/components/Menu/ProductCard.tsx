@@ -13,10 +13,9 @@ interface ProductCardProps {
     onDecrement: () => void;
 }
 
-const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><rect fill='%23f2f2f7' width='200' height='200'/><text fill='%238e8e93' font-family='sans-serif' font-size='16' font-weight='500' x='50%' y='50%' text-anchor='middle'>Нет фото</text></svg>";
-
 const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, onIncrement, onDecrement }) => {
-    const [imgSrc, setImgSrc] = useState(getImageUrl(product.img) || PLACEHOLDER_IMAGE);
+    const [imgError, setImgError] = useState(false);
+    const hasImage = !!product.img && !imgError;
 
     const price = useMemo(() => {
         return product.variants?.[0]?.cost || 0;
@@ -29,11 +28,20 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
             whileTap={{ scale: 0.98 }}
         >
             <div className={styles.imageContainer}>
-                <img
-                    src={imgSrc}
-                    alt={product.title}
-                    onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
-                />
+                {hasImage ? (
+                    <img
+                        src={getImageUrl(product.img)}
+                        alt={product.title}
+                        onError={() => setImgError(true)}
+                    />
+                ) : (
+                    <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200">
+                            <rect fill="var(--app-bg)" width="200" height="200"/>
+                            <text fill="var(--app-text-muted)" fontFamily="sans-serif" fontSize="16" fontWeight="500" x="50%" y="50%" textAnchor="middle">Нет фото</text>
+                        </svg>
+                    </div>
+                )}
                 {product.discount ? (
                     <div className={styles.badge}>-{product.discount}%</div>
                 ) : null}

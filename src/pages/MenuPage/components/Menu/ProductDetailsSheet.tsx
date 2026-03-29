@@ -91,9 +91,9 @@ const ProductDetailsSheet: FC<ProductDetailsSheetProps> = ({
                                             <span style={{
                                                 marginLeft: '8px',
                                                 fontSize: '14px',
-                                                color: 'var(--tg-button, #007aff)',
+                                                color: 'var(--app-primary)',
                                                 fontWeight: 700,
-                                                background: 'var(--tg-button-text, #ffffff)',
+                                                background: 'var(--app-on-primary)',
                                                 padding: '2px 6px',
                                                 borderRadius: '10px',
                                                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)'

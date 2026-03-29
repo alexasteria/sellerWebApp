@@ -15,7 +15,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--tg-bg, #ffffff);
+    background: var(--app-card-bg);
     border-radius: 24px 24px 0 0;
     z-index: 1001;
     max-height: 90vh;
@@ -29,7 +29,7 @@
 .handle {
     width: 40px;
     height: 5px;
-    background: var(--tg-hint, #ccc);
+    background: var(--app-border);
     border-radius: 4px;
     margin: 12px auto 16px;
     opacity: 0.5;
@@ -40,27 +40,27 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px 16px;
-    border-bottom: 1px solid var(--tg-sec-bg, #f1f1f1);
+    border-bottom: 1px solid var(--app-border);
 }
 
 .title {
     font-size: 20px;
     font-weight: 700;
-    color: var(--tg-text, #000);
+    color: var(--app-text-main);
     margin: 0;
 }
 
 .closeButton {
     appearance: none;
     border: none;
-    background: var(--tg-sec-bg, #f2f2f7);
+    background: var(--app-border);
     width: 32px;
     height: 32px;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--tg-hint, #8e8e93);
+    color: var(--app-text-muted);
     cursor: pointer;
     margin-left: auto;
     transition: opacity 0.2s;

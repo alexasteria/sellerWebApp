@@ -9,11 +9,11 @@ const Header: FC = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   if (isLoading || !activeTenant) {
-    return <div style={{ height: "60px", background: "var(--tg-bg, #ffffff)" }} />;
+    return <div style={{ height: "60px", background: "var(--app-bg)" }} />;
   }
 
   return (
-    <div style={{ padding: "16px 16px 8px", background: "var(--tg-bg, #ffffff)", overflow: "hidden" }}>
+    <div style={{ padding: "16px 16px 8px", background: "var(--app-bg)", overflow: "hidden" }}>
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -29,14 +29,14 @@ const Header: FC = () => {
             borderRadius: "12px",
             transition: "background 0.2s"
           }}
-          onPointerDown={(e) => (e.currentTarget.style.background = "var(--tg-secondary-bg, #f0f0f0)")}
+          onPointerDown={(e) => (e.currentTarget.style.background = "var(--app-border)")}
           onPointerUp={(e) => (e.currentTarget.style.background = "transparent")}
           onPointerLeave={(e) => (e.currentTarget.style.background = "transparent")}
         >
           <h1 style={{
             fontSize: "28px",
             fontWeight: 800,
-            color: "var(--tg-text, #000)",
+            color: "var(--app-text-main)",
             margin: 0,
             letterSpacing: "-0.03em",
             display: "flex",
@@ -48,7 +48,7 @@ const Header: FC = () => {
           </h1>
           <p style={{
             fontSize: "15px",
-            color: "var(--tg-hint, #8e8e93)",
+            color: "var(--app-text-muted)",
             margin: "4px 0 0 0"
           }}>
             {activeTenant.subtitle}
@@ -62,7 +62,7 @@ const Header: FC = () => {
         title="Демо-режим: Выбор Ресторана"
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "16px 0" }}>
-          <p style={{ margin: "0 0 8px 0", color: "var(--tg-hint, #8e8e93)", fontSize: "14px", lineHeight: "1.4" }}>
+          <p style={{ margin: "0 0 8px 0", color: "var(--app-text-muted)", fontSize: "14px", lineHeight: "1.4" }}>
             Приложение работает в режиме демонстрации. Выберите заведение, чтобы посмотреть его ассортимент.
           </p>
           
@@ -81,21 +81,21 @@ const Header: FC = () => {
                 gap: "16px",
                 padding: "16px",
                 borderRadius: "16px",
-                background: tenant.code === activeTenant.code ? "var(--tg-theme-bg-color, #f0f8ff)" : "var(--tg-secondary-bg, #f5f5f5)",
-                border: tenant.code === activeTenant.code ? "2px solid var(--tg-button-color, #007aff)" : "2px solid transparent",
+                background: tenant.code === activeTenant.code ? "var(--app-card-bg)" : "var(--app-bg)",
+                border: tenant.code === activeTenant.code ? "2px solid var(--app-primary)" : "2px solid transparent",
                 cursor: "pointer",
               }}
             >
               <div style={{ fontSize: "32px", lineHeight: 1 }}>{tenant.emoji}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--tg-text, #000)", marginBottom: "4px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 600, color: "var(--app-text-main)", marginBottom: "4px" }}>
                   {tenant.name}
                 </div>
-                <div style={{ fontSize: "13px", color: "var(--tg-hint, #8e8e93)" }}>
+                <div style={{ fontSize: "13px", color: "var(--app-text-muted)" }}>
                   {tenant.subtitle}
                 </div>
               </div>
-              <Store size={20} color={tenant.code === activeTenant.code ? "var(--tg-button-color, #007aff)" : "var(--tg-hint, #8e8e93)"} />
+              <Store size={20} color={tenant.code === activeTenant.code ? "var(--app-primary)" : "var(--app-text-muted)"} />
             </div>
           ))}
         </div>
