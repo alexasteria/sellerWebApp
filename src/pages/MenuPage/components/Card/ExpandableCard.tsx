@@ -8,6 +8,13 @@ import { useCart } from "@/contexts/CartContext";
 import { ModelsProduct, ModelsProductVariant } from "@/backendApi.ts";
 import { getImageUrl } from '@/utils/getImageUrl';
 
+export interface ExpandableCardProps {
+  item: ModelsProduct;
+  variantState?: Record<string, number>;
+  onIncrement: (product: ModelsProduct, variantId: number | undefined) => void;
+  onDecrement: (product: ModelsProduct, variantId: number | undefined) => void;
+}
+
 const ExpandableCard: FC<ExpandableCardProps> = ({
   item,
   variantState = {},
@@ -44,7 +51,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
 
   const totalCount = useMemo(() => {
     return Object.entries(variantState).reduce((sum, [_, count]) => {
-      return sum + count;
+      return sum + (count as number);
     }, 0);
   }, [variantState]);
 

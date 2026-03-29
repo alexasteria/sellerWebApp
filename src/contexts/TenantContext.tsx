@@ -31,8 +31,8 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [availableTenants, setAvailableTenants] = useState<TenantInfo[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [activeTenantCode, setActiveTenantCode] = useState<string>(() => {
-        return localStorage.getItem("demoTenantCode") || import.meta.env.VITE_TENANT_CODE || 'DEMO_RESTAURANT';
+    const [activeTenantCode, setActiveTenantCode] = useState<string | null>(() => {
+        return localStorage.getItem("demoTenantCode") || import.meta.env.VITE_TENANT_CODE || null;
     });
 
     useEffect(() => {
@@ -49,6 +49,14 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                     }));
                 
                 setAvailableTenants(fetchedTenants);
+
+                // Авто-выбор первого доступного тенанта, если ещё не выбран
+                if (!activeTenantCode && fetchedTenants.length > 0) {
+                    const firstCode = fetchedTenants[0].code;
+                    setActiveTenantCode(firstCode);
+                    localStorage.setItem("demoTenantCode", firstCode);
+                }
+
                 setIsLoading(false);
             })
             .catch(err => {

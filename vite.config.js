@@ -8,6 +8,7 @@ export default defineConfig({
             "@": "/src",
         },
     },
+    base: "/web-app/",
     server: {
         proxy: {
             "/api": {
