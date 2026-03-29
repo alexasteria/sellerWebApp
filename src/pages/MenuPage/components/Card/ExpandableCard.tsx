@@ -3,9 +3,10 @@ import { VariantState } from "@/types";
 import styles from "@/pages/MenuPage/components/Card/ExpandableCard.module.css";
 import CardHeader from "@/pages/MenuPage/components/Card/CardHeader";
 import CardExpandedContent from "@/pages/MenuPage/components/Card/CardExpandedContent";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { selectExpandedCardId, setExpandedCardId } from "@/store/productsSlice";
+import { useProducts } from "@/contexts/ProductContext";
+import { useCart } from "@/contexts/CartContext";
 import { ModelsProduct, ModelsProductVariant } from "@/backendApi.ts";
+import { getImageUrl } from '@/utils/getImageUrl';
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect fill='%23ccc' width='200' height='150'/><text fill='%23555' font-family='sans-serif' font-size='30' dy='10.5' font-weight='bold' x='50%' y='50%' text-anchor='middle'>No Image</text></svg>";
 
@@ -22,14 +23,14 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   onIncrement,
   onDecrement,
 }) => {
-  const dispatch = useAppDispatch();
-  const expandedCardId = useAppSelector(selectExpandedCardId);
+  const { expandedCardId, setExpandedCardId } = useProducts();
+  const { cart } = useCart();
   const isExpanded = expandedCardId === String(item.id);
   const [selectVariant, setSelectVariant] = useState<ModelsProductVariant>(item.variants[0]);
-  const [currentImageSrc, setCurrentImageSrc] = useState<string>(item.img || PLACEHOLDER_IMAGE);
+  const [currentImageSrc, setCurrentImageSrc] = useState<string>(getImageUrl(item.img) || PLACEHOLDER_IMAGE);
 
   useEffect(() => {
-    setCurrentImageSrc(item.img || PLACEHOLDER_IMAGE);
+    setCurrentImageSrc(getImageUrl(item.img) || PLACEHOLDER_IMAGE);
   }, [item.img]);
 
   const handleImageError = () => {
@@ -59,7 +60,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   }, [variantState]);
 
   const toggleExpand = () => {
-    dispatch(setExpandedCardId(isExpanded ? null : (item.id !== undefined ? String(item.id) : null)));
+    setExpandedCardId(isExpanded ? null : (item.id !== undefined ? String(item.id) : null));
   };
 
   return (

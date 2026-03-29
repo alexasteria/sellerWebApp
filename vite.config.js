@@ -1,4 +1,5 @@
-import { defineConfig } from "vite";
+/// <reference types="vitest" />
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 export default defineConfig({
     plugins: [react()],
@@ -7,21 +8,39 @@ export default defineConfig({
             "@": "/src",
         },
     },
-    // Set base path for GitHub Pages when building in CI
-    // If running in GitHub Actions, GITHUB_REPOSITORY is like "owner/repo"
-    // This makes assets served from "/repo/" which GH Pages requires
-    base: process.env.GITHUB_REPOSITORY
-        ? "/".concat(process.env.GITHUB_REPOSITORY.split("/")[1], "/")
-        : "/",
     server: {
         proxy: {
             "/api": {
-                target: "http://localhost:8085",
-                rewrite: function (path) { return path.replace(/^\/api/, ""); },
+                target: "https://seller-department.ru",
                 changeOrigin: true,
-                secure: false,
+                secure: true,
                 ws: true,
             },
+            "/static": {
+                target: "https://seller-department.ru",
+                changeOrigin: true,
+                secure: true,
+            },
         },
+        // proxy: {
+        //   "/api": {
+        //     target: "http://localhost:8085",
+        //     rewrite: (path) => path.replace(/^\/api/, ""),
+        //     changeOrigin: true,
+        //     secure: false,
+        //     ws: true,
+        //   },
+        //   "/static": {
+        //     target: "https://seller-department.ru",
+        //     //rewrite: (path) => path.replace(/^\/static/, ""),
+        //     changeOrigin: true,
+        //     secure: false,
+        //   },
+        // },
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: './src/setupTests.ts',
     },
 });

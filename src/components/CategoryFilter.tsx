@@ -2,21 +2,17 @@ import React, { FC } from "react";
 import { motion } from "framer-motion";
 import styles from "./CategoryFilter.module.css";
 import { ModelsCategory } from "@/backendApi";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { selectSelectedCategoryId, setSelectedCategoryId, fetchProducts } from "@/store/productsSlice";
-import { selectCategories, selectCategoriesLoading, selectCategoriesError } from "@/store/categoriesSlice";
+import { useCategories } from "@/contexts/CategoryContext";
+import { useProducts } from "@/contexts/ProductContext";
 import { Skeleton } from "@/components/UiKit";
 
 const CategoryFilter: FC = () => {
-  const dispatch = useAppDispatch();
-  const categories = useAppSelector(selectCategories);
-  const isLoading = useAppSelector(selectCategoriesLoading);
-  const error = useAppSelector(selectCategoriesError);
-  const selectedCategoryId = useAppSelector(selectSelectedCategoryId);
+  const { categories, isLoading, error } = useCategories();
+  const { selectedCategoryId, setSelectedCategoryId, fetchProducts } = useProducts();
 
   const handleSelectCategory = (categoryId: number | null) => {
-    dispatch(setSelectedCategoryId(categoryId));
-    dispatch(fetchProducts(categoryId));
+    setSelectedCategoryId(categoryId);
+    fetchProducts(categoryId);
   };
 
   if (isLoading) {

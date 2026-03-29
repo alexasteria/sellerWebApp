@@ -26,13 +26,13 @@ export interface ModelsCategory {
   created_at?: string;
   deleted_at?: string;
   id?: number;
-  name?: string;
+  name: string;
   tenant_id?: number;
   updated_at?: string;
 }
 
 export interface ModelsCreateCategoryRequest {
-  name?: string;
+  name: string;
 }
 
 export interface ModelsCreateOrderRequest {
@@ -41,7 +41,7 @@ export interface ModelsCreateOrderRequest {
 }
 
 export interface ModelsCreateProductRequest {
-  categoryID: string;
+  categoryID: number;
   description?: string;
   discount?: number;
   img?: string;
@@ -142,7 +142,7 @@ export interface ModelsProductTagGroup {
 
 export interface ModelsProductTagGroupName {
   created_at?: string;
-  name?: string;
+  name: string;
   tenant_id?: number;
   updated_at?: string;
 }
@@ -1038,6 +1038,52 @@ export class Api<
       this.request<ModelsTgUser[], string>({
         path: `/tg-users`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
+  upload = {
+    /**
+     * @description Uploads an image file for a product and returns its path, resize to 1000px
+     *
+     * @tags images
+     * @name ImageCreate
+     * @summary Upload a product image
+     * @request POST:/upload/image
+     */
+    imageCreate: (
+      data: {
+        /**
+         * Image file to upload
+         * @format binary
+         */
+        image: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Record<string, string>, HandlersErrorResponse>({
+        path: `/upload/image`,
+        method: "POST",
+        body: data,
+        type: ContentType.FormData,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Downloads an image from the given URL and saves it, returning its path.
+     *
+     * @tags images
+     * @name ImageFromUrlCreate
+     * @summary Upload an image from URL
+     * @request POST:/upload/image/from-url
+     */
+    imageFromUrlCreate: (imageUrl: string, params: RequestParams = {}) =>
+      this.request<Record<string, string>, HandlersErrorResponse>({
+        path: `/upload/image/from-url`,
+        method: "POST",
+        body: imageUrl,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

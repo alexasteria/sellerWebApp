@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { CartState } from '@/types';
 import styles from './CartDisplay.module.css';
-import { useAppSelector } from "@/store/hooks";
+import { useProducts } from "@/contexts/ProductContext";
 import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
 import { Card } from '@/components/UiKit';
+import { getImageUrl } from '@/utils/getImageUrl';
 
 interface CartDisplayProps {
   cart: CartState;
@@ -12,7 +13,7 @@ interface CartDisplayProps {
 const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect fill='%23f2f2f7' width='100' height='100'/></svg>";
 
 const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
-  const { products } = useAppSelector((state) => state.products);
+  const { products } = useProducts();
 
   const hasItems = Object.keys(cart).length > 0;
 
@@ -39,7 +40,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
             <Card key={productID} className={styles.cartItem} padding="sm">
               <div className={styles.imageWrapper}>
                 <img
-                  src={item.img || PLACEHOLDER_IMAGE}
+                  src={getImageUrl(item.img) || PLACEHOLDER_IMAGE}
                   alt={item.title}
                   onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE; }}
                 />

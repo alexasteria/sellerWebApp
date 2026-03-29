@@ -1,67 +1,9 @@
-import { ModelsProductVariant } from "@/backendApi";
 
-export interface Product {
-  id: string;
-  title: string;
-  img?: string;
-  description?: string;
-  discount?: number;
-  variants: ModelsProductVariant[]; //вариации одного продукта, напр - обьем сока, минимум 1
-  options?: ProductOption[]; //допы, например соус или сырный бортик к пицце
-  tags?: ProductTags;
-}
-
-type ProductOption = {
-  id: string;
-  value: string;
-  priceModifier: number;
-  isEnable: boolean;
-};
-type ProductTags = {
-  name: string; //напр - Состав
-  tags: string[]; // напр - [Моцарелла, горгонзола, пармезан, рикотта]
-};
-export interface MenuItem extends Product {
-  // id: string;
-  // title: string;
-  // price: number;
-  // img?: string;
-  // description?: string;
-  cardStyle?: "classic" | "premium";
-  ingredients?: string[];
-  spicy?: boolean;
-  vegetarian?: boolean;
-  popular?: boolean;
-  // discount?: number;
-  weight?: string;
-  cookingTime?: string;
-}
 
 export type VariantState = Record<string, number>;
 export type CartState = Record<string, VariantState>;
 
-export type OrderItem = {
-  id: string;
-  title: string;
-  price: number;
-  quantity: number;
-  description?: string;
-};
 
-// export type OrderPayload = {
-//   action: "checkout";
-//   items: OrderItem[];
-//   total: number;
-//   currency: string;
-//   delivery?: DeliveryInfo | null;
-//   timestamp?: number;
-//   user?: {
-//     id?: number;
-//     username?: string;
-//     first_name?: string;
-//     last_name?: string;
-//   };
-// };
 
 export type DeliveryAddress = {
   city: string;
@@ -87,12 +29,3 @@ export type DeliveryInfo = {
   totalWithDelivery: number;
 };
 
-export type OrderPayload = {
-  userID: number;
-  cart: {
-    productID: string;
-    variantID: string;
-    quantity: number;
-    price: number;
-  }[];
-};

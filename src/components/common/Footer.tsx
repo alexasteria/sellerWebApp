@@ -1,14 +1,13 @@
 import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/store/hooks.ts";
-import { selectCartTotal } from "@/store/cartSlice.ts";
+import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import styles from "./Footer.module.css";
 
 const Footer: FC = () => {
   const navigate = useNavigate();
-  const total = useAppSelector(selectCartTotal);
+  const { cartTotal: total } = useCart();
 
   return (
     <AnimatePresence>

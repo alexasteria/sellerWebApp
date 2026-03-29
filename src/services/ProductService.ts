@@ -1,53 +1,17 @@
-import { ModelsProduct } from "@/backendApi";
-import { apiClient } from "@/apiClient";
+import { Api, ModelsProduct } from "@/backendApi";
 
-/**
- * Service class for handling product-related operations.
- * This class follows the Singleton pattern to ensure a single instance is used throughout the application.
- */
-class ProductService {
-  private static instance: ProductService;
+export class ProductService {
+  constructor(private api: Api<unknown>) {}
 
-  /**
-   * Private constructor to prevent direct instantiation.
-   */
-  private constructor() {}
-
-  /**
-   * Returns the singleton instance of the ProductService.
-   * @returns The singleton instance.
-   */
-  public static getInstance(): ProductService {
-    if (!ProductService.instance) {
-      ProductService.instance = new ProductService();
-    }
-    return ProductService.instance;
-  }
-
-  /**
-   * Fetches the list of products for a given tenant.
-   * @param tenantId - The ID of the tenant.
-   * @returns A promise that resolves to an array of products.
-   */
-  public async getProducts(categoryId: number | null = null): Promise<ModelsProduct[]> {
+  async fetchProducts(categoryId: number | null = null): Promise<ModelsProduct[]> {
     try {
-      const response = await apiClient.products.productsList(
-        { category_id: categoryId === null ? undefined : categoryId }, // Pass category_id if not null
-        {
-          headers: {
-            "Tenant-Code": import.meta.env.VITE_TENANT_CODE,
-          },
-        }
-      );
-      return response.data;
+      const response = await this.api.products.productsList({
+        category_id: categoryId === null ? undefined : categoryId,
+      });
+      return response.data || [];
     } catch (error) {
       console.error("Failed to fetch products:", error);
-      // In a real-world app, you might want to handle this error more gracefully.
-      // For now, we return an empty array.
-      return [];
+      throw error;
     }
   }
 }
-
-// Export a singleton instance of the service
-export const productService = ProductService.getInstance();

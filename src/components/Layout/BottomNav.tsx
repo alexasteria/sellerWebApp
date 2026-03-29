@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, ShoppingCart, User } from 'lucide-react';
-import { useAppSelector } from '@/store/hooks';
-import { selectCartItemCount } from '@/store/cartSlice';
+import { useCart } from '@/contexts/CartContext';
 import styles from './BottomNav.module.css';
 import clsx from 'clsx';
 
 const BottomNav: FC<{}> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const cartItemCount = useAppSelector(selectCartItemCount);
+  const { cartItemCount } = useCart();
 
   const tabs = [
     { path: '/', icon: Home, label: 'Меню' },

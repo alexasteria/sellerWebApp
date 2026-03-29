@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { ModelsProduct } from "@/backendApi";
 import styles from './CardHeader.module.css';
+import { getImageUrl } from '@/utils/getImageUrl';
 
 interface CardHeaderProps {
   item: ModelsProduct;
@@ -25,7 +26,7 @@ const CardHeader: FC<CardHeaderProps> = ({
         <div className={styles.cardImageContainer}>
           {item.img && (
             <div className={styles.cardImage}>
-              <img src={item.img} alt={item.title} loading="lazy" />
+              <img src={getImageUrl(item.img)} alt={item.title} loading="lazy" />
             </div>
           )}
         </div>

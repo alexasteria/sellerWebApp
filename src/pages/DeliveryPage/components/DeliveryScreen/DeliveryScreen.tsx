@@ -2,11 +2,11 @@ import React, { FC, useState } from "react";
 import { DeliveryInfo } from "@/types";
 import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
 import styles from "./DeliveryScreen.module.css";
-import { useUser } from "@/contexts/UserContext.tsx";
-import { useAppSelector } from "@/store/hooks";
-import { selectCart, selectDeliveryInfo } from "@/store/cartSlice";
+import { useCart } from "@/contexts/CartContext";
+import { useProducts } from "@/contexts/ProductContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { WebApp } from "telegram-web-app";
-import { orderService } from "@/services/OrderService";
+import * as OrderService from "@/services/OrderService";
 import { GlassHeader, Button } from "@/components/UiKit";
 import { ChevronLeft } from "lucide-react";
 
@@ -28,10 +28,9 @@ const safeTgCall = (callback: () => void) => {
 };
 
 const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
-  const cart = useAppSelector(selectCart);
-  const deliveryInfo = useAppSelector(selectDeliveryInfo);
-  const { products } = useAppSelector((state) => state.products);
-  const { user } = useUser();
+  const { cart, deliveryInfo } = useCart();
+  const { products } = useProducts();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleOrderSubmit = async () => {
@@ -42,7 +41,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
     setIsSubmitting(true);
     safeTgCall(() => tg.MainButton.showProgress());
 
-    const orderResult = await orderService.submitOrder(cart, products, user, deliveryInfo);
+    const orderResult = await OrderService.submitOrder(cart, products, user.id!, deliveryInfo);
 
     safeTgCall(() => tg.MainButton.hideProgress());
     setIsSubmitting(false);

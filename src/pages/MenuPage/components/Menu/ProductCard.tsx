@@ -3,6 +3,7 @@ import { ModelsProduct } from '@/backendApi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import styles from './ProductCard.module.css';
+import { getImageUrl } from '@/utils/getImageUrl';
 
 interface ProductCardProps {
     product: ModelsProduct;
@@ -15,7 +16,7 @@ interface ProductCardProps {
 const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><rect fill='%23f2f2f7' width='200' height='200'/><text fill='%238e8e93' font-family='sans-serif' font-size='16' font-weight='500' x='50%' y='50%' text-anchor='middle'>Нет фото</text></svg>";
 
 const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, onIncrement, onDecrement }) => {
-    const [imgSrc, setImgSrc] = useState(product.img || PLACEHOLDER_IMAGE);
+    const [imgSrc, setImgSrc] = useState(getImageUrl(product.img) || PLACEHOLDER_IMAGE);
 
     const price = useMemo(() => {
         return product.variants?.[0]?.cost || 0;

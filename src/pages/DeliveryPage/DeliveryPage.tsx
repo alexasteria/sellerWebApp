@@ -4,13 +4,11 @@ import DeliveryScreen from "@/pages/DeliveryPage/components/DeliveryScreen/Deliv
 import { useTheme } from "@/hooks/useTelegram";
 import { useThemeSync } from "@/hooks/useThemeSync";
 import { DeliveryInfo } from "@/types"; // Import DeliveryInfo
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { selectCartTotal, setDeliveryInfo } from "@/store/cartSlice";
+import { useCart } from "@/contexts/CartContext";
 
 const DeliveryPage: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const total = useAppSelector(selectCartTotal);
+  const { cartTotal: total, setDeliveryInfo } = useCart();
   const theme = useTheme();
 
   useThemeSync(theme);
@@ -20,7 +18,7 @@ const DeliveryPage: FC = () => {
   };
 
   const handleSetDeliveryInfo = (info: DeliveryInfo | null) => {
-    dispatch(setDeliveryInfo(info));
+    setDeliveryInfo(info);
   };
 
   return (

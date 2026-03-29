@@ -4,6 +4,7 @@ import { BottomSheet, Button } from '@/components/UiKit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus } from 'lucide-react';
 import styles from './ProductDetailsSheet.module.css';
+import { getImageUrl } from '@/utils/getImageUrl';
 
 interface ProductDetailsSheetProps {
     product: ModelsProduct | null;
@@ -61,7 +62,7 @@ const ProductDetailsSheet: FC<ProductDetailsSheetProps> = ({
             <div className={styles.container}>
                 <div className={styles.imageWrapper}>
                     <img
-                        src={displayProduct.img || PLACEHOLDER_IMAGE}
+                        src={getImageUrl(displayProduct.img) || PLACEHOLDER_IMAGE}
                         alt={displayProduct.title}
                         onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE; }}
                     />

@@ -2,31 +2,29 @@ import React, { FC, useState } from "react";
 import ProductCard from "@/pages/MenuPage/components/Menu/ProductCard";
 import ProductDetailsSheet from "@/pages/MenuPage/components/Menu/ProductDetailsSheet";
 import styles from "@/pages/MenuPage/components/Menu/Menu.module.css";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { increment as cartIncrement, decrement as cartDecrement, selectCart } from "@/store/cartSlice";
 import { ModelsProduct } from "@/backendApi.ts";
 import { Skeleton } from "@/components/UiKit";
+import { useProducts } from "@/contexts/ProductContext";
+import { useCart } from "@/contexts/CartContext";
 
 const Menu: FC = () => {
-  const dispatch = useAppDispatch();
-  const products = useAppSelector((state) => state.products.products);
-  const productsLoading = useAppSelector((state) => state.products.isLoading);
-  const cart = useAppSelector(selectCart);
+  const { products, isLoading: productsLoading } = useProducts();
+  const { cart, increment, decrement } = useCart();
 
   const [selectedProduct, setSelectedProduct] = useState<ModelsProduct | null>(null);
 
   const handleIncrement = (product: ModelsProduct, variantID: number | undefined) => {
-    dispatch(cartIncrement({ product, variantID }));
+    increment(product, variantID);
   };
 
   const handleDecrement = (product: ModelsProduct, variantID: number | undefined) => {
-    dispatch(cartDecrement({ product, variantID }));
+    decrement(product, variantID);
   };
 
   const getProductTotalQuantity = (productId: number | undefined): number => {
     if (!productId || !cart[productId]) return 0;
     const variantsForProduct = cart[productId];
-    return Object.values(variantsForProduct).reduce((sum, qty) => sum + qty, 0);
+    return Object.values(variantsForProduct).reduce((sum, qty) => (sum as number) + (qty as number), 0);
   };
 
   if (productsLoading && products.length === 0) {

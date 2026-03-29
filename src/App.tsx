@@ -1,29 +1,32 @@
 import React, { FC, useEffect } from "react";
-import { UserProvider } from "@/contexts/UserContext";
-import Layout from "@/components/Layout/Layout"; // Import Layout
-import { useAppDispatch } from "./store/hooks";
-import { fetchProducts } from "./store/productsSlice";
-import { fetchCategories } from "./store/categoriesSlice"; // Import fetchCategories
+import Layout from "@/components/Layout/Layout";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProducts } from "@/contexts/ProductContext";
+import { useCategories } from "@/contexts/CategoryContext";
 
 const App: FC = () => {
-  const dispatch = useAppDispatch();
+  const { authenticateTelegram } = useAuth();
+  const { fetchProducts } = useProducts();
+  const { fetchCategories } = useCategories();
 
   useEffect(() => {
-    dispatch(fetchProducts(null));
-    dispatch(fetchCategories()); // Dispatch fetchCategories
-
-    // Automatically expand the Telegram Web App to maximum height
+    // Аутентификация через Telegram WebApp
     const tg = (window as any).Telegram?.WebApp;
-    if (tg && tg.expand) {
+    if (tg?.initDataUnsafe?.user) {
+      authenticateTelegram(tg.initDataUnsafe.user);
+    }
+
+    // Автоматически раскрываем на полный экран
+    if (tg?.expand) {
       tg.expand();
     }
-  }, [dispatch]);
 
-  return (
-    <UserProvider>
-      <Layout />
-    </UserProvider>
-  );
+    // Загрузка данных
+    fetchProducts(null);
+    fetchCategories();
+  }, [authenticateTelegram, fetchProducts, fetchCategories]);
+
+  return <Layout />;
 };
 
 export default App;

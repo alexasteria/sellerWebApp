@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '@/store/hooks';
-import { selectCartItemCount, selectCartTotal } from '@/store/cartSlice';
+import { useProducts } from "@/contexts/ProductContext";
+import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ChevronRight } from 'lucide-react';
 import styles from './FloatingCart.module.css';
 
 const FloatingCart: FC = () => {
     const navigate = useNavigate();
-    const count = useAppSelector(selectCartItemCount);
-    const total = useAppSelector(selectCartTotal);
+    const { cartItemCount: count, cartTotal: total } = useCart();
 
     return (
         <AnimatePresence>
