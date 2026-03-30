@@ -7,8 +7,8 @@ import { useProducts } from "@/contexts/ProductContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { WebApp } from "telegram-web-app";
 import * as OrderService from "@/services/OrderService";
-import { GlassHeader, Button } from "@/components/UiKit";
-import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/UiKit";
+import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -32,6 +32,9 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
   const { products } = useProducts();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Use native Telegram back button
+  useTelegramBackButton(onBack);
 
   const handleOrderSubmit = async () => {
     if (!user || isSubmitting) {
@@ -57,20 +60,8 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
     }
   };
 
-  const backAccessory = (
-    <button className={styles.backBtn} onClick={onBack}>
-      <ChevronLeft size={24} />
-      <span>Назад</span>
-    </button>
-  );
-
   return (
     <div className={styles.deliveryScreen}>
-      <GlassHeader title="Оформление заказа" leftAccessory={backAccessory} />
-
-      {/* Spacer for GlassHeader */}
-      <div style={{ height: 60 }} />
-
       <div className={styles.scrollContent}>
         <CartDisplay cart={cart} />
 

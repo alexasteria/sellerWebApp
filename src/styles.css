@@ -29,7 +29,7 @@
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --nav-height: 70px;
+  --nav-height: 56px;
 }
 
 :root[data-theme="dark"] {

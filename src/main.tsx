@@ -8,6 +8,7 @@ import {
 import App from "@/App";
 import MenuPage from "@/pages/MenuPage/MenuPage";
 import DeliveryPage from "@/pages/DeliveryPage/DeliveryPage";
+import ProfilePage from "@/pages/ProfilePage/ProfilePage";
 import { AppProvider } from "@/contexts";
 import "@/styles.css";
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "delivery",
         element: <DeliveryPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
       {
         path: "*",
