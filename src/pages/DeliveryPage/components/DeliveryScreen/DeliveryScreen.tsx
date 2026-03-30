@@ -47,7 +47,15 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
     setIsSubmitting(false);
 
     if (orderResult) {
-      safeTgCall(() => tg.close());
+      safeTgCall(() => {
+        if (tg.showAlert) {
+          tg.showAlert("Счет отправлен вам в чат! Оплатите его для подтверждения заказа.", () => {
+            tg.close();
+          });
+        } else {
+          tg.close();
+        }
+      });
     } else {
       safeTgCall(() => tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз."));
     }
