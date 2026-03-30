@@ -36,7 +36,7 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     });
 
     useEffect(() => {
-        apiClient.tenants.tenantsList()
+        apiClient.tenants.demoList()
             .then(res => {
                 const fetchedTenants = res.data
                     .filter(t => t.code && TARGET_TENANT_CODES.includes(t.code))

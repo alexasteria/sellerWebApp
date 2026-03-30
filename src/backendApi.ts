@@ -1024,6 +1024,22 @@ export class Api<
         format: "json",
         ...params,
       }),
+
+    /**
+     * @description Get a list of all demo tenants (prefix DEMO_)
+     *
+     * @tags tenants
+     * @name DemoList
+     * @summary Get a list of demo tenants
+     * @request GET:/tenants/demo
+     */
+    demoList: (params: RequestParams = {}) =>
+      this.request<ModelsTenant[], string>({
+        path: `/tenants/demo`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
   };
   tgUsers = {
     /**
@@ -1044,7 +1060,7 @@ export class Api<
   };
   upload = {
     /**
-     * @description Uploads an image file for a product and returns its path, resize to 1000px
+     * @description Uploads an image file for a product and returns its path.
      *
      * @tags images
      * @name ImageCreate
