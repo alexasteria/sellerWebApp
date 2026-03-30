@@ -1,0 +1,141 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--app-bg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--app-card-bg);
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.backBtn {
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--app-text-muted);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.emptyIcon {
+  color: var(--app-text-muted);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.emptyText {
+  color: var(--app-text-muted);
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.shopBtn {
+  background-color: var(--app-primary);
+  color: var(--app-on-primary);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.orderCard {
+  background-color: var(--app-card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .orderHeader {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.orderNumber {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.orderDate {
+  font-size: 13px;
+  color: var(--app-text-muted);
+}
+
+.orderBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.orderTotal {
+  font-size: 14px;
+  color: var(--app-text-muted);
+}
+
+.orderTotal strong {
+  color: var(--app-text-main);
+  font-size: 16px;
+}

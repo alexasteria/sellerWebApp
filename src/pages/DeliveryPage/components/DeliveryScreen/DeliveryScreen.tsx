@@ -1,5 +1,4 @@
-import React, { FC, useState } from "react";
-import { DeliveryInfo } from "@/types";
+import React, { FC, useState, useEffect } from "react";
 import CartDisplay from "@/pages/DeliveryPage/components/CartDisplay/CartDisplay";
 import styles from "./DeliveryScreen.module.css";
 import { useCart } from "@/contexts/CartContext";
@@ -9,6 +8,9 @@ import { WebApp } from "telegram-web-app";
 import * as OrderService from "@/services/OrderService";
 import { Button } from "@/components/UiKit";
 import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
+import { apiClient } from "@/apiClient";
+import { ModelsTgUserAddress } from "@/backendApi";
+import { MapPin, Plus } from "lucide-react";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -28,23 +30,96 @@ const safeTgCall = (callback: () => void) => {
 };
 
 const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
-  const { cart, deliveryInfo } = useCart();
+  const { cart } = useCart();
   const { products } = useProducts();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addresses, setAddresses] = useState<ModelsTgUserAddress[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<ModelsTgUserAddress | null>(null);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newAddressText, setNewAddressText] = useState("");
 
   // Use native Telegram back button
   useTelegramBackButton(onBack);
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      if (!user?.id) return;
+      setLoadingAddresses(true);
+      try {
+        const res = await apiClient.users.addressesList(user.id);
+        const fetchedAddresses = res.data || [];
+        setAddresses(fetchedAddresses);
+        
+        // Select default or first address if available
+        if (fetchedAddresses.length > 0) {
+          const defaultAddr = fetchedAddresses.find((a: ModelsTgUserAddress) => a.is_default) || fetchedAddresses[0];
+          setSelectedAddress(defaultAddr);
+        } else {
+            setIsAddingNew(true);
+        }
+      } catch (e) {
+        console.error("Failed to load addresses", e);
+      } finally {
+        setLoadingAddresses(false);
+      }
+    };
+    fetchAddresses();
+  }, [user]);
+  
+  const handleAddNewAddress = async () => {
+    if (!user?.id || !newAddressText.trim()) return;
+    try {
+        const res = await apiClient.users.addressesCreate(user.id, {
+            address_text: newAddressText.trim(),
+            is_default: addresses.length === 0,
+        });
+        const createdAttr = res.data;
+        if(createdAttr){
+            setAddresses([...addresses, createdAttr]);
+            setSelectedAddress(createdAttr);
+        }
+        setIsAddingNew(false);
+        setNewAddressText('');
+    } catch (e) {
+        console.error("Failed to add address", e);
+    }
+  };
 
   const handleOrderSubmit = async () => {
     if (!user || isSubmitting) {
       return;
     }
+    
+    // Validate if an address is selected or entered
+    if (!selectedAddress && !isAddingNew) {
+      safeTgCall(() => {
+        if (tg.showAlert) tg.showAlert("Пожалуйста, выберите адрес доставки");
+      });
+      return;
+    }
+    
+    // If user is adding address but hasn't submitted
+    if (isAddingNew && newAddressText.trim() === "") {
+        safeTgCall(() => {
+            if (tg.showAlert) tg.showAlert("Пожалуйста, укажите адрес доставки");
+          });
+          return;
+    }
+    
+    let addressToUse = selectedAddress?.address_text || null;
+    
+    // If they filled the new address field but didn't click save, save it automatically or just use the text
+    if (isAddingNew && newAddressText.trim() !== "") {
+        addressToUse = newAddressText.trim();
+        // optionally, we don't await save here to make checkout faster, it will just add address text to order
+    }
 
     setIsSubmitting(true);
     safeTgCall(() => tg.MainButton.showProgress());
 
-    const orderResult = await OrderService.submitOrder(cart, products, user.id!, deliveryInfo);
+    const orderResult = await OrderService.submitOrder(cart, products, user.id!, addressToUse);
 
     safeTgCall(() => tg.MainButton.hideProgress());
     setIsSubmitting(false);
@@ -64,6 +139,52 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
     <div className={styles.deliveryScreen}>
       <div className={styles.scrollContent}>
         <CartDisplay cart={cart} />
+
+        <div className={styles.addressSection}>
+            <h3 className={styles.addressSectionTitle}>Адрес доставки*</h3>
+            
+            {loadingAddresses ? (
+                <div className={styles.loadingAddress}>Загрузка адресов...</div>
+            ) : addresses.length > 0 && !isAddingNew ? (
+                <div className={styles.addressList}>
+                    {addresses.map((address) => (
+                        <div 
+                            key={address.id} 
+                            className={`${styles.addressCard} ${selectedAddress?.id === address.id ? styles.selected : ''}`}
+                            onClick={() => setSelectedAddress(address)}
+                        >
+                            <MapPin size={20} className={styles.addressIcon} />
+                            <div className={styles.addressTextWrapper}>
+                                <span className={styles.addressText}>{address.address_text}</span>
+                            </div>
+                            <div className={styles.radioWrapper}>
+                                <div className={`${styles.radioCircle} ${selectedAddress?.id === address.id ? styles.radioSelected : ''}`}></div>
+                            </div>
+                        </div>
+                    ))}
+                    <button className={styles.addAddressTrigger} onClick={() => setIsAddingNew(true)}>
+                        <Plus size={18} />
+                        Добавить другой адрес
+                    </button>
+                </div>
+            ) : (
+                <div className={styles.addAddressForm}>
+                    <textarea 
+                        className={styles.addressTextarea} 
+                        placeholder="Город, Улица, Дом, Квартира"
+                        rows={3}
+                        value={newAddressText}
+                        onChange={(e) => setNewAddressText(e.target.value)}
+                    ></textarea>
+                    {addresses.length > 0 && (
+                        <div className={styles.formActions}>
+                            <button className={styles.cancelAddressBtn} onClick={() => setIsAddingNew(false)}>Отмена</button>
+                            <Button size="sm" onClick={handleAddNewAddress} disabled={!newAddressText.trim()}>Сохранить адрес</Button>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
 
         <div className={styles.orderConfirmationInfo}>
           <div className={styles.infoBox}>

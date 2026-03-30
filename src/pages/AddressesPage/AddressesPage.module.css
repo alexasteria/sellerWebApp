@@ -1,0 +1,218 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--app-bg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--app-card-bg);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.backBtn {
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.addBtnIcon {
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--app-text-muted);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.emptyIcon {
+  color: var(--app-text-muted);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.emptyText {
+  color: var(--app-text-muted);
+  font-size: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.addressCard {
+  background-color: var(--app-card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+}
+
+.addressInfo {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.addressIcon {
+  color: var(--app-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.addressTextWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.addressText {
+  color: var(--app-text-main);
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.defaultBadge {
+  font-size: 11px;
+  background-color: rgba(0, 102, 255, 0.1);
+  color: var(--app-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.deleteBtn {
+  color: #ef4444;
+  padding: 4px;
+  margin: -4px;
+  opacity: 0.7;
+}
+
+.deleteBtn:hover {
+  opacity: 1;
+}
+
+.addNewBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: transparent;
+  color: var(--app-primary);
+  border: 1px dashed var(--app-primary);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  margin-top: 8px;
+  opacity: 0.8;
+}
+
+.addNewBtn:hover {
+  opacity: 1;
+  background-color: rgba(0, 102, 255, 0.05);
+}
+
+.form {
+  background-color: var(--app-card-bg);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--app-text-muted);
+}
+
+.textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--app-bg);
+  color: var(--app-text-main);
+  font-size: 16px;
+  resize: vertical;
+}
+
+@media (prefers-color-scheme: dark) {
+  .textarea {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--app-primary);
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--app-bg);
+  color: var(--app-text-main);
+  font-weight: 600;
+  font-size: 16px;
+}

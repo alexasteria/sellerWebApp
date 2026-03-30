@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './ProfilePage.module.css';
 import { Settings, HelpCircle, ShoppingBag, ChevronRight, MapPin } from 'lucide-react';
@@ -8,6 +9,8 @@ const tg: WebApp = (window as any).Telegram?.WebApp;
 
 const ProfilePage: FC = () => {
   const { user } = useAuth();
+
+  const navigate = useNavigate();
 
   const getInitials = () => {
     if (!user) return '?';
@@ -20,12 +23,12 @@ const ProfilePage: FC = () => {
     {
       title: 'Мои заказы',
       icon: <ShoppingBag size={18} />,
-      onClick: () => tg?.showAlert?.('Раздел "Мои заказы" в разработке'),
+      onClick: () => navigate('/profile/orders'),
     },
     {
       title: 'Адреса доставки',
       icon: <MapPin size={18} />,
-      onClick: () => tg?.showAlert?.('Раздел "Адреса доставки" в разработке'),
+      onClick: () => navigate('/profile/addresses'),
     },
   ];
 

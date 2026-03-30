@@ -13,7 +13,7 @@ const createOrderPayload = (
   cart: CartState,
   products: ModelsProduct[],
   userId: number,
-  deliveryInfo: DeliveryInfo | null
+  deliveryAddressText: string | null
 ): ModelsCreateOrderRequest => {
   const cartItems: ModelsCreateOrderRequest["cart"] = [];
 
@@ -45,6 +45,7 @@ const createOrderPayload = (
   return {
     cart: cartItems,
     userID: userId,
+    delivery_address: deliveryAddressText || undefined,
   };
 };
 
@@ -55,10 +56,10 @@ export const submitOrder = async (
   cart: CartState,
   products: ModelsProduct[],
   userId: number,
-  deliveryInfo: DeliveryInfo | null
+  deliveryAddressText: string | null
 ): Promise<ModelsOrder | null> => {
   try {
-    const payload = createOrderPayload(cart, products, userId, deliveryInfo);
+    const payload = createOrderPayload(cart, products, userId, deliveryAddressText);
 
     if (payload.cart.length === 0) {
       console.warn("Cannot submit an empty order.");

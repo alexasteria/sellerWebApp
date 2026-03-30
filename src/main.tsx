@@ -9,6 +9,8 @@ import App from "@/App";
 import MenuPage from "@/pages/MenuPage/MenuPage";
 import DeliveryPage from "@/pages/DeliveryPage/DeliveryPage";
 import ProfilePage from "@/pages/ProfilePage/ProfilePage";
+import OrdersHistoryPage from "@/pages/OrdersHistoryPage/OrdersHistoryPage";
+import AddressesPage from "@/pages/AddressesPage/AddressesPage";
 import { AppProvider } from "@/contexts";
 import "@/styles.css";
 
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "profile/orders",
+        element: <OrdersHistoryPage />,
+      },
+      {
+        path: "profile/addresses",
+        element: <AddressesPage />,
       },
       {
         path: "*",

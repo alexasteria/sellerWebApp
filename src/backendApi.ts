@@ -37,6 +37,7 @@ export interface ModelsCreateCategoryRequest {
 
 export interface ModelsCreateOrderRequest {
   cart: ModelsCartItem[];
+  delivery_address?: string;
   userID: number;
 }
 
@@ -66,6 +67,10 @@ export interface ModelsCreateShopOwnerRequest {
   phone_number?: string;
 }
 
+export interface ModelsCreateSubscriptionRequest {
+  plan_code: string;
+}
+
 export interface ModelsCreateTenantRequest {
   code: string;
   is_active?: boolean;
@@ -87,6 +92,25 @@ export interface ModelsCreateTgBotUserRequest {
   username?: string;
 }
 
+export interface ModelsCreateTgUserAddressRequest {
+  address_text?: string;
+  is_default?: boolean;
+}
+
+export interface ModelsDashboardResponse {
+  new_clients?: ModelsKPICard;
+  orders_today?: ModelsKPICard;
+  recent_orders?: ModelsRecentOrder[];
+  revenue?: ModelsKPICard;
+  top_products?: ModelsTopProduct[];
+}
+
+export interface ModelsKPICard {
+  change?: number;
+  is_positive?: boolean;
+  value?: number;
+}
+
 export interface ModelsLoginRequest {
   login: string;
   password: string;
@@ -94,8 +118,10 @@ export interface ModelsLoginRequest {
 
 export interface ModelsOrder {
   created_at: string;
+  delivery_address?: string;
   id: number;
   order_items?: ModelsOrderItem[];
+  payment_id?: string;
   status: string;
   tenant_id?: number;
   tg_user?: ModelsTgUser;
@@ -158,6 +184,14 @@ export interface ModelsProductVariant {
   value: string;
 }
 
+export interface ModelsRecentOrder {
+  client_name?: string;
+  date?: string;
+  id?: number;
+  status?: string;
+  total?: number;
+}
+
 export interface ModelsShopOwner {
   created_at?: string;
   deleted_at?: string;
@@ -174,8 +208,46 @@ export interface ModelsShopOwner {
   updated_at?: string;
 }
 
-export interface ModelsTenant {
+export interface ModelsSubscription {
+  created_at?: string;
+  expires_at?: string;
+  id?: number;
+  is_active?: boolean;
+  plan?: ModelsSubscriptionPlan;
+  plan_id?: number;
+  shop_owner_id?: number;
+  starts_at?: string;
+  updated_at?: string;
+}
+
+export interface ModelsSubscriptionPlan {
   code?: string;
+  description?: string;
+  /** nil = нет акции */
+  discount_price?: number;
+  id?: number;
+  is_custom?: boolean;
+  /** nil = unlimited */
+  max_products_per_tenant?: number;
+  /** nil = unlimited */
+  max_tenants?: number;
+  name?: string;
+  price?: number;
+}
+
+export interface ModelsSubscriptionStatus {
+  current_tenant_count?: number;
+  has_active_subscription?: boolean;
+  max_products_per_tenant?: number;
+  max_tenants?: number;
+  subscription?: ModelsSubscription;
+}
+
+export interface ModelsTenant {
+  bot_token?: string;
+  code?: string;
+  contact_email?: string;
+  contact_phone?: string;
   created_at?: string;
   deleted_at?: string;
   id?: number;
@@ -183,6 +255,8 @@ export interface ModelsTenant {
   name?: string;
   shop_owner_id?: number;
   updated_at?: string;
+  working_hours?: string;
+  yookassa_token?: string;
 }
 
 export interface ModelsTgUser {
@@ -202,6 +276,22 @@ export interface ModelsTgUser {
   tenant_id?: number;
   updated_at?: string;
   username?: string;
+}
+
+export interface ModelsTgUserAddress {
+  address_text?: string;
+  created_at?: string;
+  id?: number;
+  is_default?: boolean;
+  tenant_id?: number;
+  tg_user_id?: number;
+  updated_at?: string;
+}
+
+export interface ModelsTopProduct {
+  name?: string;
+  revenue?: number;
+  total_sales?: number;
 }
 
 export interface ModelsUpdateOrderStatusRequest {
@@ -622,6 +712,23 @@ export class Api<
         ...params,
       }),
   };
+  dashboard = {
+    /**
+     * @description Returns KPI cards (revenue, orders today, new clients), recent orders, and top products for the specified tenant.
+     *
+     * @tags dashboard
+     * @name DashboardList
+     * @summary Get dashboard data
+     * @request GET:/dashboard
+     */
+    dashboardList: (params: RequestParams = {}) =>
+      this.request<ModelsDashboardResponse, string>({
+        path: `/dashboard`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
   orders = {
     /**
      * @description Get a list of all orders for a given tenant
@@ -933,6 +1040,134 @@ export class Api<
         ...params,
       }),
   };
+  subscription = {
+    /**
+     * @description Get current active subscription, limits, and usage for the shop owner.
+     *
+     * @tags subscriptions
+     * @name CurrentList
+     * @summary Get current subscription status
+     * @request GET:/subscription/current
+     */
+    currentList: (params: RequestParams = {}) =>
+      this.request<ModelsSubscriptionStatus, string>({
+        path: `/subscription/current`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get a list of all subscription plans available for shop owners.
+     *
+     * @tags subscriptions
+     * @name PlansList
+     * @summary Get all subscription plans
+     * @request GET:/subscription/plans
+     */
+    plansList: (params: RequestParams = {}) =>
+      this.request<ModelsSubscriptionPlan[], string>({
+        path: `/subscription/plans`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Renew active subscription for another month (currently mock payment).
+     *
+     * @tags subscriptions
+     * @name RenewCreate
+     * @summary Renew current subscription
+     * @request POST:/subscription/renew
+     */
+    renewCreate: (params: RequestParams = {}) =>
+      this.request<Record<string, string>, string>({
+        path: `/subscription/renew`,
+        method: "POST",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Purchase a subscription plan (currently mock payment).
+     *
+     * @tags subscriptions
+     * @name SubscribeCreate
+     * @summary Subscribe to a plan
+     * @request POST:/subscription/subscribe
+     */
+    subscribeCreate: (
+      request: ModelsCreateSubscriptionRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsSubscription, string>({
+        path: `/subscription/subscribe`,
+        method: "POST",
+        body: request,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  superadmin = {
+    /**
+     * @description Retrieves all shop owners in the system
+     *
+     * @tags superadmin
+     * @name ShopOwnersList
+     * @summary List all shop owners
+     * @request GET:/superadmin/shop-owners
+     * @secure
+     */
+    shopOwnersList: (params: RequestParams = {}) =>
+      this.request<ModelsShopOwner[], any>({
+        path: `/superadmin/shop-owners`,
+        method: "GET",
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Retrieves all subscriptions in the system across all shop owners
+     *
+     * @tags superadmin
+     * @name SubscriptionsList
+     * @summary List all subscriptions
+     * @request GET:/superadmin/subscriptions
+     * @secure
+     */
+    subscriptionsList: (params: RequestParams = {}) =>
+      this.request<ModelsSubscription[], any>({
+        path: `/superadmin/subscriptions`,
+        method: "GET",
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Retrieves all tenants in the system across all shop owners
+     *
+     * @tags superadmin
+     * @name TenantsList
+     * @summary List all tenants
+     * @request GET:/superadmin/tenants
+     * @secure
+     */
+    tenantsList: (params: RequestParams = {}) =>
+      this.request<ModelsTenant[], any>({
+        path: `/superadmin/tenants`,
+        method: "GET",
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
   tenants = {
     /**
      * @description Get a list of all registered tenants
@@ -1100,6 +1335,80 @@ export class Api<
         method: "POST",
         body: imageUrl,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  users = {
+    /**
+     * @description Gets a list of all saved delivery addresses for a Telegram user.
+     *
+     * @tags addresses
+     * @name AddressesList
+     * @summary Get user addresses
+     * @request GET:/users/{tg_user_id}/addresses
+     */
+    addressesList: (tgUserId: number, params: RequestParams = {}) =>
+      this.request<ModelsTgUserAddress[], string>({
+        path: `/users/${tgUserId}/addresses`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Saves a new delivery address for a Telegram user.
+     *
+     * @tags addresses
+     * @name AddressesCreate
+     * @summary Create user address
+     * @request POST:/users/{tg_user_id}/addresses
+     */
+    addressesCreate: (
+      tgUserId: number,
+      address: ModelsCreateTgUserAddressRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsTgUserAddress, string>({
+        path: `/users/${tgUserId}/addresses`,
+        method: "POST",
+        body: address,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Deletes a delivery address for a Telegram user.
+     *
+     * @tags addresses
+     * @name AddressesDelete
+     * @summary Delete user address
+     * @request DELETE:/users/{tg_user_id}/addresses/{id}
+     */
+    addressesDelete: (
+      tgUserId: number,
+      id: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, string>({
+        path: `/users/${tgUserId}/addresses/${id}`,
+        method: "DELETE",
+        ...params,
+      }),
+
+    /**
+     * @description Gets a list of all orders placed by the user in the current tenant.
+     *
+     * @tags orders
+     * @name OrdersList
+     * @summary Get user orders
+     * @request GET:/users/{tg_user_id}/orders
+     */
+    ordersList: (tgUserId: number, params: RequestParams = {}) =>
+      this.request<ModelsOrder[], string>({
+        path: `/users/${tgUserId}/orders`,
+        method: "GET",
         format: "json",
         ...params,
       }),
