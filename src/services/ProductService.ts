@@ -7,6 +7,7 @@ export class ProductService {
     try {
       const response = await this.api.products.productsList({
         category_id: categoryId === null ? undefined : categoryId,
+        visible_only: true, // Only show products with stock > 0 and available
       });
       return response.data || [];
     } catch (error) {

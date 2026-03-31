@@ -4,12 +4,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/apiClient';
 import { ModelsTgUserAddress } from '@/backendApi';
 import { ArrowLeft, MapPin, Plus, Trash2 } from 'lucide-react';
+import { useTelegramBackButton } from '@/hooks/useTelegramBackButton';
 import { Button } from '@/components/UiKit';
 import styles from './AddressesPage.module.css';
 
 const AddressesPage: FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  useTelegramBackButton(() => navigate(-1));
   const [addresses, setAddresses] = useState<ModelsTgUserAddress[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
@@ -62,17 +64,7 @@ const AddressesPage: FC = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate(-1)}>
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className={styles.title}>Мои адреса</h1>
-        <button className={styles.addBtnIcon} onClick={() => setIsAdding(true)}>
-          <Plus size={24} />
-        </button>
-      </header>
-
-      <div className={styles.content}>
+      <div className={styles.content} style={{ marginTop: '16px' }}>
         {isAdding ? (
           <form className={styles.form} onSubmit={handleAddSubmit}>
             <div className={styles.formGroup}>

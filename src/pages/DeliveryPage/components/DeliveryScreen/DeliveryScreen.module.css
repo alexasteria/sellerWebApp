@@ -110,3 +110,182 @@
     border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
+
+/* Address Selection Styles */
+
+.addressSection {
+  background: var(--app-card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .addressSection {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.addressSectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--app-text-main);
+  margin: 0 0 12px 0;
+}
+
+.loadingAddress {
+  color: var(--app-text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.addressCard {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--app-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .addressCard {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+.addressCard.selected {
+  border-color: var(--app-primary);
+  background: rgba(var(--app-primary-rgb), 0.05);
+}
+
+.addressIcon {
+  color: var(--app-primary);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.addressTextWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.addressText {
+  color: var(--app-text-main);
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.radioWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+}
+
+.radioCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .radioCircle {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.radioSelected {
+  border-color: var(--app-primary);
+  background-color: var(--app-primary);
+}
+
+.radioSelected::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.addAddressTrigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--app-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.addAddressForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.addressTextarea {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+  color: var(--app-text-main);
+  background: var(--app-bg);
+  resize: vertical;
+  min-height: 80px;
+}
+
+.addressTextarea:focus {
+  outline: none;
+  border-color: var(--app-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .addressTextarea {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .addressTextarea:focus {
+    border-color: var(--app-primary);
+  }
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancelAddressBtn {
+  color: var(--app-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}

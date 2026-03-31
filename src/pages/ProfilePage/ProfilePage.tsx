@@ -59,19 +59,7 @@ const ProfilePage: FC = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.avatarContainer}>
-          {user?.photo_url ? (
-            <img src={user.photo_url} alt="Profile" className={styles.avatar} />
-          ) : (
-            getInitials()
-          )}
-        </div>
-        <h1 className={styles.name}>
-          {user?.first_name} {user?.last_name}
-        </h1>
-        {user?.username && <p className={styles.username}>@{user.username}</p>}
-      </header>
+      {/* Custom header removed per request */}
 
       <div className={styles.listGroupTitle}>Основное</div>
       {renderList(menuItems)}

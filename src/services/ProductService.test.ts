@@ -31,7 +31,7 @@ describe("ProductService", () => {
 
     const result = await productService.fetchProducts();
     
-    expect(apiMock.products.productsList).toHaveBeenCalledWith({ category_id: undefined });
+    expect(apiMock.products.productsList).toHaveBeenCalledWith({ category_id: undefined, visible_only: true });
     expect(result).toEqual(mockData);
   });
 
@@ -48,7 +48,7 @@ describe("ProductService", () => {
 
     const result = await productService.fetchProducts(5);
     
-    expect(apiMock.products.productsList).toHaveBeenCalledWith({ category_id: 5 });
+    expect(apiMock.products.productsList).toHaveBeenCalledWith({ category_id: 5, visible_only: true });
     expect(result).toEqual(mockData);
   });
 

@@ -139,3 +139,24 @@
   color: var(--app-text-main);
   font-size: 16px;
 }
+
+.repeatBtn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--tg-theme-button-color, var(--app-primary));
+  color: var(--tg-theme-button-text-color, var(--app-on-primary));
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.repeatBtn:active {
+  opacity: 0.8;
+}

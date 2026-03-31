@@ -840,6 +840,8 @@ export class Api<
       query?: {
         /** Category ID to filter products */
         category_id?: number;
+        /** Return only available products with stock > 0 */
+        visible_only?: boolean;
       },
       params: RequestParams = {},
     ) =>

@@ -1,14 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCart } from '@/contexts/CartContext';
 import { apiClient } from '@/apiClient';
 import { ModelsOrder } from '@/backendApi';
-import { ArrowLeft, Package, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Package, Clock, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
+import { useTelegramBackButton } from '@/hooks/useTelegramBackButton';
 import styles from './OrdersHistoryPage.module.css';
 
 const OrdersHistoryPage: FC = () => {
   const { user } = useAuth();
+  const { clearCart, increment } = useCart();
   const navigate = useNavigate();
+  useTelegramBackButton(() => navigate(-1));
   const [orders, setOrders] = useState<ModelsOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,6 +35,25 @@ const OrdersHistoryPage: FC = () => {
 
     fetchOrders();
   }, [user]);
+
+  const handleRepeatOrder = (order: ModelsOrder) => {
+    if (!order.order_items || order.order_items.length === 0) return;
+    
+    clearCart();
+    
+    order.order_items.forEach((item) => {
+      if (item.product) {
+        const qty = item.quantity || 1;
+        for (let i = 0; i < qty; i++) {
+          increment(item.product as any, item.variant?.id);
+        }
+      }
+    });
+
+    setTimeout(() => {
+      navigate('/delivery');
+    }, 50);
+  };
 
   const getStatusDisplay = (status?: string) => {
     switch (status) {
@@ -59,15 +82,7 @@ const OrdersHistoryPage: FC = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate(-1)}>
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className={styles.title}>Мои заказы</h1>
-        <div style={{ width: 24 }}></div>
-      </header>
-
-      <div className={styles.content}>
+      <div className={styles.content} style={{ marginTop: '16px' }}>
         {loading ? (
           <div className={styles.loading}>Загрузка заказов...</div>
         ) : orders.length === 0 ? (
@@ -96,6 +111,15 @@ const OrdersHistoryPage: FC = () => {
                       Итого: <strong>{order.total_amount?.toLocaleString('ru-RU')} ₽</strong>
                     </div>
                   </div>
+
+                  {order.order_items && order.order_items.length > 0 && (
+                    <button 
+                      className={styles.repeatBtn} 
+                      onClick={() => handleRepeatOrder(order)}
+                    >
+                      <RotateCcw size={16} /> Повторить заказ
+                    </button>
+                  )}
                 </div>
               );
             })}

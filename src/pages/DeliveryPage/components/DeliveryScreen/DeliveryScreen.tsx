@@ -209,6 +209,14 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
             <span>Доставка курьером:</span>
             <span>0.00₽</span>
           </div>
+          {(!isAddingNew && selectedAddress) || (isAddingNew && newAddressText.trim()) ? (
+            <div className={styles.summaryRow} style={{ color: '#64748B', fontSize: '0.85rem' }}>
+              <span>По адресу:</span>
+              <span style={{ textAlign: 'right', maxWidth: '65%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {isAddingNew ? newAddressText.trim() : selectedAddress?.address_text}
+              </span>
+            </div>
+          ) : null}
           <div className={`${styles.summaryRow} ${styles.total}`}>
             <span>Итого к оплате:</span>
             <strong>{subtotal.toFixed(2)}₽</strong>
