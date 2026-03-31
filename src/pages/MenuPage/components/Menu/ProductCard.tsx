@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import styles from './ProductCard.module.css';
 import { getImageUrl } from '@/utils/getImageUrl';
+import { animateFlyingToCart } from '@/utils/animations';
 
 interface ProductCardProps {
     product: ModelsProduct;
@@ -23,9 +24,13 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
 
     return (
         <motion.div
+            data-product-card="true"
             className={styles.card}
             onClick={onClick}
             whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
         >
             <div className={styles.imageContainer}>
                 {hasImage ? (
@@ -73,7 +78,16 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
                                     {totalQuantity}
                                 </motion.div>
                             </AnimatePresence>
-                            <button className={styles.stepperBtn} onClick={onIncrement}>
+                            <button 
+                                className={styles.stepperBtn} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (hasImage) {
+                                        animateFlyingToCart(e as any, getImageUrl(product.img));
+                                    }
+                                    onIncrement();
+                                }}
+                            >
                                 <Plus size={16} />
                             </button>
                         </div>
@@ -82,6 +96,9 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick, totalQuantity, on
                             className={styles.addButton}
                             onClick={(e) => {
                                 e.stopPropagation();
+                                if (hasImage) {
+                                    animateFlyingToCart(e as any, getImageUrl(product.img));
+                                }
                                 onIncrement();
                             }}
                         >

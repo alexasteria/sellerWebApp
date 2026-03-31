@@ -5,12 +5,14 @@ import { ModelsCategory } from "@/backendApi";
 import { useCategories } from "@/contexts/CategoryContext";
 import { useProducts } from "@/contexts/ProductContext";
 import { Skeleton } from "@/components/UiKit";
+import { triggerSelection } from "@/hooks/useTelegram";
 
 const CategoryFilter: FC = () => {
   const { categories, isLoading, error } = useCategories();
   const { selectedCategoryId, setSelectedCategoryId, fetchProducts } = useProducts();
 
   const handleSelectCategory = (categoryId: number | null) => {
+    triggerSelection();
     setSelectedCategoryId(categoryId);
     fetchProducts(categoryId);
   };
@@ -34,7 +36,12 @@ const CategoryFilter: FC = () => {
   }
 
   return (
-    <div className={styles.filterContainer}>
+    <motion.div 
+      className={styles.filterContainer}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className={styles.filterScroll}>
         <button
           className={`${styles.filterButton} ${selectedCategoryId === null ? styles.activeText : ""}`}
@@ -62,7 +69,7 @@ const CategoryFilter: FC = () => {
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

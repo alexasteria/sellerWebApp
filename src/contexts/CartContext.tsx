@@ -3,6 +3,7 @@ import { CartState, DeliveryInfo } from "@/types";
 import { ModelsProduct } from "@/backendApi";
 import { useServices } from "@/hooks/useServices";
 import { useProducts } from "./ProductContext";
+import { triggerHaptic } from "@/hooks/useTelegram";
 
 interface CartContextType {
   cart: CartState;
@@ -24,14 +25,17 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [deliveryInfo, setDeliveryInfoState] = useState<DeliveryInfo | null>(null);
 
   const increment = useCallback((product: ModelsProduct, variantID: number | undefined) => {
+    triggerHaptic("light");
     setCart((prev) => cartService.increment(prev, product, variantID));
   }, [cartService]);
 
   const decrement = useCallback((product: ModelsProduct, variantID: number | undefined) => {
+    triggerHaptic("light");
     setCart((prev) => cartService.decrement(prev, product, variantID));
   }, [cartService]);
 
   const clearCart = useCallback(() => {
+    triggerHaptic("rigid");
     setCart({});
   }, []);
 

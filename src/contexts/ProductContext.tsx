@@ -11,6 +11,8 @@ interface ProductContextType {
   fetchProducts: (categoryId?: number | null) => Promise<void>;
   setExpandedCardId: (id: string | null) => void;
   setSelectedCategoryId: (id: number | null) => void;
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -22,6 +24,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [error, setError] = useState<string | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchProducts = useCallback(async (categoryId: number | null = null) => {
     setIsLoading(true);
@@ -43,7 +46,8 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
   return (
     <ProductContext.Provider value={{
       products, isLoading, error, expandedCardId, selectedCategoryId, 
-      fetchProducts, setExpandedCardId, setSelectedCategoryId
+      fetchProducts, setExpandedCardId, setSelectedCategoryId,
+      searchQuery, setSearchQuery
     }}>
       {children}
     </ProductContext.Provider>

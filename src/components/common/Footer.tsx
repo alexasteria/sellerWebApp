@@ -20,6 +20,7 @@ const Footer: FC = () => {
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
           <motion.button
+            id="cart-icon-nav"
             className={styles.cartButton}
             onClick={() => navigate("/delivery")}
             whileHover={{ scale: 1.02 }}

@@ -11,6 +11,7 @@ import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
 import { apiClient } from "@/apiClient";
 import { ModelsTgUserAddress } from "@/backendApi";
 import { MapPin, Plus } from "lucide-react";
+import { triggerNotification } from "@/hooks/useTelegram";
 
 interface DeliveryScreenProps {
   subtotal: number;
@@ -125,8 +126,12 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
     setIsSubmitting(false);
 
     if (orderResult) {
-      safeTgCall(() => tg.close());
+      triggerNotification("success");
+      setTimeout(() => {
+        safeTgCall(() => tg.close());
+      }, 500);
     } else {
+      triggerNotification("error");
       safeTgCall(() => {
         if (tg.showAlert) {
           tg.showAlert("Ошибка отправки заказа. Попробуйте еще раз.");

@@ -31,3 +31,15 @@ export function useTheme() {
 
   return themeParams;
 }
+
+export const triggerHaptic = (style: "light" | "medium" | "heavy" | "rigid" | "soft") => {
+  safeTgCall(() => tg?.HapticFeedback.impactOccurred(style));
+};
+
+export const triggerNotification = (type: "error" | "success" | "warning") => {
+  safeTgCall(() => tg?.HapticFeedback.notificationOccurred(type));
+};
+
+export const triggerSelection = () => {
+  safeTgCall(() => tg?.HapticFeedback.selectionChanged());
+};

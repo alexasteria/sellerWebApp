@@ -3,12 +3,14 @@ import Header from "@/components/common/Header";
 import Menu from "@/pages/MenuPage/components/Menu/Menu";
 import CategoryFilter from "@/components/CategoryFilter";
 import FloatingCart from "@/pages/MenuPage/components/FloatingCart/FloatingCart";
+import SearchBar from "@/components/SearchBar/SearchBar";
 
 const MenuPage: FC = () => {
 
   return (
     <div className="container">
       <Header />
+      <SearchBar />
       <CategoryFilter />
       <Menu />
       <FloatingCart />
