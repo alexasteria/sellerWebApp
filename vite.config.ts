@@ -15,13 +15,13 @@ export default defineConfig({
       "/api": {
         target: "https://seller-department.ru",
         changeOrigin: true,
-        secure: true,
+        secure: false,
         ws: true,
       },
       "/static": {
         target: "https://seller-department.ru",
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
     },
     // proxy: {
