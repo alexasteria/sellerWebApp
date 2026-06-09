@@ -13,7 +13,7 @@ const App: FC = () => {
     // Аутентификация через Telegram WebApp
     const tg = (window as any).Telegram?.WebApp;
     if (tg?.initDataUnsafe?.user) {
-      authenticateTelegram(tg.initDataUnsafe.user);
+      authenticateTelegram(tg.initDataUnsafe.user, tg.initData);
     }
 
     // Автоматически раскрываем на полный экран

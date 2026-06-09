@@ -12,12 +12,12 @@ vi.mock('@/hooks/useTelegram', () => ({
 
 const mockProduct: ModelsProduct = {
   id: 1,
+  categoryID: 1,
   title: 'Pizza Margherita',
-  price: 500,
   variants: [
-    { id: 101, value: "Standard", cost: 500 }
+    { id: 101, value: "Standard", cost: 500, stock: 100 }
   ],
-  is_active: true,
+  is_available: true,
 };
 
 // Mock ProductContext

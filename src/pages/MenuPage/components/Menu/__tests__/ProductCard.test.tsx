@@ -18,12 +18,13 @@ vi.mock('@/utils/getImageUrl', () => ({
 describe('ProductCard Component', () => {
     const mockProduct: ModelsProduct = {
         id: 1,
+        categoryID: 1,
         title: 'Test Pizza',
         description: 'Delicious test pizza',
         discount: 10,
         img: 'test-img.png',
         variants: [
-            { id: 1, cost: 500, value: '30cm' },
+            { id: 1, cost: 500, value: '30cm', stock: 100 },
         ],
     };
 

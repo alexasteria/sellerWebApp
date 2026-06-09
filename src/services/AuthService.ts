@@ -6,19 +6,11 @@ const TOKEN_KEY = "authToken";
 export class AuthService {
   constructor(private api: Api<unknown>) {}
 
-  async authenticateTelegram(user: WebAppUser): Promise<string> {
-    const userData: ModelsTgUser = {
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      username: user.username,
-      language_code: user.language_code,
-      photo_url: user.photo_url,
-      is_bot: user.is_bot,
-    };
-
+  async authenticateTelegram(initData: string): Promise<string> {
     try {
-      const response = await this.api.auth.tgWebAppCreate(userData);
+      const response = await this.api.auth.tgWebAppCreate({ initData });
+
+
       const token = response.data?.token;
       if (token) {
         localStorage.setItem(TOKEN_KEY, token);

@@ -77,6 +77,34 @@ export interface ModelsCreateTenantRequest {
   name: string;
 }
 
+export interface AuthTgWebAppRequest {
+  initData: string;
+}
+
+export interface TgUserResponse {
+  id?: number;
+  tenant_id?: number;
+  is_bot?: boolean;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+  photo_url?: string;
+  /** @format date-time */
+  auth_date?: string;
+  /** @format date-time */
+  created_at?: string;
+  /** @format date-time */
+  updated_at?: string;
+  contact_info?: string;
+  delivery_address?: string;
+  email?: string;
+  role?: string;
+  /** @format date-time */
+  deleted_at?: string;
+  token?: string;
+}
+
 export interface ModelsCreateTgBotUserRequest {
   auth_date?: string;
   contact_info?: string;
@@ -607,11 +635,8 @@ export class Api<
      * @summary Authenticate a Telegram Web App user
      * @request POST:/auth/tg-web-app
      */
-    tgWebAppCreate: (
-      user: ModelsCreateTgBotUserRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, string>({
+    tgWebAppCreate: (user: AuthTgWebAppRequest, params: RequestParams = {}) =>
+      this.request<TgUserResponse, string>({
         path: `/auth/tg-web-app`,
         method: "POST",
         body: user,
@@ -840,8 +865,6 @@ export class Api<
       query?: {
         /** Category ID to filter products */
         category_id?: number;
-        /** Return only available products with stock > 0 */
-        visible_only?: boolean;
       },
       params: RequestParams = {},
     ) =>

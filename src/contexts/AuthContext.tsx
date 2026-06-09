@@ -11,7 +11,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
   error: string | null;
-  authenticateTelegram: (user: WebAppUser) => Promise<void>;
+  authenticateTelegram: (user: WebAppUser, initData: string) => Promise<void>;
   loginByPassword: (login: string, pass: string) => Promise<void>;
   logout: () => void;
 }
@@ -27,11 +27,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const isLoggedIn = !!token;
 
-  const authenticateTelegram = useCallback(async (telegramUser: WebAppUser) => {
+  const authenticateTelegram = useCallback(async (telegramUser: WebAppUser, initData: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const newToken = await authService.authenticateTelegram(telegramUser);
+      const newToken = await authService.authenticateTelegram(initData);
       setToken(newToken);
       setUser(telegramUser);
     } catch (err: unknown) {
