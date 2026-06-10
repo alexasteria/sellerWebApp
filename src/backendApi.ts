@@ -150,6 +150,7 @@ export interface ModelsOrder {
   id: number;
   order_items?: ModelsOrderItem[];
   payment_id?: string;
+  payment_link?: string;
   status: string;
   tenant_id?: number;
   tg_user?: ModelsTgUser;
@@ -284,6 +285,9 @@ export interface ModelsTenant {
   shop_owner_id?: number;
   updated_at?: string;
   working_hours?: string;
+  delivery_cost?: number;
+  min_order_for_free_delivery?: number;
+  admin_chat_id?: number;
   yookassa_token?: string;
 }
 

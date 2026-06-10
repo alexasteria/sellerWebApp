@@ -7,6 +7,8 @@ export interface TenantInfo {
     code: string;
     subtitle?: string;
     emoji: string;
+    delivery_cost?: number;
+    min_order_for_free_delivery?: number;
 }
 const TARGET_TENANT_CODES = ['DEMO_RESTAURANT', 'DEMO_FLOWERS'];
 
@@ -45,7 +47,9 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                         name: t.name!,
                         code: t.code!,
                         subtitle: "Демо-режим",
-                        emoji: getEmojiForCode(t.code!)
+                        emoji: getEmojiForCode(t.code!),
+                        delivery_cost: t.delivery_cost,
+                        min_order_for_free_delivery: t.min_order_for_free_delivery
                     }));
                 
                 setAvailableTenants(fetchedTenants);

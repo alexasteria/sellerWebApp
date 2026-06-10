@@ -4,6 +4,7 @@ import styles from "./DeliveryScreen.module.css";
 import { useCart } from "@/contexts/CartContext";
 import { useProducts } from "@/contexts/ProductContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTenant } from "@/contexts/TenantContext";
 import { WebApp } from "telegram-web-app";
 import * as OrderService from "@/services/OrderService";
 import { Button } from "@/components/UiKit";
@@ -34,12 +35,18 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
   const { cart } = useCart();
   const { products } = useProducts();
   const { user } = useAuth();
+  const { activeTenant } = useTenant();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addresses, setAddresses] = useState<ModelsTgUserAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<ModelsTgUserAddress | null>(null);
   const [loadingAddresses, setLoadingAddresses] = useState(false);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newAddressText, setNewAddressText] = useState("");
+
+  const deliveryCost = activeTenant?.delivery_cost || 0;
+  const minOrderForFreeDelivery = activeTenant?.min_order_for_free_delivery || 0;
+  const actualDeliveryCost = minOrderForFreeDelivery > 0 && subtotal >= minOrderForFreeDelivery ? 0 : deliveryCost;
+  const total = subtotal + actualDeliveryCost;
 
   // Use native Telegram back button
   useTelegramBackButton(onBack);
@@ -127,9 +134,30 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
 
     if (orderResult) {
       triggerNotification("success");
-      setTimeout(() => {
-        safeTgCall(() => tg.close());
-      }, 500);
+
+      const paymentLink = orderResult.payment_link;
+      if (paymentLink) {
+        safeTgCall(() => {
+          if (tg.openInvoice) {
+            tg.openInvoice(paymentLink, (status) => {
+              if (status === 'paid') {
+                console.log("Invoice paid");
+              }
+              tg.close();
+            });
+          } else if (tg.openLink) {
+            tg.openLink(paymentLink);
+            tg.close();
+          } else {
+            window.open(paymentLink, "_blank");
+            tg.close();
+          }
+        });
+      } else {
+        setTimeout(() => {
+          safeTgCall(() => tg.close());
+        }, 500);
+      }
     } else {
       triggerNotification("error");
       safeTgCall(() => {
@@ -207,7 +235,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
           </div>
           <div className={styles.summaryRow}>
             <span>Доставка курьером:</span>
-            <span>0.00₽</span>
+            <span>{actualDeliveryCost > 0 ? `${actualDeliveryCost.toFixed(2)}₽` : 'Бесплатно'}</span>
           </div>
           {(!isAddingNew && selectedAddress) || (isAddingNew && newAddressText.trim()) ? (
             <div className={styles.summaryRow} style={{ color: '#64748B', fontSize: '0.85rem' }}>
@@ -219,7 +247,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
           ) : null}
           <div className={`${styles.summaryRow} ${styles.total}`}>
             <span>Итого к оплате:</span>
-            <strong>{subtotal.toFixed(2)}₽</strong>
+            <strong>{total.toFixed(2)}₽</strong>
           </div>
         </div>
         <Button
