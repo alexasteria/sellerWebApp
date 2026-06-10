@@ -289,6 +289,7 @@ export interface ModelsTenant {
   min_order_for_free_delivery?: number;
   admin_chat_id?: number;
   yookassa_token?: string;
+  welcome_message?: string;
 }
 
 export interface ModelsTgUser {
