@@ -10,246 +10,314 @@
  * ---------------------------------------------------------------
  */
 
-export interface HandlersErrorResponse {
-  code?: number;
-  message?: string;
+export interface InternalApiUploadProductImageResponse {
+  filePath?: string;
 }
 
-export interface ModelsCartItem {
-  price: number;
-  productID: number;
-  quantity: number;
-  variantID: number;
+export interface SellerGoApiInternalApientAuthTgWebAppRequest {
+  initData?: string;
 }
 
-export interface ModelsCategory {
+export interface SellerGoApiInternalApientCategoryCreateRequest {
+  name?: string;
+}
+
+export interface SellerGoApiInternalApientCategoryListResponse {
+  list?: SellerGoApiInternalApientCategoryResponse[];
+}
+
+export interface SellerGoApiInternalApientCategoryResponse {
   created_at?: string;
-  deleted_at?: string;
   id?: number;
-  name: string;
+  name?: string;
   tenant_id?: number;
   updated_at?: string;
 }
 
-export interface ModelsCreateCategoryRequest {
-  name: string;
+export interface SellerGoApiInternalApientCategoryUpdateRequest {
+  name?: string;
 }
 
-export interface ModelsCreateOrderRequest {
-  cart: ModelsCartItem[];
+export interface SellerGoApiInternalApientCreateAddressRequest {
+  addressText?: string;
+  isDefault?: boolean;
+}
+
+export interface SellerGoApiInternalApientCreateOrderRequest {
+  cart?: SellerGoApiInternalApientOrderCartItem[];
   delivery_address?: string;
-  userID: number;
+  userID?: number;
 }
 
-export interface ModelsCreateProductRequest {
-  categoryID: number;
-  description?: string;
-  discount?: number;
-  img?: string;
-  is_available?: boolean;
-  tags?: ModelsProductTagGroup[];
-  title: string;
-  variants: ModelsCreateProductVariantRequest[];
+export interface SellerGoApiInternalApientDashboardResponse {
+  newClients?: SellerGoApiInternalApientKPICardResponse;
+  ordersToday?: SellerGoApiInternalApientKPICardResponse;
+  recentOrders?: SellerGoApiInternalApientRecentOrderResponse[];
+  revenue?: SellerGoApiInternalApientKPICardResponse;
+  topProducts?: SellerGoApiInternalApientTopProductResponse[];
 }
 
-export interface ModelsCreateProductVariantRequest {
-  cost: number;
-  stock: number;
-  value: string;
-}
-
-export interface ModelsCreateShopOwnerRequest {
-  email: string;
-  first_name: string;
-  last_name?: string;
-  login: string;
-  password: string;
-  phone_number?: string;
-}
-
-export interface ModelsCreateSubscriptionRequest {
-  plan_code: string;
-}
-
-export interface ModelsCreateTenantRequest {
-  code: string;
-  is_active?: boolean;
-  name: string;
-}
-
-export interface AuthTgWebAppRequest {
-  initData: string;
-}
-
-export interface TgUserResponse {
-  id?: number;
-  tenant_id?: number;
-  is_bot?: boolean;
-  first_name?: string;
-  last_name?: string;
-  username?: string;
-  language_code?: string;
-  photo_url?: string;
-  /** @format date-time */
-  auth_date?: string;
-  /** @format date-time */
-  created_at?: string;
-  /** @format date-time */
-  updated_at?: string;
-  contact_info?: string;
-  delivery_address?: string;
-  email?: string;
-  role?: string;
-  /** @format date-time */
-  deleted_at?: string;
-  token?: string;
-}
-
-export interface ModelsCreateTgBotUserRequest {
-  auth_date?: string;
-  contact_info?: string;
-  delivery_address?: string;
-  email?: string;
-  first_name?: string;
-  id?: number;
-  is_bot?: boolean;
-  language_code?: string;
-  last_name?: string;
-  photo_url?: string;
-  role?: string;
-  username?: string;
-}
-
-export interface ModelsCreateTgUserAddressRequest {
-  address_text?: string;
-  is_default?: boolean;
-}
-
-export interface ModelsDashboardResponse {
-  new_clients?: ModelsKPICard;
-  orders_today?: ModelsKPICard;
-  recent_orders?: ModelsRecentOrder[];
-  revenue?: ModelsKPICard;
-  top_products?: ModelsTopProduct[];
-}
-
-export interface ModelsKPICard {
+export interface SellerGoApiInternalApientKPICardResponse {
   change?: number;
-  is_positive?: boolean;
+  isPositive?: boolean;
   value?: number;
 }
 
-export interface ModelsLoginRequest {
-  login: string;
-  password: string;
+export interface SellerGoApiInternalApientLoginRequest {
+  login?: string;
+  password?: string;
 }
 
-export interface ModelsOrder {
-  created_at: string;
-  delivery_address?: string;
-  id: number;
-  order_items?: ModelsOrderItem[];
-  payment_id?: string;
-  payment_link?: string;
-  status: string;
-  tenant_id?: number;
-  tg_user?: ModelsTgUser;
-  total_amount: number;
-  updated_at: string;
+export interface SellerGoApiInternalApientLoginResponse {
+  token?: string;
 }
 
-export interface ModelsOrderItem {
+export interface SellerGoApiInternalApientOrderCartItem {
+  price?: number;
+  productID?: number;
+  quantity?: number;
+  variantID?: number;
+}
+
+export interface SellerGoApiInternalApientOrderItemResponse {
   created_at?: string;
   order_id?: number;
   price?: number;
-  product?: ModelsProduct;
+  product?: SellerGoApiInternalApientProductResponse;
   quantity?: number;
   tenant_id?: number;
   total_price?: number;
-  variant?: ModelsProductVariant;
+  variant?: SellerGoApiInternalApientProductVariantResponse;
 }
 
-export interface ModelsProduct {
-  categoryID: number;
-  createdAt?: string;
-  deleted_at?: string;
+export interface SellerGoApiInternalApientOrderListResponse {
+  items?: SellerGoApiInternalApientOrderResponse[];
+}
+
+export interface SellerGoApiInternalApientOrderResponse {
+  created_at?: string;
+  delivery_address?: string;
+  id?: number;
+  order_items?: SellerGoApiInternalApientOrderItemResponse[];
+  payment_id?: string;
+  payment_link?: string;
+  status?: string;
+  tenant_id?: number;
+  tg_user?: SellerGoApiInternalApientTgUserResponse;
+  total_amount?: number;
+  updated_at?: string;
+}
+
+export interface SellerGoApiInternalApientProductCreateRequest {
+  categoryID?: number;
+  description?: string;
+  discount?: number;
+  img?: string;
+  tags?: SellerGoApiInternalApientProductTagGroupRequest[];
+  title?: string;
+  variants?: SellerGoApiInternalApientProductVariantRequest[];
+}
+
+export interface SellerGoApiInternalApientProductListResponse {
+  list?: SellerGoApiInternalApientProductResponse[];
+}
+
+export interface SellerGoApiInternalApientProductResponse {
+  categoryID?: number;
+  created_at?: string;
   description?: string;
   discount?: number;
   id?: number;
   img?: string;
-  is_available?: boolean;
-  tags?: ModelsProductTagGroup[];
+  tags?: SellerGoApiInternalApientProductTagGroupResponse[];
   tenant_id?: number;
-  title: string;
-  updatedAt?: string;
-  variants: ModelsProductVariant[];
-}
-
-export interface ModelsProductTagGroup {
-  created_at?: string;
-  id?: number;
-  name: string;
-  product_id?: number;
-  tags: string[];
-  tenant_id?: number;
+  title?: string;
   updated_at?: string;
+  variants?: SellerGoApiInternalApientProductVariantResponse[];
 }
 
-export interface ModelsProductTagGroupName {
-  created_at?: string;
-  name: string;
-  tenant_id?: number;
-  updated_at?: string;
+export interface SellerGoApiInternalApientProductTagGroupRequest {
+  name?: string;
+  tags?: SellerGoApiInternalApientProductTagRequest[];
 }
 
-export interface ModelsProductVariant {
-  cost: number;
-  createdAt?: string;
+export interface SellerGoApiInternalApientProductTagGroupResponse {
+  id?: number;
+  name?: string;
+  tags?: SellerGoApiInternalApientProductTagResponse[];
+}
+
+export interface SellerGoApiInternalApientProductTagRequest {
+  tag?: string;
+}
+
+export interface SellerGoApiInternalApientProductTagResponse {
+  id?: number;
+  tag?: string;
+}
+
+export interface SellerGoApiInternalApientProductUpdateRequest {
+  categoryID?: number;
+  description?: string;
+  discount?: number;
+  img?: string;
+  tags?: SellerGoApiInternalApientProductTagGroupRequest[];
+  title?: string;
+  variants?: SellerGoApiInternalApientProductVariantRequest[];
+}
+
+export interface SellerGoApiInternalApientProductVariantRequest {
+  cost?: number;
+  stock?: number;
+  value?: string;
+}
+
+export interface SellerGoApiInternalApientProductVariantResponse {
+  cost?: number;
   id?: number;
   product_id?: number;
-  stock: number;
-  tenant_id?: number;
-  updatedAt?: string;
-  value: string;
+  stock?: number;
+  value?: string;
 }
 
-export interface ModelsRecentOrder {
-  client_name?: string;
+export interface SellerGoApiInternalApientRecentOrderResponse {
+  clientName?: string;
   date?: string;
   id?: number;
   status?: string;
   total?: number;
 }
 
-export interface ModelsShopOwner {
-  created_at?: string;
-  deleted_at?: string;
+export interface SellerGoApiInternalApientShopOwnerCreateRequest {
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  login?: string;
+  password?: string;
+  phone_number?: string;
+}
+
+export interface SellerGoApiInternalApientShopOwnerListResponse {
+  items?: SellerGoApiInternalApientShopOwnerResponse[];
+  total?: number;
+}
+
+export interface SellerGoApiInternalApientShopOwnerResponse {
   email?: string;
   first_name?: string;
   id?: number;
-  /** Nullable */
   last_name?: string;
   login?: string;
-  /** Plain text password for requests */
-  password?: string;
-  /** Nullable */
   phone_number?: string;
-  updated_at?: string;
 }
 
-export interface ModelsSubscription {
+export interface SellerGoApiInternalApientTenantCreateRequest {
+  bot_token?: string;
+  code?: string;
+  is_active?: boolean;
+  name?: string;
+  yookassa_token?: string;
+}
+
+export interface SellerGoApiInternalApientTenantListResponse {
+  items?: SellerGoApiInternalApientTenantResponse[];
+  total?: number;
+}
+
+export interface SellerGoApiInternalApientTenantResponse {
+  admin_chat_id?: number;
+  bot_token?: string;
+  code?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  created_at?: string;
+  delivery_cost?: number;
+  id?: number;
+  is_active?: boolean;
+  min_order_for_free_delivery?: number;
+  name?: string;
+  shop_owner_id?: number;
+  welcome_message?: string;
+  working_hours?: string;
+  yookassa_token?: string;
+}
+
+export interface SellerGoApiInternalApientTenantUpdateRequest {
+  admin_chat_id?: number;
+  bot_token?: string;
+  code?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  delivery_cost?: number;
+  is_active?: boolean;
+  min_order_for_free_delivery?: number;
+  name?: string;
+  welcome_message?: string;
+  working_hours?: string;
+  yookassa_token?: string;
+}
+
+export interface SellerGoApiInternalApientTgUserAddressResponse {
+  addressText?: string;
+  createdAt?: string;
+  id?: number;
+  isDefault?: boolean;
+  tenantId?: number;
+  tgUserId?: number;
+}
+
+export interface SellerGoApiInternalApientTgUserListResponse {
+  items?: SellerGoApiInternalApientTgUserResponse[];
+}
+
+export interface SellerGoApiInternalApientTgUserResponse {
+  auth_date?: string;
+  contact_info?: string;
+  created_at?: string;
+  deleted_at?: string;
+  delivery_address?: string;
+  email?: string;
+  first_name?: string;
+  id?: number;
+  is_bot?: boolean;
+  language_code?: string;
+  last_name?: string;
+  photo_url?: string;
+  role?: string;
+  tenant_id?: number;
+  token?: string;
+  updated_at?: string;
+  username?: string;
+}
+
+export interface SellerGoApiInternalApientTopProductResponse {
+  name?: string;
+  revenue?: number;
+  totalSales?: number;
+}
+
+export interface SellerGoApiInternalApientUpdateOrderStatusRequest {
+  payment_id?: string;
+  status?: string;
+}
+
+export interface SellerGoApiInternalModelsCreateSubscriptionRequest {
+  plan_code: string;
+}
+
+export interface SellerGoApiInternalModelsSubscription {
   created_at?: string;
   expires_at?: string;
   id?: number;
   is_active?: boolean;
-  plan?: ModelsSubscriptionPlan;
+  plan?: SellerGoApiInternalModelsSubscriptionPlan;
   plan_id?: number;
   shop_owner_id?: number;
   starts_at?: string;
   updated_at?: string;
 }
 
-export interface ModelsSubscriptionPlan {
+export interface SellerGoApiInternalModelsSubscriptionPlan {
   code?: string;
   description?: string;
   /** nil = нет акции */
@@ -264,75 +332,21 @@ export interface ModelsSubscriptionPlan {
   price?: number;
 }
 
-export interface ModelsSubscriptionStatus {
+export interface SellerGoApiInternalModelsSubscriptionStatus {
   current_tenant_count?: number;
   has_active_subscription?: boolean;
   max_products_per_tenant?: number;
   max_tenants?: number;
-  subscription?: ModelsSubscription;
+  subscription?: SellerGoApiInternalModelsSubscription;
 }
 
-export interface ModelsTenant {
-  bot_token?: string;
-  code?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  created_at?: string;
-  deleted_at?: string;
-  id?: number;
-  is_active?: boolean;
-  name?: string;
-  shop_owner_id?: number;
-  updated_at?: string;
-  working_hours?: string;
-  delivery_cost?: number;
-  min_order_for_free_delivery?: number;
-  admin_chat_id?: number;
-  yookassa_token?: string;
-  welcome_message?: string;
-}
-
-export interface ModelsTgUser {
-  auth_date?: string;
-  contact_info?: string;
-  created_at?: string;
-  deleted_at?: string;
-  delivery_address?: string;
-  email?: string;
-  first_name?: string;
-  id?: number;
-  is_bot?: boolean;
-  language_code?: string;
-  last_name?: string;
-  photo_url?: string;
-  role?: string;
-  tenant_id?: number;
-  updated_at?: string;
-  username?: string;
-}
-
-export interface ModelsTgUserAddress {
-  address_text?: string;
-  created_at?: string;
-  id?: number;
-  is_default?: boolean;
-  tenant_id?: number;
-  tg_user_id?: number;
-  updated_at?: string;
-}
-
-export interface ModelsTopProduct {
-  name?: string;
-  revenue?: number;
-  total_sales?: number;
-}
-
-export interface ModelsUpdateOrderStatusRequest {
-  status: string;
-}
-
-export interface ModelsUpdateProductAvailabilityRequest {
-  is_available?: boolean;
+export interface SellerGoApiInternalPkgMsgMessageError {
+  /** http response code */
+  code?: number;
+  /** errors messages as map of lists */
+  maps?: Record<string, string[]>;
+  /** errors messages as list */
+  messages?: string[];
 }
 
 import type {
@@ -516,7 +530,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl //localhost:8085
  * @contact
  *
- * This is a sample API for managing users.
+ * API for managing seller department services.
  */
 export class Api<
   SecurityDataType extends unknown,
@@ -531,7 +545,10 @@ export class Api<
      * @request GET:/admin/users
      */
     usersList: (params: RequestParams = {}) =>
-      this.request<ModelsShopOwner[], string>({
+      this.request<
+        SellerGoApiInternalApientShopOwnerListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/admin/users`,
         method: "GET",
         format: "json",
@@ -547,10 +564,13 @@ export class Api<
      * @request POST:/admin/users
      */
     usersCreate: (
-      shopOwner: ModelsCreateShopOwnerRequest,
+      shopOwner: SellerGoApiInternalApientShopOwnerCreateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsShopOwner, string>({
+      this.request<
+        SellerGoApiInternalApientShopOwnerResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/admin/users`,
         method: "POST",
         body: shopOwner,
@@ -568,7 +588,7 @@ export class Api<
      * @request DELETE:/admin/users/{id}
      */
     usersDelete: (id: number, params: RequestParams = {}) =>
-      this.request<string, string>({
+      this.request<string, SellerGoApiInternalPkgMsgMessageError>({
         path: `/admin/users/${id}`,
         method: "DELETE",
         format: "json",
@@ -584,7 +604,10 @@ export class Api<
      * @request GET:/admin/users/{id}
      */
     usersDetail: (id: number, params: RequestParams = {}) =>
-      this.request<ModelsShopOwner, string>({
+      this.request<
+        SellerGoApiInternalApientShopOwnerResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/admin/users/${id}`,
         method: "GET",
         format: "json",
@@ -601,10 +624,13 @@ export class Api<
      */
     usersUpdate: (
       id: number,
-      shopOwner: ModelsShopOwner,
+      shopOwner: SellerGoApiInternalApientShopOwnerCreateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsShopOwner, string>({
+      this.request<
+        SellerGoApiInternalApientShopOwnerResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/admin/users/${id}`,
         method: "PUT",
         body: shopOwner,
@@ -622,8 +648,14 @@ export class Api<
      * @summary Shop owner login
      * @request POST:/auth/login
      */
-    loginCreate: (request: ModelsLoginRequest, params: RequestParams = {}) =>
-      this.request<Record<string, string>, string>({
+    loginCreate: (
+      request: SellerGoApiInternalApientLoginRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        SellerGoApiInternalApientLoginResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/auth/login`,
         method: "POST",
         body: request,
@@ -635,13 +667,19 @@ export class Api<
     /**
      * @description Authenticates a user from the Telegram Web App. If the user does not exist, it creates a new user.
      *
-     * @tags users
+     * @tags auth
      * @name TgWebAppCreate
      * @summary Authenticate a Telegram Web App user
      * @request POST:/auth/tg-web-app
      */
-    tgWebAppCreate: (user: AuthTgWebAppRequest, params: RequestParams = {}) =>
-      this.request<TgUserResponse, string>({
+    tgWebAppCreate: (
+      user: SellerGoApiInternalApientAuthTgWebAppRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        SellerGoApiInternalApientTgUserResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/auth/tg-web-app`,
         method: "POST",
         body: user,
@@ -652,7 +690,7 @@ export class Api<
   };
   categories = {
     /**
-     * @description Get a list of all registered categories
+     * @description Get a list of all categories for the tenant
      *
      * @tags categories
      * @name CategoriesList
@@ -660,7 +698,10 @@ export class Api<
      * @request GET:/categories
      */
     categoriesList: (params: RequestParams = {}) =>
-      this.request<ModelsCategory[], string>({
+      this.request<
+        SellerGoApiInternalApientCategoryListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/categories`,
         method: "GET",
         format: "json",
@@ -676,10 +717,13 @@ export class Api<
      * @request POST:/categories
      */
     categoriesCreate: (
-      category: ModelsCreateCategoryRequest,
+      category: SellerGoApiInternalApientCategoryCreateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsCategory, string>({
+      this.request<
+        SellerGoApiInternalApientCategoryResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/categories`,
         method: "POST",
         body: category,
@@ -689,7 +733,7 @@ export class Api<
       }),
 
     /**
-     * @description Delete a category by its ID
+     * @description Delete a category by its ID (soft delete)
      *
      * @tags categories
      * @name CategoriesDelete
@@ -697,25 +741,9 @@ export class Api<
      * @request DELETE:/categories/{id}
      */
     categoriesDelete: (id: number, params: RequestParams = {}) =>
-      this.request<string, string>({
+      this.request<string, SellerGoApiInternalPkgMsgMessageError>({
         path: `/categories/${id}`,
         method: "DELETE",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Get a single category by its ID
-     *
-     * @tags categories
-     * @name CategoriesDetail
-     * @summary Get a single category
-     * @request GET:/categories/{id}
-     */
-    categoriesDetail: (id: number, params: RequestParams = {}) =>
-      this.request<ModelsCategory, string>({
-        path: `/categories/${id}`,
-        method: "GET",
         format: "json",
         ...params,
       }),
@@ -730,10 +758,13 @@ export class Api<
      */
     categoriesUpdate: (
       id: number,
-      category: ModelsCategory,
+      category: SellerGoApiInternalApientCategoryUpdateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsCategory, string>({
+      this.request<
+        SellerGoApiInternalApientCategoryResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/categories/${id}`,
         method: "PUT",
         body: category,
@@ -744,7 +775,7 @@ export class Api<
   };
   dashboard = {
     /**
-     * @description Returns KPI cards (revenue, orders today, new clients), recent orders, and top products for the specified tenant.
+     * @description Returns KPI cards, recent orders, and top products for the specified tenant
      *
      * @tags dashboard
      * @name DashboardList
@@ -752,7 +783,10 @@ export class Api<
      * @request GET:/dashboard
      */
     dashboardList: (params: RequestParams = {}) =>
-      this.request<ModelsDashboardResponse, string>({
+      this.request<
+        SellerGoApiInternalApientDashboardResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/dashboard`,
         method: "GET",
         format: "json",
@@ -769,7 +803,10 @@ export class Api<
      * @request GET:/orders
      */
     ordersList: (params: RequestParams = {}) =>
-      this.request<ModelsOrder[], string>({
+      this.request<
+        SellerGoApiInternalApientOrderListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/orders`,
         method: "GET",
         format: "json",
@@ -777,7 +814,7 @@ export class Api<
       }),
 
     /**
-     * @description Create a new order with the provided cart items.
+     * @description Create a new order with the provided cart items
      *
      * @tags orders
      * @name OrdersCreate
@@ -785,10 +822,13 @@ export class Api<
      * @request POST:/orders
      */
     ordersCreate: (
-      order: ModelsCreateOrderRequest,
+      order: SellerGoApiInternalApientCreateOrderRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsOrder, string>({
+      this.request<
+        SellerGoApiInternalApientOrderResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/orders`,
         method: "POST",
         body: order,
@@ -798,7 +838,26 @@ export class Api<
       }),
 
     /**
-     * @description Update the status of an existing order.
+     * @description Get a single order by its ID with items
+     *
+     * @tags orders
+     * @name OrdersDetail
+     * @summary Get a single order
+     * @request GET:/orders/{id}
+     */
+    ordersDetail: (id: number, params: RequestParams = {}) =>
+      this.request<
+        SellerGoApiInternalApientOrderResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
+        path: `/orders/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update the status of an existing order
      *
      * @tags orders
      * @name StatusUpdate
@@ -807,10 +866,13 @@ export class Api<
      */
     statusUpdate: (
       id: number,
-      status: ModelsUpdateOrderStatusRequest,
+      status: SellerGoApiInternalApientUpdateOrderStatusRequest,
       params: RequestParams = {},
     ) =>
-      this.request<string, string>({
+      this.request<
+        SellerGoApiInternalApientOrderResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/orders/${id}/status`,
         method: "PUT",
         body: status,
@@ -819,47 +881,9 @@ export class Api<
         ...params,
       }),
   };
-  productTagGroupNames = {
-    /**
-     * @description Get a list of all product tag group names for a given tenant
-     *
-     * @tags product-tag-group-names
-     * @name ProductTagGroupNamesList
-     * @summary Get a list of product tag group names
-     * @request GET:/product-tag-group-names
-     */
-    productTagGroupNamesList: (params: RequestParams = {}) =>
-      this.request<string[], string>({
-        path: `/product-tag-group-names`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Create a new product tag group name for a given tenant
-     *
-     * @tags product-tag-group-names
-     * @name ProductTagGroupNamesCreate
-     * @summary Create a new product tag group name
-     * @request POST:/product-tag-group-names
-     */
-    productTagGroupNamesCreate: (
-      name: ModelsProductTagGroupName,
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsProductTagGroupName, string>({
-        path: `/product-tag-group-names`,
-        method: "POST",
-        body: name,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
   products = {
     /**
-     * @description Get a list of products for a given tenant, optionally filtered by category.
+     * @description Get a list of products for a given tenant, optionally filtered by category
      *
      * @tags products
      * @name ProductsList
@@ -870,10 +894,15 @@ export class Api<
       query?: {
         /** Category ID to filter products */
         category_id?: number;
+        /** Search query */
+        query?: string;
       },
       params: RequestParams = {},
     ) =>
-      this.request<ModelsProduct[], HandlersErrorResponse>({
+      this.request<
+        SellerGoApiInternalApientProductListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/products`,
         method: "GET",
         query: query,
@@ -882,7 +911,7 @@ export class Api<
       }),
 
     /**
-     * @description Create a new product with the provided details.
+     * @description Create a new product with the provided details
      *
      * @tags products
      * @name ProductsCreate
@@ -890,10 +919,13 @@ export class Api<
      * @request POST:/products
      */
     productsCreate: (
-      product: ModelsCreateProductRequest,
+      product: SellerGoApiInternalApientProductCreateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsProduct, HandlersErrorResponse>({
+      this.request<
+        SellerGoApiInternalApientProductResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/products`,
         method: "POST",
         body: product,
@@ -903,15 +935,15 @@ export class Api<
       }),
 
     /**
-     * @description Delete a product by its ID.
+     * @description Delete a product by its ID (soft delete)
      *
      * @tags products
      * @name ProductsDelete
      * @summary Delete a product
      * @request DELETE:/products/{id}
      */
-    productsDelete: (id: string, params: RequestParams = {}) =>
-      this.request<string, HandlersErrorResponse>({
+    productsDelete: (id: number, params: RequestParams = {}) =>
+      this.request<string, SellerGoApiInternalPkgMsgMessageError>({
         path: `/products/${id}`,
         method: "DELETE",
         format: "json",
@@ -919,23 +951,7 @@ export class Api<
       }),
 
     /**
-     * @description Get a single product by its ID for a given tenant.
-     *
-     * @tags products
-     * @name ProductsDetail
-     * @summary Get a single product
-     * @request GET:/products/{id}
-     */
-    productsDetail: (id: string, params: RequestParams = {}) =>
-      this.request<ModelsProduct, HandlersErrorResponse>({
-        path: `/products/${id}`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Update an existing product with the provided details.
+     * @description Update an existing product with the provided details
      *
      * @tags products
      * @name ProductsUpdate
@@ -943,11 +959,14 @@ export class Api<
      * @request PUT:/products/{id}
      */
     productsUpdate: (
-      id: string,
-      product: ModelsProduct,
+      id: number,
+      product: SellerGoApiInternalApientProductUpdateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsProduct, HandlersErrorResponse>({
+      this.request<
+        SellerGoApiInternalApientProductResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/products/${id}`,
         method: "PUT",
         body: product,
@@ -955,124 +974,10 @@ export class Api<
         format: "json",
         ...params,
       }),
-
-    /**
-     * @description Update the availability status of a product.
-     *
-     * @tags products
-     * @name AvailabilityPartialUpdate
-     * @summary Update product availability
-     * @request PATCH:/products/{id}/availability
-     */
-    availabilityPartialUpdate: (
-      id: string,
-      availability: ModelsUpdateProductAvailabilityRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<HandlersErrorResponse, HandlersErrorResponse>({
-        path: `/products/${id}/availability`,
-        method: "PATCH",
-        body: availability,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  shopOwners = {
-    /**
-     * @description Get a list of all registered shop owners.
-     *
-     * @tags shop-owners
-     * @name ShopOwnersList
-     * @summary Get a list of shop owners
-     * @request GET:/shop-owners
-     */
-    shopOwnersList: (params: RequestParams = {}) =>
-      this.request<ModelsShopOwner[], string>({
-        path: `/shop-owners`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Create a new shop owner with the provided details.
-     *
-     * @tags shop-owners
-     * @name ShopOwnersCreate
-     * @summary Create a new shop owner
-     * @request POST:/shop-owners
-     */
-    shopOwnersCreate: (
-      shopOwner: ModelsCreateShopOwnerRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsShopOwner, string>({
-        path: `/shop-owners`,
-        method: "POST",
-        body: shopOwner,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Delete a shop owner by its ID.
-     *
-     * @tags shop-owners
-     * @name ShopOwnersDelete
-     * @summary Delete a shop owner
-     * @request DELETE:/shop-owners/{id}
-     */
-    shopOwnersDelete: (id: number, params: RequestParams = {}) =>
-      this.request<string, string>({
-        path: `/shop-owners/${id}`,
-        method: "DELETE",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Get a single shop owner by its ID.
-     *
-     * @tags shop-owners
-     * @name ShopOwnersDetail
-     * @summary Get a single shop owner
-     * @request GET:/shop-owners/{id}
-     */
-    shopOwnersDetail: (id: number, params: RequestParams = {}) =>
-      this.request<ModelsShopOwner, string>({
-        path: `/shop-owners/${id}`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Update an existing shop owner with the provided details.
-     *
-     * @tags shop-owners
-     * @name ShopOwnersUpdate
-     * @summary Update an existing shop owner
-     * @request PUT:/shop-owners/{id}
-     */
-    shopOwnersUpdate: (
-      id: number,
-      shopOwner: ModelsShopOwner,
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsShopOwner, string>({
-        path: `/shop-owners/${id}`,
-        method: "PUT",
-        body: shopOwner,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
   };
   subscription = {
     /**
-     * @description Get current active subscription, limits, and usage for the shop owner.
+     * @description Get current subscription status for the authorized shop owner.
      *
      * @tags subscriptions
      * @name CurrentList
@@ -1080,7 +985,7 @@ export class Api<
      * @request GET:/subscription/current
      */
     currentList: (params: RequestParams = {}) =>
-      this.request<ModelsSubscriptionStatus, string>({
+      this.request<SellerGoApiInternalModelsSubscriptionStatus, any>({
         path: `/subscription/current`,
         method: "GET",
         format: "json",
@@ -1096,7 +1001,7 @@ export class Api<
      * @request GET:/subscription/plans
      */
     plansList: (params: RequestParams = {}) =>
-      this.request<ModelsSubscriptionPlan[], string>({
+      this.request<SellerGoApiInternalModelsSubscriptionPlan[], any>({
         path: `/subscription/plans`,
         method: "GET",
         format: "json",
@@ -1104,23 +1009,22 @@ export class Api<
       }),
 
     /**
-     * @description Renew active subscription for another month (currently mock payment).
+     * @description Renews the current active subscription for another month.
      *
      * @tags subscriptions
      * @name RenewCreate
-     * @summary Renew current subscription
+     * @summary Renew subscription
      * @request POST:/subscription/renew
      */
     renewCreate: (params: RequestParams = {}) =>
-      this.request<Record<string, string>, string>({
+      this.request<void, any>({
         path: `/subscription/renew`,
         method: "POST",
-        format: "json",
         ...params,
       }),
 
     /**
-     * @description Purchase a subscription plan (currently mock payment).
+     * @description Creates a mock subscription to the specified plan code.
      *
      * @tags subscriptions
      * @name SubscribeCreate
@@ -1128,10 +1032,10 @@ export class Api<
      * @request POST:/subscription/subscribe
      */
     subscribeCreate: (
-      request: ModelsCreateSubscriptionRequest,
+      request: SellerGoApiInternalModelsCreateSubscriptionRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsSubscription, string>({
+      this.request<SellerGoApiInternalModelsSubscription, any>({
         path: `/subscription/subscribe`,
         method: "POST",
         body: request,
@@ -1140,67 +1044,9 @@ export class Api<
         ...params,
       }),
   };
-  superadmin = {
-    /**
-     * @description Retrieves all shop owners in the system
-     *
-     * @tags superadmin
-     * @name ShopOwnersList
-     * @summary List all shop owners
-     * @request GET:/superadmin/shop-owners
-     * @secure
-     */
-    shopOwnersList: (params: RequestParams = {}) =>
-      this.request<ModelsShopOwner[], any>({
-        path: `/superadmin/shop-owners`,
-        method: "GET",
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Retrieves all subscriptions in the system across all shop owners
-     *
-     * @tags superadmin
-     * @name SubscriptionsList
-     * @summary List all subscriptions
-     * @request GET:/superadmin/subscriptions
-     * @secure
-     */
-    subscriptionsList: (params: RequestParams = {}) =>
-      this.request<ModelsSubscription[], any>({
-        path: `/superadmin/subscriptions`,
-        method: "GET",
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Retrieves all tenants in the system across all shop owners
-     *
-     * @tags superadmin
-     * @name TenantsList
-     * @summary List all tenants
-     * @request GET:/superadmin/tenants
-     * @secure
-     */
-    tenantsList: (params: RequestParams = {}) =>
-      this.request<ModelsTenant[], any>({
-        path: `/superadmin/tenants`,
-        method: "GET",
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
   tenants = {
     /**
-     * @description Get a list of all registered tenants
+     * @description Get a list of tenants for the current shop owner
      *
      * @tags tenants
      * @name TenantsList
@@ -1208,7 +1054,10 @@ export class Api<
      * @request GET:/tenants
      */
     tenantsList: (params: RequestParams = {}) =>
-      this.request<ModelsTenant[], string>({
+      this.request<
+        SellerGoApiInternalApientTenantListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/tenants`,
         method: "GET",
         format: "json",
@@ -1224,10 +1073,13 @@ export class Api<
      * @request POST:/tenants
      */
     tenantsCreate: (
-      tenant: ModelsCreateTenantRequest,
+      tenant: SellerGoApiInternalApientTenantCreateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsTenant, string>({
+      this.request<
+        SellerGoApiInternalApientTenantResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/tenants`,
         method: "POST",
         body: tenant,
@@ -1245,7 +1097,7 @@ export class Api<
      * @request DELETE:/tenants/{id}
      */
     tenantsDelete: (id: number, params: RequestParams = {}) =>
-      this.request<string, string>({
+      this.request<string, SellerGoApiInternalPkgMsgMessageError>({
         path: `/tenants/${id}`,
         method: "DELETE",
         format: "json",
@@ -1261,7 +1113,10 @@ export class Api<
      * @request GET:/tenants/{id}
      */
     tenantsDetail: (id: number, params: RequestParams = {}) =>
-      this.request<ModelsTenant, string>({
+      this.request<
+        SellerGoApiInternalApientTenantResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/tenants/${id}`,
         method: "GET",
         format: "json",
@@ -1278,10 +1133,13 @@ export class Api<
      */
     tenantsUpdate: (
       id: number,
-      tenant: ModelsTenant,
+      tenant: SellerGoApiInternalApientTenantUpdateRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsTenant, string>({
+      this.request<
+        SellerGoApiInternalApientTenantResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/tenants/${id}`,
         method: "PUT",
         body: tenant,
@@ -1291,7 +1149,7 @@ export class Api<
       }),
 
     /**
-     * @description Get a list of all demo tenants (prefix DEMO_)
+     * @description Get all tenants with DEMO_ prefix codes
      *
      * @tags tenants
      * @name DemoList
@@ -1299,7 +1157,7 @@ export class Api<
      * @request GET:/tenants/demo
      */
     demoList: (params: RequestParams = {}) =>
-      this.request<ModelsTenant[], string>({
+      this.request<SellerGoApiInternalApientTenantListResponse, any>({
         path: `/tenants/demo`,
         method: "GET",
         format: "json",
@@ -1316,91 +1174,53 @@ export class Api<
      * @request GET:/tg-users
      */
     tgUsersList: (params: RequestParams = {}) =>
-      this.request<ModelsTgUser[], string>({
+      this.request<
+        SellerGoApiInternalApientTgUserListResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
         path: `/tg-users`,
         method: "GET",
         format: "json",
         ...params,
       }),
-  };
-  upload = {
-    /**
-     * @description Uploads an image file for a product and returns its path.
-     *
-     * @tags images
-     * @name ImageCreate
-     * @summary Upload a product image
-     * @request POST:/upload/image
-     */
-    imageCreate: (
-      data: {
-        /**
-         * Image file to upload
-         * @format binary
-         */
-        image: File;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<Record<string, string>, HandlersErrorResponse>({
-        path: `/upload/image`,
-        method: "POST",
-        body: data,
-        type: ContentType.FormData,
-        format: "json",
-        ...params,
-      }),
 
     /**
-     * @description Downloads an image from the given URL and saves it, returning its path.
-     *
-     * @tags images
-     * @name ImageFromUrlCreate
-     * @summary Upload an image from URL
-     * @request POST:/upload/image/from-url
-     */
-    imageFromUrlCreate: (imageUrl: string, params: RequestParams = {}) =>
-      this.request<Record<string, string>, HandlersErrorResponse>({
-        path: `/upload/image/from-url`,
-        method: "POST",
-        body: imageUrl,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  users = {
-    /**
-     * @description Gets a list of all saved delivery addresses for a Telegram user.
+     * @description Get a list of addresses for a Telegram user
      *
      * @tags addresses
      * @name AddressesList
      * @summary Get user addresses
-     * @request GET:/users/{tg_user_id}/addresses
+     * @request GET:/tg-users/{tg_user_id}/addresses
      */
     addressesList: (tgUserId: number, params: RequestParams = {}) =>
-      this.request<ModelsTgUserAddress[], string>({
-        path: `/users/${tgUserId}/addresses`,
+      this.request<
+        SellerGoApiInternalApientTgUserAddressResponse[],
+        SellerGoApiInternalPkgMsgMessageError
+      >({
+        path: `/tg-users/${tgUserId}/addresses`,
         method: "GET",
         format: "json",
         ...params,
       }),
 
     /**
-     * @description Saves a new delivery address for a Telegram user.
+     * @description Create a new address for a Telegram user
      *
      * @tags addresses
      * @name AddressesCreate
-     * @summary Create user address
-     * @request POST:/users/{tg_user_id}/addresses
+     * @summary Create a user address
+     * @request POST:/tg-users/{tg_user_id}/addresses
      */
     addressesCreate: (
       tgUserId: number,
-      address: ModelsCreateTgUserAddressRequest,
+      address: SellerGoApiInternalApientCreateAddressRequest,
       params: RequestParams = {},
     ) =>
-      this.request<ModelsTgUserAddress, string>({
-        path: `/users/${tgUserId}/addresses`,
+      this.request<
+        SellerGoApiInternalApientTgUserAddressResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
+        path: `/tg-users/${tgUserId}/addresses`,
         method: "POST",
         body: address,
         type: ContentType.Json,
@@ -1409,36 +1229,52 @@ export class Api<
       }),
 
     /**
-     * @description Deletes a delivery address for a Telegram user.
+     * @description Delete an address for a Telegram user
      *
      * @tags addresses
      * @name AddressesDelete
-     * @summary Delete user address
-     * @request DELETE:/users/{tg_user_id}/addresses/{id}
+     * @summary Delete a user address
+     * @request DELETE:/tg-users/{tg_user_id}/addresses/{id}
      */
     addressesDelete: (
       tgUserId: number,
       id: number,
       params: RequestParams = {},
     ) =>
-      this.request<void, string>({
-        path: `/users/${tgUserId}/addresses/${id}`,
+      this.request<string, SellerGoApiInternalPkgMsgMessageError>({
+        path: `/tg-users/${tgUserId}/addresses/${id}`,
         method: "DELETE",
+        format: "json",
         ...params,
       }),
-
+  };
+  upload = {
     /**
-     * @description Gets a list of all orders placed by the user in the current tenant.
+     * @description Upload an image file for a product
      *
-     * @tags orders
-     * @name OrdersList
-     * @summary Get user orders
-     * @request GET:/users/{tg_user_id}/orders
+     * @tags upload
+     * @name ProductImageCreate
+     * @summary Upload a product image
+     * @request POST:/upload/product-image
      */
-    ordersList: (tgUserId: number, params: RequestParams = {}) =>
-      this.request<ModelsOrder[], string>({
-        path: `/users/${tgUserId}/orders`,
-        method: "GET",
+    productImageCreate: (
+      data: {
+        /**
+         * Image file
+         * @format binary
+         */
+        image: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        InternalApiUploadProductImageResponse,
+        SellerGoApiInternalPkgMsgMessageError
+      >({
+        path: `/upload/product-image`,
+        method: "POST",
+        body: data,
+        type: ContentType.FormData,
         format: "json",
         ...params,
       }),
