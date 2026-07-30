@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
 import ProductCard from '../ProductCard';
-import { ModelsProduct } from '@/backendApi';
+import { SellerGoApiInternalApientProductResponse } from '@/backendApi';
 
 // Mock the animations module to prevent actual DOM manipulation during tests
 vi.mock('@/utils/animations', () => ({
@@ -16,7 +16,7 @@ vi.mock('@/utils/getImageUrl', () => ({
 }));
 
 describe('ProductCard Component', () => {
-    const mockProduct: ModelsProduct = {
+    const mockProduct: SellerGoApiInternalApientProductResponse = {
         id: 1,
         categoryID: 1,
         title: 'Test Pizza',

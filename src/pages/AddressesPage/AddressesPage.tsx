@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/apiClient';
-import { ModelsTgUserAddress } from '@/backendApi';
+import { SellerGoApiInternalApientTgUserAddressResponse } from '@/backendApi';
 import { ArrowLeft, MapPin, Plus, Trash2 } from 'lucide-react';
 import { useTelegramBackButton } from '@/hooks/useTelegramBackButton';
 import { Button } from '@/components/UiKit';
@@ -12,7 +12,7 @@ const AddressesPage: FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   useTelegramBackButton(() => navigate(-1));
-  const [addresses, setAddresses] = useState<ModelsTgUserAddress[]>([]);
+  const [addresses, setAddresses] = useState<SellerGoApiInternalApientTgUserAddressResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [newAddressText, setNewAddressText] = useState('');
@@ -21,7 +21,7 @@ const AddressesPage: FC = () => {
     if (!user?.id) return;
     setLoading(true);
     try {
-      const response = await apiClient.users.addressesList(user.id);
+      const response = await apiClient.tgUsers.addressesList(user.id);
       setAddresses(response.data || []);
     } catch (error) {
       console.error('Failed to fetch addresses:', error);
@@ -38,7 +38,7 @@ const AddressesPage: FC = () => {
   const handleDelete = async (id?: number) => {
     if (!user?.id || !id) return;
     try {
-      await apiClient.users.addressesDelete(user.id, id);
+      await apiClient.tgUsers.addressesDelete(user.id, id);
       setAddresses(addresses.filter(a => a.id !== id));
     } catch (error) {
       console.error('Failed to delete address:', error);
@@ -50,9 +50,9 @@ const AddressesPage: FC = () => {
     if (!user?.id || !newAddressText.trim()) return;
 
     try {
-      await apiClient.users.addressesCreate(user.id, {
-        address_text: newAddressText.trim(),
-        is_default: addresses.length === 0,
+      await apiClient.tgUsers.addressesCreate(user.id, {
+        addressText: newAddressText.trim(),
+        isDefault: addresses.length === 0,
       });
       setNewAddressText('');
       setIsAdding(false);
@@ -104,8 +104,8 @@ const AddressesPage: FC = () => {
                 <div className={styles.addressInfo}>
                   <MapPin size={20} className={styles.addressIcon} />
                   <div className={styles.addressTextWrapper}>
-                    <p className={styles.addressText}>{address.address_text}</p>
-                    {address.is_default && <span className={styles.defaultBadge}>Основной</span>}
+                    <p className={styles.addressText}>{address.addressText}</p>
+                    {address.isDefault && <span className={styles.defaultBadge}>Основной</span>}
                   </div>
                 </div>
                 <button

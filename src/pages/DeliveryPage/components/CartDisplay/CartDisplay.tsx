@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { CartState } from '@/types';
 import styles from './CartDisplay.module.css';
 import { useProducts } from "@/contexts/ProductContext";
-import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse, SellerGoApiInternalApientProductVariantResponse } from "@/backendApi";
 import { Card } from '@/components/UiKit';
 import { getImageUrl } from '@/utils/getImageUrl';
 
@@ -33,7 +33,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
       <div className={styles.cartList}>
         {Object.entries(cart).map(([productIDStr, variants]) => {
           const productID = Number(productIDStr);
-          const item = products.find((p: ModelsProduct) => p.id === productID);
+          const item = products.find((p: SellerGoApiInternalApientProductResponse) => p.id === productID);
           if (!item) return null;
 
           return (
@@ -50,7 +50,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
                 <div className={styles.variantList}>
                   {Object.entries(variants).map(([variantIDStr, count]) => {
                     const variantID = Number(variantIDStr);
-                    const v = item.variants?.find((v: ModelsProductVariant) => v.id === variantID);
+                    const v = item.variants?.find((v: SellerGoApiInternalApientProductVariantResponse) => v.id === variantID);
                     if (!v || count === 0) return null;
 
                     return (
@@ -58,7 +58,7 @@ const CartDisplay: FC<CartDisplayProps> = ({ cart }) => {
                         <span className={styles.variantName}>{v.value}</span>
                         <div className={styles.variantMeta}>
                           <span className={styles.variantCount}>{count} шт</span>
-                          <span className={styles.variantPrice}>{(v.cost * count).toFixed(2)}₽</span>
+                          <span className={styles.variantPrice}>{((v.cost || 0) * count).toFixed(2)}₽</span>
                         </div>
                       </div>
                     );

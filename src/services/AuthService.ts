@@ -1,4 +1,4 @@
-import { Api, ModelsTgUser, ModelsLoginRequest } from "@/backendApi";
+import { Api, SellerGoApiInternalApientTgUserResponse, SellerGoApiInternalApientLoginRequest } from "@/backendApi";
 import { WebAppUser } from "telegram-web-app";
 
 const TOKEN_KEY = "authToken";
@@ -25,7 +25,7 @@ export class AuthService {
 
   async loginByPassword(login: string, password: string): Promise<string> {
     try {
-      const response = await this.api.auth.loginCreate({ login, password } as ModelsLoginRequest);
+      const response = await this.api.auth.loginCreate({ login, password } as SellerGoApiInternalApientLoginRequest);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const token = response.data?.token || (response.data as any)?.token;
       if (token) {

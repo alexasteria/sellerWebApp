@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { CartState, DeliveryInfo } from "@/types";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 import { useServices } from "@/hooks/useServices";
 import { useProducts } from "./ProductContext";
 import { triggerHaptic } from "@/hooks/useTelegram";
@@ -10,8 +10,8 @@ interface CartContextType {
   deliveryInfo: DeliveryInfo | null;
   cartItemCount: number;
   cartTotal: number;
-  increment: (product: ModelsProduct, variantID: number | undefined) => void;
-  decrement: (product: ModelsProduct, variantID: number | undefined) => void;
+  increment: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
+  decrement: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
   clearCart: () => void;
   setDeliveryInfo: (info: DeliveryInfo | null) => void;
 }
@@ -24,12 +24,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [cart, setCart] = useState<CartState>({});
   const [deliveryInfo, setDeliveryInfoState] = useState<DeliveryInfo | null>(null);
 
-  const increment = useCallback((product: ModelsProduct, variantID: number | undefined) => {
+  const increment = useCallback((product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => {
     triggerHaptic("light");
     setCart((prev) => cartService.increment(prev, product, variantID));
   }, [cartService]);
 
-  const decrement = useCallback((product: ModelsProduct, variantID: number | undefined) => {
+  const decrement = useCallback((product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => {
     triggerHaptic("light");
     setCart((prev) => cartService.decrement(prev, product, variantID));
   }, [cartService]);

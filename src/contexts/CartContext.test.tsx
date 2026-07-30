@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { CartProvider, useCart } from './CartContext';
 import { ProductProvider } from './ProductContext';
-import { ModelsProduct } from '@/backendApi';
+import { SellerGoApiInternalApientProductResponse } from '@/backendApi';
 import React from 'react';
 
 // Mock tg-telegram to bypass haptic issues
@@ -10,14 +10,14 @@ vi.mock('@/hooks/useTelegram', () => ({
   triggerHaptic: vi.fn(),
 }));
 
-const mockProduct: ModelsProduct = {
+const mockProduct: SellerGoApiInternalApientProductResponse = {
   id: 1,
   categoryID: 1,
   title: 'Pizza Margherita',
   variants: [
     { id: 101, value: "Standard", cost: 500, stock: 100 }
   ],
-  is_available: true,
+  
 };
 
 // Mock ProductContext

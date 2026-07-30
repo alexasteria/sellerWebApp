@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo } from 'react';
-import { ModelsProduct, ModelsProductVariant } from '@/backendApi';
+import { SellerGoApiInternalApientProductResponse, SellerGoApiInternalApientProductVariantResponse } from '@/backendApi';
 import { BottomSheet, Button } from '@/components/UiKit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus } from 'lucide-react';
@@ -7,12 +7,12 @@ import styles from './ProductDetailsSheet.module.css';
 import { getImageUrl } from '@/utils/getImageUrl';
 
 interface ProductDetailsSheetProps {
-    product: ModelsProduct | null;
+    product: SellerGoApiInternalApientProductResponse | null;
     isOpen: boolean;
     onClose: () => void;
     variantState: Record<string, number>;
-    onIncrement: (product: ModelsProduct, variantID: number | undefined) => void;
-    onDecrement: (product: ModelsProduct, variantID: number | undefined) => void;
+    onIncrement: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
+    onDecrement: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
 }
 
 const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'><rect fill='%23f2f2f7' width='400' height='300'/><text fill='%238e8e93' font-family='sans-serif' font-size='24' font-weight='500' x='50%' y='50%' text-anchor='middle'>Нет фото</text></svg>";
@@ -26,7 +26,7 @@ const ProductDetailsSheet: FC<ProductDetailsSheetProps> = ({
     onDecrement,
 }) => {
     // Keep a local copy of the product so the exit animation has content to render
-    const [displayProduct, setDisplayProduct] = useState<ModelsProduct | null>(product);
+    const [displayProduct, setDisplayProduct] = useState<SellerGoApiInternalApientProductResponse | null>(product);
 
     React.useEffect(() => {
         if (product) {

@@ -10,7 +10,7 @@ import * as OrderService from "@/services/OrderService";
 import { Button } from "@/components/UiKit";
 import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
 import { apiClient } from "@/apiClient";
-import { ModelsTgUserAddress } from "@/backendApi";
+import { SellerGoApiInternalApientTgUserAddressResponse } from "@/backendApi";
 import { MapPin, Plus } from "lucide-react";
 import { triggerNotification } from "@/hooks/useTelegram";
 
@@ -37,8 +37,8 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
   const { user } = useAuth();
   const { activeTenant } = useTenant();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addresses, setAddresses] = useState<ModelsTgUserAddress[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<ModelsTgUserAddress | null>(null);
+  const [addresses, setAddresses] = useState<SellerGoApiInternalApientTgUserAddressResponse[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<SellerGoApiInternalApientTgUserAddressResponse | null>(null);
   const [loadingAddresses, setLoadingAddresses] = useState(false);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newAddressText, setNewAddressText] = useState("");
@@ -56,13 +56,13 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
       if (!user?.id) return;
       setLoadingAddresses(true);
       try {
-        const res = await apiClient.users.addressesList(user.id);
+        const res = await apiClient.tgUsers.addressesList(user.id);
         const fetchedAddresses = res.data || [];
         setAddresses(fetchedAddresses);
         
         // Select default or first address if available
         if (fetchedAddresses.length > 0) {
-          const defaultAddr = fetchedAddresses.find((a: ModelsTgUserAddress) => a.is_default) || fetchedAddresses[0];
+          const defaultAddr = fetchedAddresses.find((a: SellerGoApiInternalApientTgUserAddressResponse) => a.isDefault) || fetchedAddresses[0];
           setSelectedAddress(defaultAddr);
         } else {
             setIsAddingNew(true);
@@ -79,9 +79,9 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
   const handleAddNewAddress = async () => {
     if (!user?.id || !newAddressText.trim()) return;
     try {
-        const res = await apiClient.users.addressesCreate(user.id, {
-            address_text: newAddressText.trim(),
-            is_default: addresses.length === 0,
+        const res = await apiClient.tgUsers.addressesCreate(user.id, {
+            addressText: newAddressText.trim(),
+            isDefault: addresses.length === 0,
         });
         const createdAttr = res.data;
         if(createdAttr){
@@ -116,7 +116,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
           return;
     }
     
-    let addressToUse = selectedAddress?.address_text || null;
+    let addressToUse = selectedAddress?.addressText || null;
     
     // If they filled the new address field but didn't click save, save it automatically or just use the text
     if (isAddingNew && newAddressText.trim() !== "") {
@@ -188,7 +188,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
                         >
                             <MapPin size={20} className={styles.addressIcon} />
                             <div className={styles.addressTextWrapper}>
-                                <span className={styles.addressText}>{address.address_text}</span>
+                                <span className={styles.addressText}>{address.addressText}</span>
                             </div>
                             <div className={styles.radioWrapper}>
                                 <div className={`${styles.radioCircle} ${selectedAddress?.id === address.id ? styles.radioSelected : ''}`}></div>
@@ -241,7 +241,7 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
             <div className={styles.summaryRow} style={{ color: '#64748B', fontSize: '0.85rem' }}>
               <span>По адресу:</span>
               <span style={{ textAlign: 'right', maxWidth: '65%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {isAddingNew ? newAddressText.trim() : selectedAddress?.address_text}
+                {isAddingNew ? newAddressText.trim() : selectedAddress?.addressText}
               </span>
             </div>
           ) : null}

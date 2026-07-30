@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
-import { ModelsCategory } from "@/backendApi";
+import { SellerGoApiInternalApientCategoryResponse } from "@/backendApi";
 import { useServices } from "@/hooks/useServices";
 
 interface CategoryContextType {
-  categories: ModelsCategory[];
+  categories: SellerGoApiInternalApientCategoryResponse[];
   isLoading: boolean;
   error: string | null;
   fetchCategories: () => Promise<void>;
@@ -13,7 +13,7 @@ const CategoryContext = createContext<CategoryContextType | undefined>(undefined
 
 export const CategoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { categories: categoryService } = useServices();
-  const [categories, setCategories] = useState<ModelsCategory[]>([]);
+  const [categories, setCategories] = useState<SellerGoApiInternalApientCategoryResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

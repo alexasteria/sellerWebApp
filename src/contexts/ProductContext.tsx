@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 import { useServices } from "@/hooks/useServices";
 
 interface ProductContextType {
-  products: ModelsProduct[];
+  products: SellerGoApiInternalApientProductResponse[];
   isLoading: boolean;
   error: string | null;
   expandedCardId: string | null;
@@ -19,7 +19,7 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { products: productService } = useServices();
-  const [products, setProducts] = useState<ModelsProduct[]>([]);
+  const [products, setProducts] = useState<SellerGoApiInternalApientProductResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);

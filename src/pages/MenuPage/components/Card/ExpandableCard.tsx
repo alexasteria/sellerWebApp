@@ -5,14 +5,14 @@ import CardHeader from "@/pages/MenuPage/components/Card/CardHeader";
 import CardExpandedContent from "@/pages/MenuPage/components/Card/CardExpandedContent";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
-import { ModelsProduct, ModelsProductVariant } from "@/backendApi.ts";
+import { SellerGoApiInternalApientProductResponse, SellerGoApiInternalApientProductVariantResponse } from "@/backendApi.ts";
 import { getImageUrl } from '@/utils/getImageUrl';
 
 export interface ExpandableCardProps {
-  item: ModelsProduct;
+  item: SellerGoApiInternalApientProductResponse;
   variantState?: Record<string, number>;
-  onIncrement: (product: ModelsProduct, variantId: number | undefined) => void;
-  onDecrement: (product: ModelsProduct, variantId: number | undefined) => void;
+  onIncrement: (product: SellerGoApiInternalApientProductResponse, variantId: number | undefined) => void;
+  onDecrement: (product: SellerGoApiInternalApientProductResponse, variantId: number | undefined) => void;
 }
 
 const ExpandableCard: FC<ExpandableCardProps> = ({
@@ -24,7 +24,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
   const { expandedCardId, setExpandedCardId } = useProducts();
   const { cart } = useCart();
   const isExpanded = expandedCardId === String(item.id);
-  const [selectVariant, setSelectVariant] = useState<ModelsProductVariant>(item.variants[0]);
+  const [selectVariant, setSelectVariant] = useState<SellerGoApiInternalApientProductVariantResponse>((item.variants?.[0] || {} as any));
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
 
   const discountPrice = useMemo(() => {
     if (!item.discount) return price;
-    const calculatedPrice = price * (1 - item.discount / 100);
+    const calculatedPrice = (price || 0) * (1 - (item.discount || 0) / 100);
     return parseFloat(calculatedPrice.toFixed(2));
   }, [price]);
 
@@ -87,8 +87,8 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
         item={item}
         isExpanded={isExpanded}
         totalCount={totalCount}
-        discountPrice={discountPrice}
-        price={price}
+        discountPrice={discountPrice || 0}
+        price={price || 0}
         toggleExpand={toggleExpand}
       />
 
@@ -101,7 +101,7 @@ const ExpandableCard: FC<ExpandableCardProps> = ({
           selectVariant={selectVariant}
           setSelectVariant={setSelectVariant}
           quantity={quantity}
-          discountPrice={discountPrice}
+          discountPrice={discountPrice || 0}
           isExpanded={isExpanded}
         />
       )}

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ProductService } from "./ProductService";
 import { Api } from "@/backendApi";
 import { AxiosResponse } from "axios";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 
 describe("ProductService", () => {
   let apiMock: any;
@@ -19,8 +19,8 @@ describe("ProductService", () => {
   });
 
   it("should fetch products without categoryId", async () => {
-    const mockData = [{ id: 1, title: "Product 1" }] as unknown as ModelsProduct[];
-    const mockResponse: AxiosResponse<ModelsProduct[]> = {
+    const mockData = [{ id: 1, title: "Product 1" }] as unknown as SellerGoApiInternalApientProductResponse[];
+    const mockResponse: AxiosResponse<SellerGoApiInternalApientProductResponse[]> = {
       data: mockData,
       status: 200,
       statusText: "OK",
@@ -36,8 +36,8 @@ describe("ProductService", () => {
   });
 
   it("should fetch products with categoryId", async () => {
-    const mockData = [{ id: 2, title: "Product 2" }] as unknown as ModelsProduct[];
-    const mockResponse: AxiosResponse<ModelsProduct[]> = {
+    const mockData = [{ id: 2, title: "Product 2" }] as unknown as SellerGoApiInternalApientProductResponse[];
+    const mockResponse: AxiosResponse<SellerGoApiInternalApientProductResponse[]> = {
       data: mockData,
       status: 200,
       statusText: "OK",

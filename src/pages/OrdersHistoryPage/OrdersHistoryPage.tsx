@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { apiClient } from '@/apiClient';
-import { ModelsOrder } from '@/backendApi';
+import { SellerGoApiInternalApientOrderResponse } from '@/backendApi';
 import { ArrowLeft, Package, Clock, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
 import { useTelegramBackButton } from '@/hooks/useTelegramBackButton';
 import styles from './OrdersHistoryPage.module.css';
@@ -13,7 +13,7 @@ const OrdersHistoryPage: FC = () => {
   const { clearCart, increment } = useCart();
   const navigate = useNavigate();
   useTelegramBackButton(() => navigate(-1));
-  const [orders, setOrders] = useState<ModelsOrder[]>([]);
+  const [orders, setOrders] = useState<SellerGoApiInternalApientOrderResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,8 +24,8 @@ const OrdersHistoryPage: FC = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await apiClient.users.ordersList(user.id);
-        setOrders(response.data || []);
+        const response = await apiClient.instance.get(`/orders?tg_user_id=${user.id}`);
+        setOrders((response.data.items || []) || []);
       } catch (error) {
         console.error('Failed to fetch orders:', error);
       } finally {
@@ -36,7 +36,7 @@ const OrdersHistoryPage: FC = () => {
     fetchOrders();
   }, [user]);
 
-  const handleRepeatOrder = (order: ModelsOrder) => {
+  const handleRepeatOrder = (order: SellerGoApiInternalApientOrderResponse) => {
     if (!order.order_items || order.order_items.length === 0) return;
     
     clearCart();

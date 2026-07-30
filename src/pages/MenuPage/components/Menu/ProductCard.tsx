@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from 'react';
-import { ModelsProduct } from '@/backendApi';
+import { SellerGoApiInternalApientProductResponse } from '@/backendApi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import styles from './ProductCard.module.css';
@@ -7,7 +7,7 @@ import { getImageUrl } from '@/utils/getImageUrl';
 import { animateFlyingToCart } from '@/utils/animations';
 
 interface ProductCardProps {
-    product: ModelsProduct;
+    product: SellerGoApiInternalApientProductResponse;
     onClick: () => void;
     totalQuantity: number;
     onIncrement: () => void;

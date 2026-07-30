@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { motion } from "framer-motion";
 import styles from "./CategoryFilter.module.css";
-import { ModelsCategory } from "@/backendApi";
+import { SellerGoApiInternalApientCategoryResponse } from "@/backendApi";
 import { useCategories } from "@/contexts/CategoryContext";
 import { useProducts } from "@/contexts/ProductContext";
 import { Skeleton } from "@/components/UiKit";
@@ -53,7 +53,7 @@ const CategoryFilter: FC = () => {
           <span className={styles.buttonText}>Все</span>
         </button>
 
-        {categories.map((category: ModelsCategory) => {
+        {categories.map((category: SellerGoApiInternalApientCategoryResponse) => {
           const isActive = selectedCategoryId === (category.id ?? null);
           return (
             <button

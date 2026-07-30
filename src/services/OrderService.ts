@@ -1,7 +1,7 @@
 import {
-  ModelsCreateOrderRequest,
-  ModelsOrder,
-  ModelsProduct,
+  SellerGoApiInternalApientCreateOrderRequest,
+  SellerGoApiInternalApientOrderResponse,
+  SellerGoApiInternalApientProductResponse,
 } from "@/backendApi";
 import { apiClient } from "@/apiClient";
 import { CartState, DeliveryInfo } from "@/types";
@@ -11,11 +11,11 @@ import { CartState, DeliveryInfo } from "@/types";
  */
 const createOrderPayload = (
   cart: CartState,
-  products: ModelsProduct[],
+  products: SellerGoApiInternalApientProductResponse[],
   userId: number,
   deliveryAddressText: string | null
-): ModelsCreateOrderRequest => {
-  const cartItems: ModelsCreateOrderRequest["cart"] = [];
+): SellerGoApiInternalApientCreateOrderRequest => {
+  const cartItems: SellerGoApiInternalApientCreateOrderRequest["cart"] = [];
 
   Object.entries(cart).forEach(([productIdStr, variantState]) => {
     const productId = Number(productIdStr);
@@ -30,8 +30,8 @@ const createOrderPayload = (
         return;
 
       const discountedPrice = product.discount
-        ? variant.cost * (1 - product.discount / 100)
-        : variant.cost;
+        ? (variant.cost || 0) * (1 - product.discount / 100)
+        : (variant.cost || 0);
 
       cartItems.push({
         productID: product.id,
@@ -54,14 +54,14 @@ const createOrderPayload = (
  */
 export const submitOrder = async (
   cart: CartState,
-  products: ModelsProduct[],
+  products: SellerGoApiInternalApientProductResponse[],
   userId: number,
   deliveryAddressText: string | null
-): Promise<ModelsOrder | null> => {
+): Promise<SellerGoApiInternalApientOrderResponse | null> => {
   try {
     const payload = createOrderPayload(cart, products, userId, deliveryAddressText);
 
-    if (payload.cart.length === 0) {
+    if ((payload.cart || []).length === 0) {
       console.warn("Cannot submit an empty order.");
       return null;
     }

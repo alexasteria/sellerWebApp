@@ -41,8 +41,8 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         apiClient.tenants.demoList()
             .then(res => {
                 const fetchedTenants = res.data
-                    .filter(t => t.code && TARGET_TENANT_CODES.includes(t.code))
-                    .map(t => ({
+                    .items?.filter((t: any) => t.code && TARGET_TENANT_CODES.includes(t.code))
+                    .map((t: any) => ({
                         id: t.id!,
                         name: t.name!,
                         code: t.code!,
@@ -52,11 +52,11 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                         min_order_for_free_delivery: t.min_order_for_free_delivery
                     }));
                 
-                setAvailableTenants(fetchedTenants);
+                setAvailableTenants(fetchedTenants || []);
 
                 // Авто-выбор первого доступного тенанта, если ещё не выбран
-                if (!activeTenantCode && fetchedTenants.length > 0) {
-                    const firstCode = fetchedTenants[0].code;
+                if (!activeTenantCode && (fetchedTenants || []).length > 0) {
+                    const firstCode = (fetchedTenants || [])[0].code;
                     setActiveTenantCode(firstCode);
                     localStorage.setItem("demoTenantCode", firstCode);
                 }

@@ -1,8 +1,8 @@
 import { CartState } from "@/types";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 
 export class CartService {
-  increment(prevCart: CartState, product: ModelsProduct, variantID: number | undefined): CartState {
+  increment(prevCart: CartState, product: SellerGoApiInternalApientProductResponse, variantID: number | undefined): CartState {
     if (product.id === undefined || variantID === undefined) return prevCart;
     
     const newCart = { ...prevCart };
@@ -18,7 +18,7 @@ export class CartService {
     return newCart;
   }
 
-  decrement(prevCart: CartState, product: ModelsProduct, variantID: number | undefined): CartState {
+  decrement(prevCart: CartState, product: SellerGoApiInternalApientProductResponse, variantID: number | undefined): CartState {
     if (product.id === undefined || variantID === undefined) return prevCart;
 
     const newCart = { ...prevCart };
@@ -44,7 +44,7 @@ export class CartService {
     return newCart;
   }
 
-  calculateTotal(cart: CartState, products: ModelsProduct[]): number {
+  calculateTotal(cart: CartState, products: SellerGoApiInternalApientProductResponse[]): number {
     const total = Object.entries(cart).reduce((sum, [productIdStr, variantState]) => {
       const productId = Number(productIdStr);
       const item = products.find((p) => p.id === productId);
@@ -53,10 +53,10 @@ export class CartService {
       const itemTotal = Object.entries(variantState).reduce(
         (variantSum, [variantIdStr, count]) => {
           const variantId = Number(variantIdStr);
-          const variant = item.variants.find((v) => v.id === variantId);
+          const variant = (item.variants || []).find((v) => v.id === variantId);
           if (!variant) return variantSum;
 
-          const variantPrice = variant.cost * 100; // cents
+          const variantPrice = (variant.cost || 0) * 100; // cents
           const discountedPrice = item.discount
             ? variantPrice * (1 - item.discount / 100)
             : variantPrice;

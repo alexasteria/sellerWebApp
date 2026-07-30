@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 import styles from './CardHeader.module.css';
 import { getImageUrl } from '@/utils/getImageUrl';
 
 interface CardHeaderProps {
-  item: ModelsProduct;
+  item: SellerGoApiInternalApientProductResponse;
   isExpanded: boolean;
   totalCount: number;
   discountPrice: number;
@@ -44,7 +44,7 @@ const CardHeader: FC<CardHeaderProps> = ({
         <div className={styles.cardPriceRow}>
           <div className={styles.cardPrice}>
             <span className={styles.discountedPrice}>
-              {item.variants?.length > 1 && !isExpanded && "от "}
+              {(item.variants || []).length > 1 && !isExpanded && "от "}
               {discountPrice.toFixed(2)}₽
             </span>
             {Boolean(item.discount) && (

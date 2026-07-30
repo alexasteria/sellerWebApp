@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { submitOrder } from "./OrderService";
 import { apiClient } from "@/apiClient";
 import { CartState } from "@/types";
-import { ModelsProduct, ModelsOrder } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse, SellerGoApiInternalApientOrderResponse } from "@/backendApi";
 import { AxiosResponse } from "axios";
 
 // Mock the apiClient
@@ -28,7 +28,7 @@ describe("OrderService", () => {
       variants: [{ id: 201, cost: 20.00, stock: 10, value: "Standard", product_id: 2, tenant_id: 1 }],
       discount: 10, // 10%
     },
-  ] as unknown as ModelsProduct[];
+  ] as unknown as SellerGoApiInternalApientProductResponse[];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -57,8 +57,8 @@ describe("OrderService", () => {
       "2": { "201": 1 }, // Product 2, Variant 201 (cost 20, discount 10) -> price 18
     };
 
-    const mockResponseData = { id: 999, total_amount: 38 } as unknown as ModelsOrder;
-    const mockResponse: AxiosResponse<ModelsOrder> = {
+    const mockResponseData = { id: 999, total_amount: 38 } as unknown as SellerGoApiInternalApientOrderResponse;
+    const mockResponse: AxiosResponse<SellerGoApiInternalApientOrderResponse> = {
       data: mockResponseData,
       status: 200,
       statusText: "OK",

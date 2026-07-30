@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { ModelsProductVariant } from "@/backendApi";
+import { SellerGoApiInternalApientProductVariantResponse } from "@/backendApi";
 import { VariantState } from "@/types";
 import styles from '@/pages/MenuPage/components/Card/components/ProductVariants.module.css';
 
 const ProductVariants: FC<{
-  variants?: ModelsProductVariant[];
-  setSelectVariant: (v: ModelsProductVariant) => void;
+  variants?: SellerGoApiInternalApientProductVariantResponse[];
+  setSelectVariant: (v: SellerGoApiInternalApientProductVariantResponse) => void;
   selected?: number;
   variantState?: VariantState;
 }> = ({ variants, setSelectVariant, selected, variantState = {} }) => {

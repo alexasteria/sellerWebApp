@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import ProductCard from "@/pages/MenuPage/components/Menu/ProductCard";
 import ProductDetailsSheet from "@/pages/MenuPage/components/Menu/ProductDetailsSheet";
 import styles from "@/pages/MenuPage/components/Menu/Menu.module.css";
-import { ModelsProduct } from "@/backendApi.ts";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi.ts";
 import { Skeleton } from "@/components/UiKit";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
@@ -11,13 +11,13 @@ const Menu: FC = () => {
   const { products, isLoading: productsLoading, searchQuery } = useProducts();
   const { cart, increment, decrement } = useCart();
 
-  const [selectedProduct, setSelectedProduct] = useState<ModelsProduct | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<SellerGoApiInternalApientProductResponse | null>(null);
 
-  const handleIncrement = (product: ModelsProduct, variantID: number | undefined) => {
+  const handleIncrement = (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => {
     increment(product, variantID);
   };
 
-  const handleDecrement = (product: ModelsProduct, variantID: number | undefined) => {
+  const handleDecrement = (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => {
     decrement(product, variantID);
   };
 

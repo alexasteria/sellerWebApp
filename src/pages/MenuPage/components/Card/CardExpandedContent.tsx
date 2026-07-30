@@ -1,16 +1,16 @@
 import React, { FC } from "react";
-import { ModelsProduct, ModelsProductVariant } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse, SellerGoApiInternalApientProductVariantResponse } from "@/backendApi";
 import { VariantState } from "@/types";
 import ProductVariants from "@/pages/MenuPage/components/Card/components/ProductVariants";
 import styles from "@/pages/MenuPage/components/Card/CardExpandedContent.module.css";
 
 interface CardExpandedContentProps {
-  item: ModelsProduct;
+  item: SellerGoApiInternalApientProductResponse;
   variantState: VariantState;
-  onIncrement: (product: ModelsProduct, variantID: number | undefined) => void;
-  onDecrement: (product: ModelsProduct, variantID: number | undefined) => void;
-  selectVariant: ModelsProductVariant;
-  setSelectVariant: (v: ModelsProductVariant) => void;
+  onIncrement: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
+  onDecrement: (product: SellerGoApiInternalApientProductResponse, variantID: number | undefined) => void;
+  selectVariant: SellerGoApiInternalApientProductVariantResponse;
+  setSelectVariant: (v: SellerGoApiInternalApientProductVariantResponse) => void;
   quantity: number;
   discountPrice: number;
   isExpanded: boolean;
@@ -44,9 +44,9 @@ const CardExpandedContent: FC<CardExpandedContentProps> = ({
             <div key={groupKey} className={styles.cardExpandedIngredients}>
               <div className={styles.ingredientsTitle}>{group.name}:</div>
               <div className={styles.ingredientsList}>
-                {group.tags.map((value: string, index: number) => (
+                {group.tags?.map((value, index: number) => (
                   <span key={`${groupKey}-${index}`} className={styles.ingredientItem}>
-                    {value}
+                    {(value as any).tag || (value as any)}
                   </span>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { CartService } from "./CartService";
-import { ModelsProduct } from "@/backendApi";
+import { SellerGoApiInternalApientProductResponse } from "@/backendApi";
 import { CartState } from "@/types";
 
 describe("CartService", () => {
@@ -24,7 +24,7 @@ describe("CartService", () => {
       ],
       discount: 10, // 10% discount
     },
-  ] as unknown as ModelsProduct[];
+  ] as unknown as SellerGoApiInternalApientProductResponse[];
 
   describe("increment", () => {
     it("should add a new item to an empty cart", () => {
