@@ -204,7 +204,10 @@ const DeliveryScreen: FC<DeliveryScreenProps> = ({ subtotal, onBack }) => {
                 <div className={styles.addAddressForm}>
                     <textarea 
                         className={styles.addressTextarea} 
-                        placeholder="Город, Улица, Дом, Квартира"
+                        placeholder={activeTenant?.business_type === 'ecommerce' 
+                          ? "Страна, Индекс, Город, Улица/ПВЗ, Дом, Квартира" 
+                          : "Город, Улица, Дом, Квартира"
+                        }
                         rows={3}
                         value={newAddressText}
                         onChange={(e) => setNewAddressText(e.target.value)}
